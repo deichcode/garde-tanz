@@ -1,0 +1,296 @@
+[
+  {
+    "name": "Gardetanz_2027",
+    "dauer_s": 177.2,
+    "essentia": {
+      "bpm": 126.1,
+      "konfidenz": 1.36,
+      "schlaege": 377
+    },
+    "librosa": {
+      "schlaege": 278
+    },
+    "uebereinstimmung": {
+      "f_mass_streng": 0.507,
+      "raster_bestaetigt": 0.504,
+      "ebene_gleich": 0.334
+    },
+    "abschnitte": [
+      {
+        "start": 0.58,
+        "ende": 18.88,
+        "bpm": 107.7,
+        "schlaege": 34,
+        "schwankung_ms": 23.2,
+        "raster_bestaetigt": 0.088,
+        "ebene_gleich": 0.118,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 18.89,
+        "ende": 39.83,
+        "bpm": 87.6,
+        "schlaege": 33,
+        "schwankung_ms": 11.6,
+        "raster_bestaetigt": 0.515,
+        "ebene_gleich": 0.0,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 39.8,
+        "ende": 65.2,
+        "bpm": 161.5,
+        "schlaege": 68,
+        "schwankung_ms": 11.6,
+        "raster_bestaetigt": 0.588,
+        "ebene_gleich": 0.294,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 65.22,
+        "ende": 103.91,
+        "bpm": 143.6,
+        "schlaege": 93,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.806,
+        "ebene_gleich": 0.763,
+        "ebene_pruefen": false
+      },
+      {
+        "start": 103.93,
+        "ende": 176.45,
+        "bpm": 126.0,
+        "schlaege": 153,
+        "schwankung_ms": 11.6,
+        "raster_bestaetigt": 0.359,
+        "ebene_gleich": 0.203,
+        "ebene_pruefen": true
+      }
+    ],
+    "unregelmaessig_s": [],
+    "erste_schlaege_s": [
+      0.58,
+      1.18,
+      1.79,
+      2.37
+    ],
+    "eins": {
+      "phase": 0,
+      "abstand": 0.12,
+      "erste_eins_s": 0.58
+    }
+  },
+  {
+    "name": "Piccolotanz_2027",
+    "dauer_s": 170.3,
+    "essentia": {
+      "bpm": 143.0,
+      "konfidenz": 2.09,
+      "schlaege": 386
+    },
+    "librosa": {
+      "schlaege": 351
+    },
+    "uebereinstimmung": {
+      "f_mass_streng": 0.782,
+      "raster_bestaetigt": 0.775,
+      "ebene_gleich": 0.661
+    },
+    "abschnitte": [
+      {
+        "start": 0.39,
+        "ende": 55.03,
+        "bpm": 129.2,
+        "schlaege": 118,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.932,
+        "ebene_gleich": 0.5,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 55.03,
+        "ende": 101.82,
+        "bpm": 143.6,
+        "schlaege": 114,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.833,
+        "ebene_gleich": 0.851,
+        "ebene_pruefen": false
+      },
+      {
+        "start": 101.84,
+        "ende": 169.74,
+        "bpm": 136.0,
+        "schlaege": 156,
+        "schwankung_ms": 11.6,
+        "raster_bestaetigt": 0.615,
+        "ebene_gleich": 0.647,
+        "ebene_pruefen": true
+      }
+    ],
+    "unregelmaessig_s": [],
+    "erste_schlaege_s": [
+      0.39,
+      0.81,
+      1.23,
+      1.7
+    ],
+    "eins": {
+      "phase": 0,
+      "abstand": 0.19,
+      "erste_eins_s": 0.39
+    }
+  },
+  {
+    "name": "Piccolos_2026_Rohschnitt",
+    "dauer_s": 215.2,
+    "essentia": {
+      "bpm": 134.9,
+      "konfidenz": 2.1,
+      "schlaege": 475
+    },
+    "librosa": {
+      "schlaege": 478
+    },
+    "uebereinstimmung": {
+      "f_mass_streng": 0.661,
+      "raster_bestaetigt": 0.674,
+      "ebene_gleich": 0.851
+    },
+    "abschnitte": [
+      {
+        "start": 0.5,
+        "ende": 65.04,
+        "bpm": 136.0,
+        "schlaege": 145,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.952,
+        "ebene_gleich": 1.0,
+        "ebene_pruefen": false
+      },
+      {
+        "start": 65.04,
+        "ende": 139.78,
+        "bpm": 129.2,
+        "schlaege": 163,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.914,
+        "ebene_gleich": 0.785,
+        "ebene_pruefen": false
+      },
+      {
+        "start": 139.81,
+        "ende": 214.63,
+        "bpm": 136.0,
+        "schlaege": 169,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.207,
+        "ebene_gleich": 0.787,
+        "ebene_pruefen": false
+      }
+    ],
+    "unregelmaessig_s": [],
+    "erste_schlaege_s": [
+      0.5,
+      1.0,
+      1.49,
+      1.99
+    ],
+    "eins": {
+      "phase": 1,
+      "abstand": 0.22,
+      "erste_eins_s": 1.0
+    }
+  },
+  {
+    "name": "Piccolos_2025",
+    "dauer_s": 194.3,
+    "essentia": {
+      "bpm": 132.6,
+      "konfidenz": 2.02,
+      "schlaege": 455
+    },
+    "librosa": {
+      "schlaege": 332
+    },
+    "uebereinstimmung": {
+      "f_mass_streng": 0.658,
+      "raster_bestaetigt": 0.771,
+      "ebene_gleich": 0.286
+    },
+    "abschnitte": [
+      {
+        "start": 0.48,
+        "ende": 63.09,
+        "bpm": 132.5,
+        "schlaege": 138,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.819,
+        "ebene_gleich": 0.123,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 63.08,
+        "ende": 83.46,
+        "bpm": 129.2,
+        "schlaege": 45,
+        "schwankung_ms": 11.6,
+        "raster_bestaetigt": 0.711,
+        "ebene_gleich": 0.489,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 83.46,
+        "ende": 94.83,
+        "bpm": 132.5,
+        "schlaege": 26,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.0,
+        "ebene_gleich": 0.0,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 94.81,
+        "ende": 140.93,
+        "bpm": 166.7,
+        "schlaege": 128,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.852,
+        "ebene_gleich": 0.0,
+        "ebene_pruefen": true
+      },
+      {
+        "start": 140.93,
+        "ende": 188.29,
+        "bpm": 139.7,
+        "schlaege": 110,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.855,
+        "ebene_gleich": 0.718,
+        "ebene_pruefen": false
+      },
+      {
+        "start": 188.29,
+        "ende": 193.74,
+        "bpm": 132.5,
+        "schlaege": 13,
+        "schwankung_ms": 0.0,
+        "raster_bestaetigt": 0.385,
+        "ebene_gleich": 1.0,
+        "ebene_pruefen": false
+      }
+    ],
+    "unregelmaessig_s": [],
+    "erste_schlaege_s": [
+      0.48,
+      0.95,
+      1.42,
+      1.88
+    ],
+    "eins": {
+      "phase": 3,
+      "abstand": 0.54,
+      "erste_eins_s": 1.88
+    }
+  }
+]

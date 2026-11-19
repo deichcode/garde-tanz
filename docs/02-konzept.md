@@ -363,10 +363,13 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 ### 6.7 Musik und Raster
 
 1. **Hochladen** (MP3, M4A, WAV) zum Tanz. Die Datei liegt im Vereinsspeicher und wird auf Trainingsgeräten offline zwischengespeichert.
-2. **Automatische Analyse:** Schläge, Taktanfänge („die 1“) und Tempo-Abschnitte werden erkannt. Das dauert einige Sekunden, danach erscheint ein Vorschlag für den Start von Bild 1.
+2. **Automatische Analyse:** Schläge und Tempo-Abschnitte werden erkannt, das dauert einige Sekunden. Unsichere Abschnitte sind markiert („Tempo-Ebene prüfen“), nur diese muss man nachhören. Taktanfänge („die 1“) sind höchstens ein Vorschlag, weil sie im Spike nicht verlässlich erkannt wurden. Den Start von Bild 1 setzt der Trainer.
 3. **Korrigieren im Raster-Editor:**
    - Wellenform mit Schlagstrichen, jede „1“ eines Achters hervorgehoben.
    - **„Bild 1 beginnt hier“** auf einen Schlag ziehen. Das Intro davor gehört zum Vorlauf. Einmarsch und Ausmarsch werden nicht erfasst.
+   - **Doppelt / halb so schnell** pro Tempo-Abschnitt, mit einem Tipp. Das ist die häufigste Korrektur: Die Analyse zählt oft jeden zweiten Schlag oder doppelt so viele (Spike M0.1).
+   - **Auf den Gegenschlag:** Raster eines Abschnitts um einen halben Schlag verschieben (bei Märschen mit „Umpa“-Begleitung).
+   - **Freier Abschnitt:** Ein Intro ohne festen Takt bleibt ohne Raster.
    - **Mittippen:** Während die Musik läuft, auf die Schläge tippen (Taste oder Fläche). Die App passt das Raster im markierten Abschnitt an.
    - **Tempo-Abschnitt:** „Ab hier neues Tempo“ an einem Schlag setzen, BPM per Mittippen oder Zahl.
    - **Feinjustage:** ganzes Raster oder Abschnitt um ±10 ms verschieben.
@@ -486,7 +489,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Kataloge | Schlüssel eines Bausteins = Rolle + normalisierter Text. Häufigkeit, übliche Zeiten und „bewegt sich“ aktualisiert ein Function-Trigger beim Speichern eines Bildes. Vorschläge berechnet das Gerät aus dem lokal gespeicherten Katalog, auch offline. | Keine Doppelten durch Offline-Arbeit, alle Geräte sehen dieselben Vorschläge. |
 | Musik offline | Cache Storage / IndexedDB, `navigator.storage.persist()` | Musik muss ohne Netz in der Halle laufen |
 | Audio | **Web Audio API**, Zeit aus `AudioContext.currentTime` minus `outputLatency` minus Geräte-Verzögerung | Genaue Synchronität |
-| Schlagerkennung | Server-Analyse beim Hochladen (z. B. Python-Dienst mit einem Beat-/Downbeat-Tracker wie *beat_this* oder *madmom*, Lizenz prüfen). Fallback: Mittippen | Medleys mit Tempowechseln brauchen gute Takterkennung |
+| Schlagerkennung | Server-Analyse beim Hochladen. **Grundlage: Essentia** (im Spike stabil bei Tempowechseln, Lizenz AGPL-3.0 prüfen). Vor der Entscheidung noch ein neuronales Verfahren testen (*beat_this*, MIT, erkennt auch Taktanfänge). Korrektur-Werkzeuge siehe 6.7 | Ergebnis Spike M0.1: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md) |
 | KI | Server-Funktion mit Anthropic SDK, `claude-opus-5-5`, strukturierte Ausgabe | Schlüssel sicher, Antwort schema-valide |
 | Tests | Vitest (Logik: Zeiten, Prüfregeln, Formen), Playwright (Abläufe, Druck) | – |
 
@@ -500,6 +503,11 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | 4 | KI erzeugt räumlich unsinnige Aufstellungen | 20 echte Beschreibungen aus bestehenden Papier-Tänzen | ≥ 70 % ohne oder mit kleiner Nacharbeit übernehmbar |
 | 5 | 30 Tänzer auf dem Handy präzise verschieben | Prototyp Bearbeiten-Modus | Formation in < 10 s korrekt verschoben |
 | 6 | Microsoft-Anmeldung scheitert in der installierten iOS-PWA (Weiterleitung, Safari trennt den Speicher von Drittanbietern), oder Gastkonten mit privatem Microsoft-Konto verhalten sich anders | Anmeldung mit Vereinskonto und Gastkonto auf iPhone (installiert), Android und Desktop. Entfernen aus der Gruppe testen | Beide Kontoarten melden sich an. Die Sitzung hält ≥ 30 Tage, auch über Offline-Phasen. Wer aus der Gruppe entfernt wurde, ist beim nächsten Online-Start gesperrt |
+
+**Stand 19.11.2026:**
+
+- **Risiko 1** ist teilweise geprüft, mit 4 Vereinsmusiken. Tempowechsel werden gut erkannt, die Tempo-Ebene und die „1“ sind unsicher. Daraus folgen die Korrektur-Werkzeuge in 6.7. Offen sind der Hörtest und der Test mit einem neuronalen Verfahren. Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
+- **Risiko 2** (Bluetooth-Box) wird später vor Ort getestet.
 
 ## 11. Erfolgskriterien für das MVP
 

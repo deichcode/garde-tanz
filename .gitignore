@@ -4,3 +4,8 @@ dist/
 *.log
 .env
 .env.*
+
+# Musik und Audio nie einchecken (Urheberrecht, Größe)
+*.mp3
+*.wav
+*.m4a
