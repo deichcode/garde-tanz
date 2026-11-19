@@ -106,9 +106,9 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 | Pflege-Menü | `.gm-menu` | Am Baustein: Umbenennen (diese Rolle oder alle), langer Name, übliche Zeiten, bewegt sich, anheften, nicht mehr vorschlagen, zusammenführen. Zeilen 48 px, rechts der aktuelle Wert |
 | Kurzmeldung | `.gm-toast` | Tinte auf Papier invertiert, eine Zeile + `Rückgängig`. Für automatisch Gelerntes („Neu bei Grenadiere: Salut“). Verschwindet nach 6 s, im Training nie |
 | Auswahlliste | `.gm-check` | Für KI-Vorschläge zum Abhaken, z. B. Start-Katalog einer neuen Rolle. Zeile 48 px, Kästchen 22 px in Tinte |
-| Bildkarte | `.gm-frame` | Kopf: Nummer + „16 Zeiten“ + Hinweis-Badge. Bühne. Eine Zeile pro Spur, Anzahl Zeiten fett in Mono (`.gm-track__n`). Summe nur bei Abweichung. `.is-active` = Signal-Rahmen |
+| Bildkarte | `.gm-frame` | Kopf: Nummer + „16 Zeiten“ + Zählweise, wenn nicht Achter („· 4 + 12“) + Hinweis-Badge. Keine Titel. Bühne. Eine Zeile pro Spur, Anzahl Zeiten fett in Mono (`.gm-track__n`). Summe nur bei Abweichung. `.is-active` = Signal-Rahmen |
 | Blatt | `.gm-sheet` | A4 quer, 2 × 2, skaliert über Container-Einheiten, druckt 1:1 (`@page A4 landscape`) |
-| Zählzeit | `.gm-count` | Große Zahl = Zeit im Achter, daneben „/8“ und „2. Achter von 2“, Segmente pro Zeit. `--preroll` für den Vorlauf |
+| Zählzeit | `.gm-count` | Große Zahl = Zeit im aktuellen Zählabschnitt (Achter, durchgezählt oder aufgeteilt), daneben dessen Länge („/8“, „/16“, „/12“) und der Abschnitt. Segmente pro Zeit, gegliedert nach Zählabschnitten. `--preroll` für den Vorlauf |
 | Stepper | `.gm-stepper` | Für Zeiten. Minus/Plus 48 px (`--l` 64 px). Zahl in Mono |
 | Segment-Auswahl | `.gm-seg` | Zwei bis drei Optionen, aktive mit Tinten-Rahmen |
 | Hinweis | `.gm-badge--warn` | Icon + Text + Fläche. Sagt, was fehlt: „6 von 8 Zeiten · 2 fehlen“ |

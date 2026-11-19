@@ -54,6 +54,7 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 | **Bild** | Eine Aufstellung mit einer festen Anzahl Zeiten. Zeigt die Startaufstellung und die Laufwege ins nächste Bild | `Frame` |
 | **Zeit** | Ein Schlag. Kleinste Einheit, nur ganze Zeiten | `count` |
 | **Achter** | 8 Zeiten. Ein Bild mit 16 Zeiten hat 2 Achter | – |
+| **Zählweise** | Wie laut gezählt wird: in Achtern, durch (1–16) oder aufgeteilt (1–4, 1–12) | `Frame.countSplit` |
 | **Formation** | Form, in der Tänzer stehen: Linie, Block, Kreis, Bogen, Keil, frei | `Formation` |
 | **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 1/4 Dreh`, `6 Marsch`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
 | **Laufweg** | Weg von der Aufstellung in Bild *n* zur Aufstellung in Bild *n+1* | `Path` |
@@ -113,6 +114,7 @@ interface Frame {
   formations: Formation[];    // Startaufstellung; jeder Tänzer genau 1×
   tracks: Track[];            // Aktionen; jede Gruppe in genau 1 Track
   pathStyle: PathStyle[];     // Darstellung der Laufwege ins nächste Bild
+  countSplit?: number[];      // Zählweise: Längen der Zählabschnitte, z. B. [8,8], [16], [4,12]; fehlt = automatisch
   note?: string;              // Trainer-Notiz
   updatedAt: string; updatedBy: Id;
 }
@@ -185,6 +187,22 @@ interface Music {
 
 Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer Liste „Offene Hinweise (3)“. Auch ein Bild mit Hinweisen kann gespeichert, gedruckt und trainiert werden.
 
+### 5.4 Zählweise
+
+Wie laut gezählt wird, hängt vom Bild ab:
+
+| Zählweise | Beispiel (16 Zeiten) | Wann |
+|---|---|---|
+| **Achter** | 1–8, 1–8 | am häufigsten |
+| **Durchzählen** | 1–16 | z. B. bei 16 Zeiten Marsch |
+| **Aufgeteilt** | 1–4, 1–12 | selten, an markanten Stellen: Es wird auf eine bestimmte Aktion hin gezählt |
+
+- **Automatisch:** in Achtern. Beginnt in allen Spuren zur selben Zeit ein Baustein mit mehr als 8 Zeiten, wird er ab seinem Beginn durchgezählt: `16 Marsch` ergibt 1–16, `4 Stip · 12 Marsch` ergibt 1–4, 1–12. Davor und danach wird wieder in Achtern gezählt. Referenz: `countSegments` in `design-system/stage.js`.
+- **Ändern in place:** Ein Tipp auf die Zählweise im Inspektor bzw. Bild-Kopf öffnet die Auswahl *Automatisch*, *Achter*, *Durchzählen* oder *eigene Aufteilung*. Für die eigene Aufteilung tippt man in der Zeitenleiste zwischen zwei Zeiten und setzt oder entfernt damit „ab hier neu zählen“.
+- **Sichtbar, auch im Druck:** Weicht die Zählweise von Achtern ab, steht sie im Bild-Kopf, etwa `16 Zeiten · 4 + 12` oder `16 Zeiten · 1–16`. So stehen die markanten Stellen auch auf dem Papier.
+- **Training:** Die große Zahl zählt so, wie der Trainer ruft: Sie zeigt die Zeit im aktuellen Zählabschnitt, daneben dessen Länge („/12“). Die Segmentleiste ist nach den Abschnitten gegliedert. Der Vorlauf zählt immer in Achtern („5, 6, 7, 8“).
+- **Ändern sich die Zeiten eines Bildes**, fällt eine eigene Aufteilung auf *Automatisch* zurück, mit Hinweis.
+
 ## 6. Funktionsumfang MVP
 
 ### 6.1 Verein, Konten, Sync
@@ -196,7 +214,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 - **Prüfung:** Bei jeder Anmeldung und einmal täglich prüft der Server die Gruppenmitgliedschaft. Wer aus der Gruppe entfernt wird, verliert den Zugang beim nächsten Online-Abgleich. Die Daten auf seinem Gerät werden dann gelöscht.
 - **Gespeichert wird nur** Name, E-Mail-Adresse und die Microsoft-Konto-ID des Trainers.
 - **Einrichtung (einmalig durch den M365-Admin):** ~~Gruppe anlegen~~ erledigt. Noch offen, mit Schritt-für-Schritt-Anleitung in M1: App in Entra ID registrieren, Trainer als Mitglieder und die Trainerleitung als Besitzer der Gruppe eintragen, Externe als Gäste einladen, der Graph-Berechtigung einmal zustimmen. Für die Konfiguration braucht die App dann die Tenant-ID und die Objekt-ID der Gruppe (beides keine Geheimnisse).
-- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.
+- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). **Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.** Feinere Rechte (z. B. nur die eigene Garde) kommen bei Bedarf später.
 - **Local-first:** Alle Daten liegen zusätzlich auf dem Gerät. Bearbeiten und Training funktionieren offline, der Abgleich passiert automatisch.
 - **Konflikte:** Jedes Bild ist ein eigenes Dokument, gespeichert wird feldweise. Gleichzeitige Änderungen am selben Feld: die letzte gewinnt. Am Bild steht „zuletzt geändert von Anna, vor 5 Min.“.
 - **Stände sichern:** benannte Versionen (z. B. „vor Turnier Köln“), wiederherstellbar als Kopie. Rückgängig/Wiederholen gilt pro Sitzung.
@@ -232,7 +250,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 - **Direkt im Blatt bearbeiten:** Ein Klick auf ein Bild macht es aktiv (Rahmen in Signalfarbe), rechts öffnet sich der Inspektor. Mit **Fokus** (Doppelklick oder `F`) füllt ein einzelnes Bild das Blatt, für Feinarbeit bei 30 Tänzern.
 - **Navigation:** Seiten vor und zurück, Seitenübersicht, Zeitleiste (Klick springt zum Bild), Tastatur (`←` `→` Bild, `Bild↑` `Bild↓` Seite).
 - **Bild einfügen:** `+` nach dem aktiven Bild oder `N` legt eine Kopie des vorherigen Bildes an. Alternativ „Mit KI beschreiben“ (siehe 6.8). Bilder lassen sich verschieben, duplizieren und löschen (mit Rückgängig).
-- **Zeiten pro Bild:** Schnellwahl `8` `16` `4` `2` `32` und freie Eingabe.
+- **Zeiten pro Bild:** Schnellwahl `8` `16` `4` `2` `32` und freie Eingabe. Daneben die **Zählweise** (siehe 5.4). Bilder haben keine Titel, der Kopf zeigt nur Nummer, Zeiten und gegebenenfalls die Zählweise.
 - **Tablet hochkant:** 2 Bilder untereinander statt 2 × 2. Quer gilt das Standard-Blatt.
 
 ### 6.4 Formationen und Positionen
@@ -348,7 +366,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 2. **Automatische Analyse:** Schläge, Taktanfänge („die 1“) und Tempo-Abschnitte werden erkannt. Das dauert einige Sekunden, danach erscheint ein Vorschlag für den Start von Bild 1.
 3. **Korrigieren im Raster-Editor:**
    - Wellenform mit Schlagstrichen, jede „1“ eines Achters hervorgehoben.
-   - **„Bild 1 beginnt hier“** auf einen Schlag ziehen. Das Intro davor gehört zum Vorlauf.
+   - **„Bild 1 beginnt hier“** auf einen Schlag ziehen. Das Intro davor gehört zum Vorlauf. Einmarsch und Ausmarsch werden nicht erfasst.
    - **Mittippen:** Während die Musik läuft, auf die Schläge tippen (Taste oder Fläche). Die App passt das Raster im markierten Abschnitt an.
    - **Tempo-Abschnitt:** „Ab hier neues Tempo“ an einem Schlag setzen, BPM per Mittippen oder Zahl.
    - **Feinjustage:** ganzes Raster oder Abschnitt um ±10 ms verschieben.
@@ -448,6 +466,9 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Schautanz, Solo, Paartanz | Fokus Gardetanz |
 | Bühnenmaße, Raster, umschaltbare Perspektive | „Freie Fläche reicht“, Publikum immer unten |
 | Halbe Zeiten | Nicht benötigt |
+| Einmarsch und Ausmarsch | Werden in der Choreografie nicht beachtet |
+| Bildtitel (z. B. „Diagonale“) | Nicht benötigt, Nummer und Zeiten reichen |
+| Rechte pro Garde | Zum Start dürfen alle Trainer alles. Kommt bei Bedarf später |
 | KI räumt Kataloge auf (Synonyme erkennen, z. B. „Gewehr hoch“ = „Präs“) | Erst nötig, wenn Kataloge groß werden. Zusammenführen geht im MVP von Hand am Baustein |
 | Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start |
 | Mehrere Vereine, Abo | Nur der eigene Verein |
@@ -499,9 +520,6 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | **M4 Training** | Trainingsmodus, Vorlauf, Audio-Verzögerung, Bearbeiten-Modus, Offline-Status | **Einsatz in der Halle** |
 | **M5 KI** | KI-Assistent mit Rückfragen und Vorschau | Schneller neue Bilder |
 
-## 13. Offene Fragen für später
+## 13. Offene Fragen
 
-1. Zählt ihr laut „1–8, 2–2–3–…“ oder „1–16“? (Das bestimmt die Zählanzeige, Standard sind Achter.)
-2. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
-3. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
-4. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
+Alle Fragen aus dem Konzept sind beantwortet (Stand 19.11.2026). Die Antworten stehen im [Interview-Protokoll](01-interview.md) unter „Nachtrag“. Neue Fragen entstehen voraussichtlich bei den Spikes in M0 (Musik, Audio-Latenz, Offline auf dem iPhone, Anmeldung).

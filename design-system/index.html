@@ -123,6 +123,9 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 .sg-band__bar { grid-row: 1; grid-column: 3 / 11; display: flex; align-items: center; gap: 4px; min-width: 0; padding: 2px 8px; border: 2px solid var(--gm-signal); border-radius: var(--gm-radius-s); background: var(--gm-signal-tint); font-size: var(--gm-text-xs); font-weight: 700; }
 .sg-band__bar svg { width: 14px; height: 14px; flex: none; }
 .sg-band__cell { grid-row: 2; display: grid; place-items: center; min-height: 32px; border-radius: 3px; background: var(--gm-sunken); font: 700 var(--gm-text-xs) var(--gm-font-mono); }
+.sg-splitbar { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 2px; }
+.sg-splitbar__cell { display: grid; place-items: center; min-height: 40px; border: 1.5px solid var(--gm-line-strong); border-radius: 3px; font: 700 var(--gm-text-xs) var(--gm-font-mono); }
+.sg-splitbar__cell.is-restart { border-left: 4px solid var(--gm-signal); }
 .sg-preroll-note { color: var(--gm-signal); font-weight: 800; font-size: var(--gm-text-lg); }
 
 /* Größen */
@@ -372,10 +375,20 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   <section id="zaehlzeit" aria-labelledby="h-zaehlzeit">
     <div class="sg-sec-head">
       <h2 id="h-zaehlzeit">Zählzeit &amp; Aktionen</h2>
-      <p>Gezählt wird in Achtern, wie in der Halle: Die große Zahl ist die Zeit im aktuellen Achter, darunter steht, welcher Achter läuft. Die Segmente zeigen den Fortschritt im ganzen Bild.</p>
+      <p>Gezählt wird, wie in der Halle gerufen wird: meist in Achtern, lange Bausteine durch (16 Marsch → 1–16), an markanten Stellen aufgeteilt (1–4, 1–12). Die große Zahl ist die Zeit im aktuellen Zählabschnitt, die Segmente zeigen das ganze Bild, gegliedert nach Abschnitten.</p>
     </div>
-    <div class="sg-grid">
-      <div class="sg-panel sg-stack"><h3>Zählzeit: Bild mit 16 Zeiten, Zeit 13</h3><div id="count-now"></div></div>
+    <div class="sg-grid sg-grid--wide">
+      <div class="sg-panel sg-stack"><h3>Achter (häufig), Zeit 13 von 16</h3><div id="count-now"></div></div>
+      <div class="sg-panel sg-stack"><h3>Durchgezählt: 16 Marsch, Zeit 13</h3><div id="count-through"></div></div>
+      <div class="sg-panel sg-stack"><h3>Aufgeteilt: 4 + 12, Zeit 13</h3><div id="count-split"></div><p class="sg-caption">Bild 9: 4 Stip, dann 12 Marsch. Automatisch erkannt, steht auch im Bild-Kopf.</p></div>
+      <div class="sg-panel sg-stack"><h3>Zählweise festlegen</h3>
+        <div class="gm-seg" role="group" aria-label="Zählweise Bild 9">
+          <button type="button" aria-pressed="true">Automatisch</button><button type="button" aria-pressed="false">Achter</button>
+          <button type="button" aria-pressed="false">Durchzählen</button><button type="button" aria-pressed="false">Eigene</button>
+        </div>
+        <div class="sg-splitbar" id="split-bar" role="img" aria-label="Bild 9: 1 bis 4, dann neu 1 bis 12"></div>
+        <p class="sg-caption">Zwischen zwei Zeiten tippen setzt oder entfernt „ab hier neu zählen“ (blaue Kante).</p>
+      </div>
       <div class="sg-panel sg-stack"><h3>Vorlauf vor dem Startbild</h3><div id="count-preroll"></div><p class="sg-caption">Während des Vorlaufs ist die Zahl blau und das Bild noch nicht gestartet.</p></div>
     </div>
     <div class="sg-grid">
@@ -706,8 +719,8 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         { shape: 'line', cx: 0.5, cy: 0.76, length: 0.84, members: GM.alternate('a', 'b', 6) },
         { shape: 'line', cx: 0.5, cy: 0.32, length: 0.36, members: C }],
       tracks: [
-        { groups: ['a', 'b'], blocks: [[4, '1/2 Dreh'], [4, 'Stip'], [8, 'Marsch', 1]] },
-        { groups: ['c'], blocks: [[2, '1/4 Dreh'], [6, 'BeinSchw'], [8, 'Marsch', 1]] }] },
+        { groups: ['a', 'b'], blocks: [[4, 'Stip'], [12, 'Marsch', 1]] },
+        { groups: ['c'], blocks: [[4, '1/4 Dreh'], [12, 'Marsch', 1]] }] },
     10: { num: 10, counts: 8, note: 'Hintere Reihe kommt zu spät',
       formations: [
         { shape: 'block', cx: 0.2, cy: 0.46, length: 0.2, rows: 2, depth: 0.22, members: A },
@@ -833,25 +846,41 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   $('desk-sheet').innerHTML = sheet(10);
 
   /* --- Zählzeit ---------------------------------------------------------------- */
-  function count(at, total, opts) {
+  /* Zählanzeige: große Zahl = Zeit im aktuellen Zählabschnitt (Konzept 5.4) */
+  function count(at, segs, opts) {
     opts = opts || {};
-    var eight = Math.ceil(at / 8), inEight = at - (eight - 1) * 8, groups = '';
-    for (var g = 0; g < total / 8; g++) {
-      groups += '<span class="gm-count__group">';
-      for (var s = 1; s <= 8; s++) {
-        var n = g * 8 + s;
+    var start = 0, si = 0;
+    while (si < segs.length - 1 && at > start + segs[si]) { start += segs[si]; si++; }
+    var inSeg = at - start, len = segs[si];
+    var allEight = segs.every(function (s) { return s === 8; });
+    var label = allEight ? (si + 1) + '. Achter von ' + segs.length
+      : segs.length === 1 ? 'durchgezählt' : 'Abschnitt ' + (si + 1) + ' von ' + segs.length + ' · ' + segs.join(' + ');
+    var groups = '', pos = 0;
+    segs.forEach(function (s) {
+      groups += '<span class="gm-count__group" style="flex:' + s + '">';
+      for (var k = 1; k <= s; k++) {
+        var n = pos + k;
         groups += '<span class="gm-count__seg' + (n < at ? ' is-done' : n === at ? ' is-now' : '') + '"></span>';
       }
       groups += '</span>';
-    }
-    return '<div class="gm-count' + (opts.preroll ? ' gm-count--preroll' : '') + '" role="group" aria-label="Zeit ' + inEight + ' im ' + eight + '. Achter">' +
-      '<span class="gm-count__num">' + inEight + '</span><span class="gm-count__meta">' +
+      pos += s;
+    });
+    return '<div class="gm-count' + (opts.preroll ? ' gm-count--preroll' : '') + '" role="group" aria-label="Zeit ' + inSeg + ' von ' + len + '">' +
+      '<span class="gm-count__num">' + inSeg + '</span><span class="gm-count__meta">' +
       (opts.preroll ? '<span class="sg-preroll-note">Vorlauf</span><span class="gm-count__eight">gleich Bild 12</span>'
-        : '<span class="gm-count__of">/8</span><span class="gm-count__eight">' + eight + '. Achter von ' + (total / 8) + '</span>') +
+        : '<span class="gm-count__of">/' + len + '</span><span class="gm-count__eight">' + label + '</span>') +
       '</span><span class="gm-count__bar">' + groups + '</span></div>';
   }
-  $('count-now').innerHTML = count(13, 16);
-  $('count-preroll').innerHTML = count(7, 8, { preroll: true });
+  $('count-now').innerHTML = count(13, [8, 8]);
+  $('count-through').innerHTML = count(13, GM.countSegments({ counts: 16, tracks: [{ blocks: [[16, 'Marsch', 1]] }] }));
+  $('count-split').innerHTML = count(13, GM.countSegments(F[9]));
+  $('count-preroll').innerHTML = count(7, [8], { preroll: true });
+  var sb = '', segs9 = GM.countSegments(F[9]), p0 = 0;
+  segs9.forEach(function (s, si) {
+    for (var k = 1; k <= s; k++) sb += '<span class="sg-splitbar__cell' + (k === 1 && si > 0 ? ' is-restart' : '') + '">' + k + '</span>';
+    p0 += s;
+  });
+  $('split-bar').innerHTML = sb;
 
   $('chip-states').innerHTML =
     '<span class="gm-chip gm-chip--past"><span class="gm-chip__n">4</span> 1/2 Dreh</span>' +
@@ -979,7 +1008,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
       '<button class="sg-tbar__title" type="button">Bild 11 <small>/ 42</small>' + I('down') + '</button>' +
       '<span class="sg-tbar__status" title="Offline bereit">' + I('ready', 'Offline bereit') + '</span></div>' +
     GM.renderStage(dance, F[11], F[12], { label: true, title: 'Bild 11' }) +
-    count(13, 16) +
+    count(13, GM.countSegments(F[11])) +
     '<div class="sg-ttracks">' + trainingTracks(F[11], 13) + '</div>' +
     '<p class="sg-next">Weiter: <strong>Bild 12</strong> · 8 Zeiten</p>' +
     '<div class="sg-tools"><button class="gm-btn gm-btn--secondary" type="button">' + I('play-o') + 'Vorlauf 8' + I('down') + '</button>' +

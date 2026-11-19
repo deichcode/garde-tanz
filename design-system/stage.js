@@ -273,6 +273,35 @@
     }).join('');
   }
 
+  /* --- Zählweise (Konzept 5.4) ------------------------------------------------ */
+  function eights(n) { var out = []; while (n > 0) { out.push(Math.min(8, n)); n -= 8; } return out; }
+
+  /**
+   * Längen der Zählabschnitte eines Bildes, z. B. [8, 8], [16] oder [4, 12].
+   * Eine eigene Aufteilung (countSplit) gewinnt. Automatisch: Achter. Beginnt in
+   * allen Spuren zur selben Zeit ein gleich langer Baustein mit mehr als 8 Zeiten,
+   * wird er ab seinem Beginn durchgezählt (16 Marsch → 1–16, 4 Stip · 12 Marsch → 1–4, 1–12).
+   */
+  function countSegments(frame) {
+    if (frame.countSplit) return frame.countSplit.slice();
+    var longs = frame.tracks.map(function (t) {
+      var pos = 0, hit = null;
+      t.blocks.forEach(function (b) { if (!hit && b[0] > 8) hit = { start: pos, len: b[0] }; pos += b[0]; });
+      return hit;
+    });
+    var l = longs[0];
+    var same = l && longs.every(function (x) { return x && x.start === l.start && x.len === l.len; });
+    if (!same) return eights(frame.counts);
+    return eights(l.start).concat([l.len], eights(frame.counts - l.start - l.len));
+  }
+
+  /** Zählweise als Text für den Bild-Kopf, leer wenn in Achtern gezählt wird. */
+  function countLabel(frame) {
+    var segs = countSegments(frame);
+    if (segs.join() === eights(frame.counts).join()) return '';
+    return segs.length === 1 ? '1–' + segs[0] : segs.join(' + ');
+  }
+
   /** Warnungen nach den Prüfregeln (Konzept 5.3). */
   function warnings(frame, next) {
     var list = [], P = positions(frame), Q = next ? positions(next) : null;
@@ -296,7 +325,7 @@
     var cls = 'gm-frame' + (opts.active ? ' is-active' : '') + (opts.now ? ' is-now' : '');
     var html = '<article class="' + cls + '" aria-label="Bild ' + frame.num + '">';
     html += '<header class="gm-frame__head"><span class="gm-frame__num">' + frame.num + '</span>' +
-      '<span class="gm-frame__counts">' + frame.counts + ' Zeiten</span><span class="gm-frame__flags">';
+      '<span class="gm-frame__counts">' + frame.counts + ' Zeiten' + (countLabel(frame) ? ' · ' + countLabel(frame) : '') + '</span><span class="gm-frame__flags">';
     if (warns.length) html += '<span class="gm-badge gm-badge--warn" title="Offene Hinweise">' + icon('warn') + warns.length + '</span>';
     if (frame.note) html += '<span class="gm-badge gm-badge--neutral" title="Notiz">' + icon('note') + '</span>';
     html += '</span></header>';
@@ -345,6 +374,6 @@
   global.GM = {
     symbol: symbol, symbolIcon: symbolIcon, layoutFormation: layoutFormation, positions: positions, assignShortest: assignShortest,
     renderStage: renderStage, renderFrame: renderFrame, renderChips: renderChips, warnings: warnings,
-    trackText: trackText, trackHtml: trackHtml, trackSum: trackSum, trackWho: trackWho, icon: icon, members: members, alternate: alternate
+    trackText: trackText, trackHtml: trackHtml, countSegments: countSegments, countLabel: countLabel, trackSum: trackSum, trackWho: trackWho, icon: icon, members: members, alternate: alternate
   };
 })(window);

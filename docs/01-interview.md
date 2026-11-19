@@ -93,6 +93,10 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | *„Reserve ist eigenständige Gruppe.“* | Die Reserve bekommt eine **eigene Rolle** mit eigenem Katalog, sie nutzt nicht die Liste der Mariechen mit. Zuordnung: ● Mariechen, ○ Grenadiere, ✕ Reserve. |
 | *„Mehrere Gruppen sollten beliebig zu einer Gruppe zusammengenommen werden können, auch für Teile des Tanzes.“* | **Gruppenverbund** aus beliebigen Gruppen, festgelegt für *nur dieses Bild*, *bis Bild …* oder *bis auf Weiteres*. Neue Bilder übernehmen den Verbund. Trennen ist ab einem Bild möglich, die Zeitleiste zeigt die Abschnitte. Konzept 6.5. |
 | *Kürzel für „Marsch auf der Stelle“? – „MrschSt“* | Im gemeinsamen Katalog als `MrschSt` (bewegt sich nicht). |
+| *Wie wird gezählt? – „Hängt immer davon ab. Bei 16 Zeiten Marsch wird 1, 2, 3, 4, …, 16 gezählt. Häufig bis 8. Selten aufgeteilt, z. B. 1, 2, 3, 4, 1, 2, 3, 4, …, 12 für 16 Zeiten. Das sind dann markante Stellen, wo auf eine bestimmte Aktion hin gezählt wird.“* | Jedes Bild hat eine **Zählweise**: Achter, durchgezählt oder eigene Aufteilung. Automatisch gilt Achter. Lange Bausteine (> 8 Zeiten) werden ab ihrem Beginn durchgezählt. Die Zählweise lässt sich in place ändern, steht im Bild-Kopf und im Druck und steuert die Zählanzeige im Training. Konzept 5.4. |
+| *Dürfen alle Trainer alle Tänze bearbeiten? – „Erstmal alle alles, später ggf. komplexer.“* | Keine Rechte pro Garde im MVP. Konzept 6.1, 8. |
+| *Einmarsch und Ausmarsch als eigene Bilder? – „Nein, werden nicht beachtet.“* | Nicht erfasst. Bild 1 beginnt nach dem Einmarsch, Musik davor ist Intro bzw. Vorlauf. |
+| *Bildtitel? – „Nein.“* | Keine Titel. Der Bild-Kopf zeigt Nummer, Zeiten und gegebenenfalls die Zählweise. |
 | *„Microsoft 365 Gruppe ist erstellt.“* | Einrichtungsschritt „Gruppe anlegen“ erledigt. Offen bis M1: App-Registrierung, Mitglieder und Besitzer, Gäste, Admin-Zustimmung. Konzept 6.1. |
 
 ---
@@ -102,7 +106,7 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 Diese Punkte habe ich festgelegt, damit das Konzept vollständig ist. Jeder lässt sich leicht ändern.
 
 1. **Sprache und Ansprache:** Die Oberfläche ist auf Deutsch und duzt. Sie nutzt das Vokabular der Trainer: *Bild, Zeiten, Achter, Gruppe, Laufweg, Aktion*. Begriffe wie *Frame* oder *Count* tauchen nicht auf.
-2. **Zählanzeige in Achtern:** Im Training zeigt die große Zahl die Zeit innerhalb des aktuellen Achters (1–8), daneben steht „2. Achter“. Das passt zum lauten Mitzählen „5, 6, 7, 8“.
+2. ~~**Zählanzeige in Achtern**~~ → ersetzt durch die **Zählweise pro Bild** (siehe Nachtrag, Konzept 5.4).
 3. **Standard-Vorlauf: 8 Zeiten.** Pro Gerät auf 0, 4, 8 oder 16 einstellbar.
 4. **Heller Modus als Standard** (Papier-Anmutung, helle Hallen). Ein dunkler Modus ist verfügbar.
 5. **Drittes Gruppensymbol: ✕.** Es unterscheidet sich von ● und ○ sowohl in der Form als auch in der Füllung. Alternativen: ▲ ■ ◆ oder der Buchstabe „R“ (für Reserve).

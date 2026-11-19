@@ -21,6 +21,8 @@ Laufweg, Raster (`beats[]`), Vorlauf (`preRoll`). In der UI nie „Frame“, „
 - Gemeinsame Bausteine (`roleId: '*'`) gelten für alle Rollen. Start-Kataloge: `seed/start-katalog.json`.
 - Gruppenverbünde: beliebige Gruppen-Kombinationen, auch über Bildbereiche. Neue Bilder übernehmen die Verbünde des vorherigen.
 - Begriffe können Zahlen enthalten (`1/4 Dreh`): Die erste Zahl ist immer die Anzahl Zeiten, angezeigt fett in Mono.
+- Zählweise pro Bild (`countSplit`): automatisch Achter, Bausteine > 8 Zeiten werden durchgezählt (Referenz `countSegments`). Steuert die Zählanzeige im Training.
+- Keine Bildtitel, kein Einmarsch/Ausmarsch, keine Rechte pro Garde (alle Trainer dürfen alles).
 - Anmeldung **nur mit Microsoft über den Vereins-Tenant** (Einzelmandant, Gäste mit privatem Konto über Entra B2B). Zugang = Mitglied einer M365-Gruppe, keine eigene Benutzerverwaltung. Die Sitzung muss offline erhalten bleiben.
 
 ## Design-Regeln
