@@ -13,7 +13,7 @@
   ],
   "roleActions": [
     { "roleId": "*", "label": "Marsch", "longName": "marschieren", "moves": true, "defaultCounts": null },
-    { "roleId": "*", "label": "Marsch auf der Stelle", "longName": "marschieren am Platz", "moves": false, "defaultCounts": null },
+    { "roleId": "*", "label": "MrschSt", "longName": "Marsch auf der Stelle", "moves": false, "defaultCounts": null },
     { "roleId": "*", "label": "1/4 Dreh", "longName": "Vierteldrehung", "moves": false, "defaultCounts": null },
     { "roleId": "*", "label": "1/2 Dreh", "longName": "Drehung", "moves": false, "defaultCounts": null },
     { "roleId": "*", "label": "Stip", "longName": "Stippeföttche", "moves": false, "defaultCounts": null },

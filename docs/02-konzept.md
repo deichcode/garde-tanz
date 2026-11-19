@@ -191,11 +191,11 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 - **Anmeldung über das Microsoft 365 des Vereins:** „Mit Microsoft anmelden“ läuft über den eigenen Microsoft-365-Tenant des Vereins. Trainer nutzen ihr **Vereinskonto**. Wer keins hat, wird mit seinem **privaten Microsoft-Konto als Gast** in den Tenant eingeladen oder bekommt ein Vereinskonto. Es gibt keine eigenen Passwörter in der App und keine anderen Anmeldearten.
 - **Einmal anmelden, dann dauerhaft:** Microsoft wird nur bei der ersten Anmeldung auf einem Gerät gebraucht. Danach hält die App die Sitzung selbst. Training und Bearbeiten funktionieren offline, ohne erneute Anmeldung.
-- **Zugang = Mitglied der M365-Gruppe „Garde-Tanz“.** Die Gruppe wird für die App neu angelegt. Wer Zugang bekommt oder verliert, pflegt der Verein dort, wo er seine Konten ohnehin verwaltet. Die App hat **keine eigene Benutzerverwaltung** und keine Einladungslinks.
+- **Zugang = Mitglied der M365-Gruppe „Garde-Tanz“.** Die Gruppe ist angelegt (19.11.2026). Wer Zugang bekommt oder verliert, pflegt der Verein dort, wo er seine Konten ohnehin verwaltet. Die App hat **keine eigene Benutzerverwaltung** und keine Einladungslinks.
 - **Admins** (Garden anlegen, Rollen zusammenführen oder löschen) sind die **Besitzer** dieser Gruppe. Eine zweite Gruppe ist nicht nötig.
 - **Prüfung:** Bei jeder Anmeldung und einmal täglich prüft der Server die Gruppenmitgliedschaft. Wer aus der Gruppe entfernt wird, verliert den Zugang beim nächsten Online-Abgleich. Die Daten auf seinem Gerät werden dann gelöscht.
 - **Gespeichert wird nur** Name, E-Mail-Adresse und die Microsoft-Konto-ID des Trainers.
-- **Einrichtung (einmalig durch den M365-Admin, ca. 15 Minuten):** App in Entra ID registrieren, Gruppe „Garde-Tanz“ anlegen, Trainer als Mitglieder und die Trainerleitung als Besitzer eintragen, Externe als Gäste einladen, der Graph-Berechtigung einmal zustimmen. Eine Schritt-für-Schritt-Anleitung entsteht in M1.
+- **Einrichtung (einmalig durch den M365-Admin):** ~~Gruppe anlegen~~ erledigt. Noch offen, mit Schritt-für-Schritt-Anleitung in M1: App in Entra ID registrieren, Trainer als Mitglieder und die Trainerleitung als Besitzer der Gruppe eintragen, Externe als Gäste einladen, der Graph-Berechtigung einmal zustimmen. Für die Konfiguration braucht die App dann die Tenant-ID und die Objekt-ID der Gruppe (beides keine Geheimnisse).
 - **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.
 - **Local-first:** Alle Daten liegen zusätzlich auf dem Gerät. Bearbeiten und Training funktionieren offline, der Abgleich passiert automatisch.
 - **Konflikte:** Jedes Bild ist ein eigenes Dokument, gespeichert wird feldweise. Gleichzeitige Änderungen am selben Feld: die letzte gewinnt. Am Bild steht „zuletzt geändert von Anna, vor 5 Min.“.
@@ -250,7 +250,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 **Grundidee:** Jede Gruppe hat eine **Rolle**, jede Rolle hat einen eigenen **Katalog**. Dazu kommen **gemeinsame Bausteine**, die alle Rollen haben. Der Katalog füllt sich beim Schreiben von selbst. Korrigiert wird er dort, wo man gerade arbeitet. Niemand muss vorab etwas anlegen oder regelmäßig aufräumen.
 
 ```
-Alle Rollen ────────────────────────────▶   Marsch→  Marsch auf der Stelle  1/4 Dreh  1/2 Dreh  Stip
+Alle Rollen ────────────────────────────▶   Marsch→  MrschSt  1/4 Dreh  1/2 Dreh  Stip
 Gruppe ● Mariechen  ─▶ Rolle Mariechen  ─▶ + Hüpf→  Schmeiß
 Gruppe ○ Grenadiere ─▶ Rolle Grenadiere ─▶ + GewSchw  Präs  Fuß  Klopf
 Gruppe ✕ Reserve    ─▶ Rolle Reserve    ─▶ + BeinSchw
@@ -305,7 +305,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Rolle | Kürzel | Bedeutung | Bewegt sich* |
 |---|---|---|---|
 | Alle | Marsch | marschieren | ja |
-| Alle | Marsch auf der Stelle | marschieren am Platz | nein |
+| Alle | MrschSt | Marsch auf der Stelle | nein |
 | Alle | 1/4 Dreh | Vierteldrehung | nein |
 | Alle | 1/2 Dreh | Drehung | nein |
 | Alle | Stip | Stippeföttche | nein |
@@ -505,4 +505,3 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 2. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
 3. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
 4. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
-5. Schreibt ihr „Marsch auf der Stelle“ aus, oder gibt es dafür ein Kürzel?
