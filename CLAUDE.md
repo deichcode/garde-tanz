@@ -6,7 +6,8 @@ Vor jeder Arbeit lesen: `docs/02-konzept.md` (fachliches Modell, MVP-Umfang) und
 ## Fachsprache (verbindlich in UI und Code-Kommentaren)
 
 Bild (`Frame`), Zeiten (`counts`, nur ganze), Achter (8 Zeiten), Gruppe (`Group`, Symbol ● ○ ✕),
-Gruppenverbund (`Track.groupIds` mit mehreren Gruppen), Formation, Aktion/Baustein (`ActionBlock`),
+Gruppenverbund (`Track.groupIds` mit mehreren Gruppen), Rolle (`Role`, z. B. Mariechen, Grenadiere)
+mit Katalog (`RoleAction`, Schlüssel = Rolle + normalisierter Begriff), Formation, Aktion/Baustein (`ActionBlock`),
 Laufweg, Raster (`beats[]`), Vorlauf (`preRoll`). In der UI nie „Frame“, „Count“, „Pre-Roll“.
 
 ## Fachregeln
@@ -16,7 +17,8 @@ Laufweg, Raster (`beats[]`), Vorlauf (`preRoll`). In der UI nie „Frame“, „
 - Tänzer sind **anonym** (`groupId:index`). Keine Personendaten speichern.
 - Bühne fest 3:2, normierte Koordinaten 0..1, **y = 1 ist vorne (Publikum unten)**.
 - Musik-Raster = Liste von Schlagzeitpunkten (Tempowechsel möglich), nicht ein globales BPM.
-- Anmeldung **nur mit Microsoft** (Office-365-/Arbeitskonten und private Microsoft-Konten). Zugang nur per Einladung. Die Sitzung muss offline erhalten bleiben.
+- Kataloge pflegen sich selbst: Freitext wird beim **zweiten Gebrauch in derselben Rolle** automatisch Baustein. Übliche Zeiten und „bewegt sich“ werden aus der Nutzung gelernt. Pflege nur in place am Baustein, nie als Pflicht-Schritt vorab.
+- Anmeldung **nur mit Microsoft über den Vereins-Tenant** (Einzelmandant, Gäste mit privatem Konto über Entra B2B). Zugang = Mitglied einer M365-Gruppe, keine eigene Benutzerverwaltung. Die Sitzung muss offline erhalten bleiben.
 
 ## Design-Regeln
 

@@ -49,12 +49,13 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 |---|---|---|
 | **Tanz** | Eine Choreografie einer Garde für eine Saison | `Dance` |
 | **Gruppe** | Feste Teilmenge der Tänzer mit eigenem Symbol (● ○ ✕). Meist 2–3 Gruppen mit je 4–10 Tänzern | `Group` |
+| **Rolle** | Was eine Gruppe ist, z. B. *Mariechen* oder *Grenadiere*. Bestimmt, welche Aktionen es gibt (Grenadiere schwenken, klopfen, präsentieren das Gewehr). Gilt vereinsweit, mehrere Gruppen können dieselbe Rolle haben | `Role` |
 | **Gruppenverbund** | Zwei oder mehr Gruppen, die sich in einem Bild wie eine verhalten (z. B. eine Linie ●○●○) | `Track.groupIds` |
 | **Bild** | Eine Aufstellung mit einer festen Anzahl Zeiten. Zeigt die Startaufstellung und die Laufwege ins nächste Bild | `Frame` |
 | **Zeit** | Ein Schlag. Kleinste Einheit, nur ganze Zeiten | `count` |
 | **Achter** | 8 Zeiten. Ein Bild mit 16 Zeiten hat 2 Achter | – |
 | **Formation** | Form, in der Tänzer stehen: Linie, Block, Kreis, Bogen, Keil, frei | `Formation` |
-| **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 Dreh`, `6 M` | `ActionBlock` |
+| **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 Dreh`, `6 M`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
 | **Laufweg** | Weg von der Aufstellung in Bild *n* zur Aufstellung in Bild *n+1* | `Path` |
 | **Raster** | Die Schlagzeitpunkte der Musik | `BeatGrid` |
 | **Vorlauf** | Zeiten, die die Musik vor dem gewählten Startbild anläuft | `preRoll` |
@@ -69,8 +70,8 @@ Bild 7 · 16 Zeiten                          Bild 8 · 8 Zeiten
 │   ● ○ ● ○ ● ○ ● ○       │   ──Laufweg──▶  │  ●  ●  ●  ●             │
 │        ✕ ✕ ✕ ✕          │                 │  ○  ○  ○  ○    ✕ ✕ ✕ ✕  │
 └──────── Publikum ───────┘                 └──────── Publikum ───────┘
-●○  8 Kick · 8 M  (16/16)                    …
-✕   2 Dreh · 6 Pose · 8 M  (16/16)
+●○  8 Wurf · 8 M  (16/16)                    …
+✕   2 Schw · 6 Präs · 8 M  (16/16)
 ```
 
 - Ein Bild beschreibt die **Startaufstellung** und was jede Gruppe in den Zeiten des Bildes tut.
@@ -99,6 +100,7 @@ interface Group {
   name: string;               // frei, z. B. "Gruppe 1" oder "Große"
   symbol: 'dot' | 'ring' | 'cross' | 'triangle' | 'square' | 'diamond' | { letter: string };
   size: number;               // Anzahl Tänzer, 4–10 typisch
+  roleId: Id;                 // Rolle, z. B. "Grenadiere" → bestimmt den Baustein-Katalog
 }
 
 // Tänzer sind anonym. Intern: (groupId, index 0..size-1).
@@ -133,10 +135,27 @@ interface Track {
 }
 
 interface ActionBlock {
-  actionId?: Id;              // Baustein aus dem Vereinskatalog
-  label: string;              // Anzeige: "M", "Dreh", oder Freitext
+  term: string;               // Begriff wie geschrieben: "Präs" (Schlüssel normalisiert: "präs")
   counts: number;             // ganze Zeiten
-  moves: boolean;             // Laufweg findet in diesen Zeiten statt
+  moves: boolean;             // Laufweg in diesen Zeiten (Vorgabe aus RoleAction, pro Block änderbar)
+}
+
+// --- Rollen und Kataloge: vereinsweit, pflegen sich beim Schreiben selbst (siehe 6.5)
+interface Role {
+  id: Id;
+  name: string;               // "Mariechen", "Grenadiere", "Fahnenträger"
+}
+
+interface RoleAction {        // Eintrag im Katalog einer Rolle
+  roleId: Id;
+  key: string;                // normalisierter Begriff ("präs"); Rolle + key → offline keine Doppelten
+  label: string;              // Kürzel wie auf Papier: "Präs"
+  longName?: string;          // "Gewehr präsentieren"; pro Rolle, "Wurf" darf je Rolle etwas anderes sein
+  aliases: string[];          // Suchwörter, Tippvarianten
+  state: 'candidate' | 'learned' | 'pinned' | 'hidden'; // candidate = 1× benutzt (Freitext)
+  defaultCounts: number;      // häufigste benutzte Zeitenanzahl in dieser Rolle
+  moves: boolean;             // geschätzt, dann aus Korrekturen gelernt
+  uses: number; lastUsedAt: string; // Reihenfolge der Vorschläge
 }
 
 interface PathStyle {
@@ -170,11 +189,12 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 ### 6.1 Verein, Konten, Sync
 
-- **Anmeldung mit Microsoft:** „Mit Microsoft anmelden“ funktioniert mit **Office-365-/Microsoft-365-Konten** (Arbeits- oder Schulkonto, z. B. ein Vereins-Konto) und mit **privaten Microsoft-Konten** (Outlook.com, Hotmail, Xbox …). Es gibt keine eigenen Passwörter in der App. Andere Anmeldearten gibt es im MVP nicht. Wer kein Microsoft-Konto hat, kann kostenlos ein privates anlegen.
+- **Anmeldung über das Microsoft 365 des Vereins:** „Mit Microsoft anmelden“ läuft über den eigenen Microsoft-365-Tenant des Vereins. Trainer nutzen ihr **Vereinskonto**. Wer keins hat, wird mit seinem **privaten Microsoft-Konto als Gast** in den Tenant eingeladen oder bekommt ein Vereinskonto. Es gibt keine eigenen Passwörter in der App und keine anderen Anmeldearten.
 - **Einmal anmelden, dann dauerhaft:** Microsoft wird nur bei der ersten Anmeldung auf einem Gerät gebraucht. Danach hält die App die Sitzung selbst. Training und Bearbeiten funktionieren offline, ohne erneute Anmeldung.
-- **Zugang nur auf Einladung:** Ein Microsoft-Konto allein gibt keinen Zugang. Ein Admin erzeugt einen Einladungslink. Der Trainer öffnet ihn und meldet sich mit Microsoft an, damit ist das Konto mit dem Verein verknüpft. Unbekannte Konten sehen „Kein Zugang – bitte lass dich von einem Admin einladen“.
+- **Zugang = Mitglied einer M365-Gruppe**, z. B. eines bestehenden Teams „Trainer“ oder einer neuen Gruppe „Garde-Tanz“. Wer Zugang bekommt oder verliert, pflegt der Verein dort, wo er seine Konten ohnehin verwaltet. Die App hat **keine eigene Benutzerverwaltung** und keine Einladungslinks. **Admins** (Garden anlegen, Rollen zusammenführen oder löschen) sind Mitglieder einer zweiten Gruppe, z. B. „Garde-Tanz Admins“.
+- **Prüfung:** Bei jeder Anmeldung und einmal täglich prüft der Server die Gruppenmitgliedschaft. Wer aus der Gruppe entfernt wird, verliert den Zugang beim nächsten Online-Abgleich. Die Daten auf seinem Gerät werden dann gelöscht.
 - **Gespeichert wird nur** Name, E-Mail-Adresse und die Microsoft-Konto-ID des Trainers.
-- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten. Admins verwalten Einladungen und können Zugänge entziehen.
+- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.
 - **Local-first:** Alle Daten liegen zusätzlich auf dem Gerät. Bearbeiten und Training funktionieren offline, der Abgleich passiert automatisch.
 - **Konflikte:** Jedes Bild ist ein eigenes Dokument, gespeichert wird feldweise. Gleichzeitige Änderungen am selben Feld: die letzte gewinnt. Am Bild steht „zuletzt geändert von Anna, vor 5 Min.“.
 - **Stände sichern:** benannte Versionen (z. B. „vor Turnier Köln“), wiederherstellbar als Kopie. Rückgängig/Wiederholen gilt pro Sitzung.
@@ -183,8 +203,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 ### 6.2 Tanz anlegen
 
 - Titel, Garde, Saison.
-- **Gruppen:** Standard 3 Gruppen (● ○ ✕), Anzahl Tänzer je Gruppe (4–10), Name optional. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
-- Optional: aus einem bestehenden Tanz kopieren (Gruppen und Katalog übernehmen).
+- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (z. B. ● Mariechen groß und ○ Mariechen klein mit Rolle *Mariechen*, ✕ mit Rolle *Grenadiere*) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
+- Ein neuer Tanz übernimmt Gruppen und Rollen vom letzten Tanz derselben Garde. Optional: aus einem anderen Tanz kopieren.
 
 ### 6.3 Seitenansicht und Bild-Editor (Desktop, Tablet)
 
@@ -198,9 +218,9 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 │ │ │ ● ○ ● ○ ● ○ │      │  ●  ●  ●  ● │   │ │  ▸ Linie ●○ (8)           │ │
 │ │ │    ✕ ✕ ✕    │      │ ✕ ✕   ○ ○ ○ │   │ │  ▸ Block ✕ (4)            │ │
 │ │ └─────────────┘      └─────────────┘   │ │ Aktionen                  │ │
-│ │ ●○ 8 Kick · 8 M      ●  8 M            │ │  ●○ [8 Kick][8 M]  16/16  │ │
-│ │ ✕  2 Dreh · 14 M     ○  6 Kick ⚠ 6/8   │ │  ✕  [2 Dreh][14 M] 16/16  │ │
-│ │ 11 · …               12 · …            │ │ Bausteine: M Dreh Kick …  │ │
+│ │ ●○ 8 Wurf · 8 M      ●  8 M            │ │  ●○ [8 Wurf][8 M]  16/16  │ │
+│ │ ✕  2 Schw · 14 M     ○  6 Wurf ⚠ 6/8   │ │  ✕  [2 Schw][14 M] 16/16  │ │
+│ │ 11 · …               12 · …            │ │ Bausteine ✕: M Schw Präs  │ │
 │ └────────────────────────────────────────┘ │ Notiz                     │ │
 │ ‹ Seite 2   ■■■□□□□□□□□   Seite 4 ›        │ ✦ Mit KI beschreiben      │ │
 ├ Zeitleiste: Musik-Wellenform + Bilder als Blöcke (Breite = Zeiten) + Abspielkopf ┤
@@ -221,13 +241,60 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 - **Ausrichtungshilfen:** keine dauerhaften Raster. Beim Ziehen erscheinen kurz Hilfslinien (Bühnenmitte, Kanten anderer Formationen).
 - **Zuordnung beim Formationswechsel:** Wer wohin läuft, ordnet die App automatisch so zu, dass die Wege möglichst kurz sind (innerhalb der Gruppe). Positionen lassen sich manuell tauschen.
 
-### 6.5 Aktionen
+### 6.5 Aktionen, Rollen und Kataloge
 
-- Pro Bild gibt es **eine Spur je Gruppe oder Gruppenverbund**. Ein Verbund (●○) wird gebildet, indem man Spuren zusammenzieht oder Gruppen in der Spur-Auswahl kombiniert.
-- **Bausteine** aus dem Vereinskatalog als Tasten. Jeder Baustein hat Kürzel, Standard-Zeiten und die Eigenschaft *bewegend* (z. B. `M` = Marsch, 8 Zeiten, bewegend).
-- **Schreiben wie auf Papier:** In das Feld einer Spur „2 drehen 6 M“ tippen, die App erkennt die Bausteine (`2 Dreh` `6 M`). Unbekanntes bleibt Freitext.
+**Ausgangslage:** Welche Aktionen es gibt, hängt davon ab, wer tanzt. Grenadiere haben Gewehre und schwenken, klopfen, präsentieren. Mariechen marschieren oder hüpfen, wenn sie sich bewegen, und werfen die Beine. Eine gemeinsame Liste für alle wäre lang und passt für keinen richtig. Eine Liste, die man getrennt pflegen muss, veraltet.
+
+**Grundidee:** Jede Gruppe hat eine **Rolle**, jede Rolle hat einen eigenen **Katalog**. Der Katalog füllt sich beim Schreiben von selbst. Korrigiert wird er dort, wo man gerade arbeitet. Niemand muss vorab etwas anlegen oder regelmäßig aufräumen.
+
+```
+Gruppe ● Mariechen groß ─┐
+Gruppe ○ Mariechen klein ─┴─▶ Rolle Mariechen   ─▶ M→  Hüpf→  Wurf  Dreh  Pose  Spagat …
+Gruppe ✕ Grenadiere ─────────▶ Rolle Grenadiere ─▶ M→  Schw  Klopf  Präs  Schult  Pose …
+                                                    (→ = bewegt sich, Reihenfolge = Häufigkeit)
+```
+
+**Schreiben**
+
+- Pro Bild gibt es **eine Spur je Gruppe oder Gruppenverbund**. Ein Verbund (●○) entsteht, indem man Spuren zusammenzieht oder Gruppen in der Spur-Auswahl kombiniert.
+- **Tippen wie auf Papier:** „2 schw 6 präs“ wird zu `2 Schw` `6 Präs`. Ab dem ersten Buchstaben erscheint eine Vorschlagsliste aus dem Katalog der Rolle. Sie sucht in Kürzel, langem Namen und Tippvarianten und verträgt Tippfehler. `Enter` übernimmt.
+- **Baustein-Leiste:** die 8 häufigsten Bausteine der Rolle als Tasten. Ein Tipp hängt den Baustein mit seinen üblichen Zeiten an. Fehlen weniger Zeiten, nimmt er genau den Rest (bei `6/8` wird ein Tipp auf `M` zu `2 M`).
+- **Gruppenverbund aus verschiedenen Rollen** (Mariechen und Grenadiere in einer Linie): Zuerst kommen Bausteine, die beide Rollen kennen, dann die übrigen mit Kennzeichen der Rolle.
 - **Zeiten ändern** per Stepper oder Zahl. Die Summe der Spur steht daneben: `16/16` neutral, `6/8 ⚠` als Hinweis.
-- **Vereinskatalog** wird von den Trainern selbst gepflegt. Start-Set als Vorschlag: Marsch (M), Drehung (Dreh), Kick, Pose/Halten, Wechselschritt, Spagat, Rad, Hebung, Gruß. Der Verein ergänzt eigene Begriffe.
+
+**Lernen durch Benutzen (automatisch)**
+
+| Was | Wie |
+|---|---|
+| Neuer Begriff | Was nicht im Katalog steht, ist sofort als **Freitext** nutzbar (gestrichelter Baustein). Keine Rückfrage, kein Dialog. |
+| Zweite Verwendung | Benutzt jemand denselben Begriff ein zweites Mal **in derselben Rolle**, wird er automatisch Baustein dieser Rolle. Ein kurzer Hinweis meldet „Neu bei Grenadiere: Salut“ mit `Rückgängig`. |
+| Übliche Zeiten | Die Zeitenanzahl, die in dieser Rolle am häufigsten für den Baustein benutzt wurde. |
+| Bewegt sich | Beim ersten Mal geschätzt (Wortstämme wie *marsch, lauf, hüpf, geh, schritt*). Stellt ein Trainer es an einem Baustein um, merkt sich die Rolle das. |
+| Reihenfolge | Häufigkeit in dieser Rolle, die letzten Tänze zählen mehr. Angeheftete Bausteine stehen immer vorn. |
+| Übliche Fortbewegung | Der häufigste bewegende Baustein der Rolle (Mariechen: `M` oder `Hüpf`, Grenadiere: `M`). Den bietet der Hinweis „läuft ohne Lauf-Aktion“ direkt an: `2 Hüpf ergänzen`. |
+| Doppelte vermeiden | Ähnliche Schreibweisen („Schwenkn“) bekommen „Meinst du Schwenken?“. Gleicher Text ist derselbe Begriff, auch wenn zwei Geräte offline arbeiten. |
+
+**Pflegen, wo man gerade ist (in place)**
+
+Lange drücken (Handy) oder Rechtsklick bzw. `…` (Desktop) auf einen Baustein öffnet ein Menü:
+
+- **Umbenennen:** ändert das Kürzel in allen Tänzen, z. B. `Präs` → `Präsent`. Standard: nur in dieser Rolle, wahlweise in allen Rollen
+- **Langer Name und Tippvarianten**
+- **Übliche Zeiten** für diese Rolle
+- **Bewegt sich** ja/nein für diese Rolle
+- **Oben anheften** / **Nicht mehr vorschlagen** (bestehende Verwendungen bleiben)
+- **Zusammenführen mit …:** für Doppelte und Tippfehler, alle Verwendungen werden umgehängt
+
+Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersicht pro Rolle (Liste mit Häufigkeit). Im Alltag braucht man sie nicht.
+
+**Rollen**
+
+- Rollen gelten **vereinsweit**, damit z. B. Jugend und Aktive voneinander profitieren. Mehrere Gruppen können dieselbe Rolle haben (● Mariechen groß, ○ Mariechen klein).
+- **Jede Rolle hat ihre eigenen Begriffe.** Langer Name, übliche Zeiten und „bewegt sich“ gelten je Rolle. `Wurf` darf bei Mariechen der Beinwurf und bei Fahnenträgern das Fahnenwerfen sein. Gleiche Kürzel (`M`, `Dreh`) gelten im Gruppenverbund als gemeinsamer Baustein.
+- **Neue Rolle in Sekunden:** Name eingeben, z. B. „Fahnenträger“. Die KI schlägt einen Start-Katalog mit 8–12 Bausteinen vor (Kürzel, Zeiten, bewegt sich), alle vorausgewählt. Ein Tipp übernimmt. Alternativ: Kopie einer bestehenden Rolle, oder leer starten, dann füllt sich der Katalog beim Schreiben.
+- Braucht eine Garde eigene Begriffe, legt sie eine eigene Rolle als Kopie an (z. B. „Mariechen Jugend“).
+
+**Was ein Trainer nie tun muss:** einen Katalog vorab anlegen, übliche Zeiten pflegen oder Listen aufräumen, damit die App funktioniert.
 
 ### 6.6 Laufwege
 
@@ -259,18 +326,18 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 **Einstieg:** „Mit KI beschreiben“ im Inspektor oder beim Einfügen eines Bildes. Ein Textfeld nimmt auch Diktat über die Systemtastatur an.
 
-> *„Gruppe ● und ○ bilden abwechselnd eine Linie vorne, ✕ marschiert in 8 Zeiten nach hinten in einen Keil. 16 Zeiten.“*
+> *„Die Mariechen bilden abwechselnd eine Linie vorne und gehen nach 8 Zeiten nach hinten in einen Keil. Die Grenadiere präsentieren vorne in der Mitte. 16 Zeiten.“*
 
 **Ablauf wie ein Interview:**
 
 1. Die KI prüft, ob die Beschreibung eindeutig genug ist.
-2. **Unklar:** 1–3 Rückfragen als Karten mit Antwortoptionen und Freitext, z. B. *„Wie lange marschiert ●○ nach vorne?“* → `8 Zeiten` · `16 Zeiten` · *eigene Antwort*. Höchstens 2 Runden, danach ein Vorschlag mit markierten Annahmen.
+2. **Unklar:** 1–3 Rückfragen als Karten mit Antwortoptionen und Freitext, z. B. *„Marschieren oder hüpfen die Mariechen nach hinten?“* → `Marschieren` · `Hüpfen` · *eigene Antwort*. Höchstens 2 Runden, danach ein Vorschlag mit markierten Annahmen.
 3. **Vorschlag:** erscheint als **Vorschau im Bild** (halbtransparente Symbole, gestrichelte Laufwege, Aktionen markiert). Darunter stehen die Annahmen der KI im Klartext.
 4. **Entscheiden:** `Übernehmen` · `Anders versuchen` · `Verwerfen`. Nach dem Übernehmen ist alles normal bearbeitbar.
 
-**Was die KI erzeugt:** Formationen (als Formen mit Parametern, nicht als lose Koordinaten), Laufwege, Aktionsspuren mit Zeiten aus dem Vereinskatalog. Die Prüfregeln aus 5.3 werden vor der Anzeige angewendet. Ist ein Vorschlag ungültig, korrigiert die KI ihn automatisch einmal.
+**Was die KI erzeugt:** Formationen (als Formen mit Parametern, nicht als lose Koordinaten), Laufwege, Aktionsspuren mit Zeiten aus den Katalogen der beteiligten Rollen, inklusive ihrer üblichen Fortbewegung. Neue Begriffe aus einem Vorschlag werden wie getippter Freitext behandelt (6.5). Die Prüfregeln aus 5.3 werden vor der Anzeige angewendet. Ist ein Vorschlag ungültig, korrigiert die KI ihn automatisch einmal.
 
-**Kontext für die KI:** Gruppen (Symbole, Größen), vorheriges und nächstes Bild, Vereinskatalog inkl. Kürzel, Bühnenkonventionen (3:2, Publikum unten), Zeiten-Standard.
+**Kontext für die KI:** Gruppen (Symbole, Größen), vorheriges und nächstes Bild, Kataloge der Rollen inkl. Kürzel, Standard-Zeiten und üblicher Fortbewegung, Bühnenkonventionen (3:2, Publikum unten), Zeiten-Standard.
 
 **Technik (Vorschlag):** Eine Server-Funktion ruft die Claude API auf, Modell `claude-opus-5-5`. Weitere Details:
 
@@ -291,8 +358,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 │ └──────── Publikum ────────┘ │
 │   5  /8     2. Achter        │  ← Zählzeit, riesig
 │  ▮▮▮▮▮▯▯▯ ▮▮▮▮▮▮▮▮           │  ← Achter-Segmente
-│ ●○ ┃ 8 Kick ┃ ▌8 M▐          │  ← laufende Aktion invertiert
-│ ✕  ┃ 2 Dreh ┃ ▌14 M▐         │
+│ ●○ ┃ 8 Wurf ┃ ▌8 M▐          │  ← laufende Aktion invertiert
+│ ✕  ┃ 2 Schw ┃ ▌14 M▐         │
 │ Weiter: Bild 13 · 8 Zeiten   │
 │ [Vorlauf 8 ▾]   [✎ Bearbeiten]│
 │  ◀ Bild 11   ( ▶ )  Bild 13 ▶ │  ← Daumenbereich, große Tasten
@@ -318,7 +385,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 - **Format:** A4 quer, 2 × 2, identisch mit der Seitenansicht, in Schwarz-Weiß optimiert.
 - **Optionen:** alle Seiten oder Bereich, mit/ohne Laufwege, mit/ohne Notizen.
-- **Fußzeile:** Tanzname · Stand (Datum, Version) · Seite x / y.
+- **Fußzeile:** Tanzname · Legende der Gruppen (● Mariechen groß · ○ Mariechen klein · ✕ Grenadiere) · Stand (Datum, Version) · Seite x / y.
+- **Optional:** eine Schlussseite mit den Kürzeln aller beteiligten Rollen.
 - **Umsetzung:** Druck-Stylesheet (`@page A4 landscape`), dieselben SVG-Komponenten wie am Bildschirm. Ausgabe über den Druckdialog bzw. „Als PDF sichern“.
 - Gleiche Seitenaufteilung in App und Druck, damit „Seite 4, Bild 14“ im Team auf beiden Wegen dasselbe meint.
 
@@ -334,7 +402,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | 6 | Training | (✓ Tablet) | ✓ |
 | 7 | Bearbeiten-Modus | – | ✓ |
 | 8 | Druckvorschau | ✓ | ✓ (PDF teilen) |
-| 9 | Einstellungen: Gerät (Audio-Verzögerung, Vorlauf, hell/dunkel), Verein (Katalog, Trainer einladen) | ✓ | ✓ |
+| 9 | Einstellungen: Gerät (Audio-Verzögerung, Vorlauf, hell/dunkel), Verein (Rollen und Kataloge aufräumen, im Alltag nicht nötig) | ✓ | ✓ |
 
 ## 8. Nicht im MVP
 
@@ -346,6 +414,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | Schautanz, Solo, Paartanz | Fokus Gardetanz |
 | Bühnenmaße, Raster, umschaltbare Perspektive | „Freie Fläche reicht“, Publikum immer unten |
 | Halbe Zeiten | Nicht benötigt |
+| KI räumt Kataloge auf (Synonyme erkennen, z. B. „Gewehr hoch“ = „Präs“) | Erst nötig, wenn Kataloge groß werden. Zusammenführen geht im MVP von Hand am Baustein |
+| Reihenfolgen lernen („nach Wurf folgt meist M“) | Häufigkeit reicht für gute Vorschläge zum Start |
 | Mehrere Vereine, Abo | Nur der eigene Verein |
 | Streaming-Dienste als Musikquelle | Synchronisation braucht die Datei |
 
@@ -357,7 +427,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | Darstellung | **SVG** für Bühne, Symbole, Pfeile | Scharf auf jedem Bildschirm, identisch im Druck |
 | Zustand | Zustand (Store) + Befehls-Historie für Rückgängig | Einfach, gut testbar |
 | Daten & Sync | **Firebase** (EU-Region): Firestore mit Offline-Persistenz, Storage für Musik | Offline-Sync ist eingebaut, für einen Verein im Gratis- oder Kleinstkostenbereich. *Alternative:* Supabase (EU), dann mit eigener Offline-Schicht. |
-| Anmeldung | **Firebase Auth mit Microsoft-Anbieter.** App-Registrierung in Microsoft Entra ID für „Konten in allen Organisationsverzeichnissen und persönliche Microsoft-Konten“. Anmeldung per Weiterleitung (nicht per Pop-up, wegen installierter PWAs auf iOS). Zugriffsregeln in Firestore prüfen die Vereinsmitgliedschaft. | Deckt Office-365- und private Microsoft-Konten mit einem Ablauf ab. Die Firebase-Sitzung bleibt unabhängig vom Microsoft-Token bestehen, das ist wichtig für Offline-Training. *Alternative:* Supabase mit Azure-Anbieter. |
+| Anmeldung | **Firebase Auth mit Microsoft-Anbieter** (mit Identity Platform, wegen Blocking Functions). App-Registrierung als **Einzelmandant im Vereins-Tenant** (Entra ID), Gäste über Entra B2B. Eine Blocking Function (`beforeSignIn`) prüft per Microsoft Graph die Gruppenmitgliedschaft, ein täglicher Job prüft erneut. Berechtigung `GroupMember.Read.All` (Anwendung) mit einmaliger Admin-Zustimmung. Anmeldung per Weiterleitung statt Pop-up (installierte PWAs auf iOS). | Eigener Tenant: keine Freigabe-Probleme, keine Herausgeber-Verifizierung, Benutzerpflege in M365. Die Firebase-Sitzung bleibt unabhängig vom Microsoft-Token bestehen, das ist wichtig für Offline-Training. *Alternative:* Supabase mit Azure-Anbieter. |
+| Kataloge | Schlüssel eines Bausteins = Rolle + normalisierter Text. Häufigkeit, übliche Zeiten und „bewegt sich“ aktualisiert ein Function-Trigger beim Speichern eines Bildes. Vorschläge berechnet das Gerät aus dem lokal gespeicherten Katalog, auch offline. | Keine Doppelten durch Offline-Arbeit, alle Geräte sehen dieselben Vorschläge. |
 | Musik offline | Cache Storage / IndexedDB, `navigator.storage.persist()` | Musik muss ohne Netz in der Halle laufen |
 | Audio | **Web Audio API**, Zeit aus `AudioContext.currentTime` minus `outputLatency` minus Geräte-Verzögerung | Genaue Synchronität |
 | Schlagerkennung | Server-Analyse beim Hochladen (z. B. Python-Dienst mit einem Beat-/Downbeat-Tracker wie *beat_this* oder *madmom*, Lizenz prüfen). Fallback: Mittippen | Medleys mit Tempowechseln brauchen gute Takterkennung |
@@ -373,7 +444,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | 3 | iOS löscht Offline-Daten von Web-Apps | Installierte PWA, persistenter Speicher, 14 Tage Test | Tanz + Musik nach 14 Tagen offline verfügbar |
 | 4 | KI erzeugt räumlich unsinnige Aufstellungen | 20 echte Beschreibungen aus bestehenden Papier-Tänzen | ≥ 70 % ohne oder mit kleiner Nacharbeit übernehmbar |
 | 5 | 30 Tänzer auf dem Handy präzise verschieben | Prototyp Bearbeiten-Modus | Formation in < 10 s korrekt verschoben |
-| 6 | Microsoft-Anmeldung scheitert. Möglich sind zwei Ursachen: (a) die Weiterleitung in der installierten iOS-PWA (Safari trennt den Speicher von Drittanbietern), (b) ein Trainer nutzt das Office-365-Konto seines Arbeitgebers, und dessen IT erlaubt keine Freigabe fremder Apps | Anmeldung testen mit privatem Konto, Vereins-/Schulkonto und Firmenkonto auf iPhone (installiert), Android und Desktop | Alle Kontoarten außer gesperrten Firmenkonten melden sich an. Für (b) gibt es einen klaren Hinweis „Nutze dein privates Microsoft-Konto“. Die Sitzung hält ≥ 30 Tage, auch über Offline-Phasen. |
+| 6 | Microsoft-Anmeldung scheitert in der installierten iOS-PWA (Weiterleitung, Safari trennt den Speicher von Drittanbietern), oder Gastkonten mit privatem Microsoft-Konto verhalten sich anders | Anmeldung mit Vereinskonto und Gastkonto auf iPhone (installiert), Android und Desktop. Entfernen aus der Gruppe testen | Beide Kontoarten melden sich an. Die Sitzung hält ≥ 30 Tage, auch über Offline-Phasen. Wer aus der Gruppe entfernt wurde, ist beim nächsten Online-Start gesperrt |
 
 ## 11. Erfolgskriterien für das MVP
 
@@ -396,9 +467,10 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 ## 13. Offene Fragen für später
 
-1. Gibt es eine feste Liste eurer Begriffe und Kürzel? (Sie wird zum Start-Katalog.)
+1. Welche Begriffe und Kürzel nutzen Mariechen und Grenadiere heute? Daraus werden die Start-Kataloge. Ohne Liste schlägt die KI einen vor, und der Rest lernt sich beim Schreiben.
 2. Zählt ihr laut „1–8, 2–2–3–…“ oder „1–16“? (Das bestimmt die Zählanzeige, Standard sind Achter.)
 3. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
 4. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
 5. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
-6. Hat der Verein einen eigenen Microsoft-365-Tenant (z. B. über Microsoft für gemeinnützige Organisationen)? Dann registrieren wir die App dort, und Vereinskonten funktionieren ohne Freigabe-Probleme.
+6. Welche Rollen gibt es außer Mariechen und Grenadieren (z. B. Kommandant, Fahnenträger, Tanzpaar)?
+7. Gibt es in eurem Microsoft 365 schon eine Gruppe oder ein Team mit allen Trainern, über das der Zugang laufen kann?

@@ -101,7 +101,11 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 | Komponente | Klasse | Kernregeln |
 |---|---|---|
 | Taste | `.gm-btn` + `--primary` `--secondary` `--ghost` `--signal` `--danger` | 48 px hoch, Text immer dabei. `--l` 64 px, `--stack` (Icon über Text) für Training, `--play` 88 px rund |
-| Aktionsbaustein | `.gm-chip` | „Anzahl + Kürzel“. `--past` gedimmt, `--now` blau gefüllt mit Fortschritt (`--gm-progress`), Standard umrandet, `--free` gestrichelt (Freitext), Pfeil-Icon = bewegend |
+| Aktionsbaustein | `.gm-chip` | „Anzahl + Kürzel“. `--past` gedimmt, `--now` blau gefüllt mit Fortschritt (`--gm-progress`), Standard umrandet, `--free` gestrichelt (Freitext, noch nicht im Katalog der Rolle; beim zweiten Gebrauch automatisch Baustein), Pfeil-Icon = bewegend. Lange drücken bzw. Rechtsklick öffnet das Pflege-Menü |
+| Vorschlagsliste | `.gm-suggest` | Erscheint ab dem ersten Buchstaben unter dem Eingabefeld einer Spur. Zeile: Kürzel (fett), langer Name, übliche Zeiten. Getippter Teil unterstrichen, aktive Zeile mit Signal-Kante. Letzte Zeile: als Freitext übernehmen |
+| Pflege-Menü | `.gm-menu` | Am Baustein: Umbenennen (diese Rolle oder alle), langer Name, übliche Zeiten, bewegt sich, anheften, nicht mehr vorschlagen, zusammenführen. Zeilen 48 px, rechts der aktuelle Wert |
+| Kurzmeldung | `.gm-toast` | Tinte auf Papier invertiert, eine Zeile + `Rückgängig`. Für automatisch Gelerntes („Neu bei Grenadiere: Salut“). Verschwindet nach 6 s, im Training nie |
+| Auswahlliste | `.gm-check` | Für KI-Vorschläge zum Abhaken, z. B. Start-Katalog einer neuen Rolle. Zeile 48 px, Kästchen 22 px in Tinte |
 | Bildkarte | `.gm-frame` | Kopf: Nummer + „16 Zeiten“ + Hinweis-Badge. Bühne. Eine Zeile pro Spur. Summe nur bei Abweichung. `.is-active` = Signal-Rahmen |
 | Blatt | `.gm-sheet` | A4 quer, 2 × 2, skaliert über Container-Einheiten, druckt 1:1 (`@page A4 landscape`) |
 | Zählzeit | `.gm-count` | Große Zahl = Zeit im Achter, daneben „/8“ und „2. Achter von 2“, Segmente pro Zeit. `--preroll` für den Vorlauf |

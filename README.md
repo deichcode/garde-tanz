@@ -27,9 +27,10 @@ Die Datei lässt sich auch direkt im Browser öffnen.
 - **Gruppen** mit Symbolen ● ○ ✕, 2–3 Gruppen mit je 4–10 Tänzern. Zwei Gruppen können sich wie eine verhalten.
 - **Bilder** mit fester Anzahl Zeiten (meist 8 oder 16). Formationen als Formen, die die App in Einzelpositionen auflöst.
 - **Aktionen** pro Gruppe als Bausteine („2 Dreh · 6 M“). Ein Hinweis erscheint, wenn die Zeiten nicht aufgehen.
+- **Rollen mit eigenen Katalogen** (Mariechen: Wurf, Hüpf …; Grenadiere: Schwenken, Klopfen, Präsentieren …). Die Kataloge lernen beim Schreiben und werden direkt am Baustein gepflegt.
 - **Laufwege** automatisch zwischen den Bildern, mit Zuordnung auf kürzeste Wege.
 - **Musik** mit automatischer Schlagerkennung, Korrektur per Mittippen, Tempowechsel möglich.
 - **Training** am Handy: Start ab jedem Bild mit Vorlauf, Zählzeit und laufende Aktion groß, offline.
 - **Drucken** im Papierformat: A4 quer, 2 × 2.
 - **KI-Assistent:** ein Bild beschreiben, die KI fragt bei Unklarheiten nach und schlägt ein Bild vor.
-- **Anmeldung mit Microsoft:** Office-365- oder privates Microsoft-Konto, Zugang per Einladung.
+- **Anmeldung mit Microsoft** über das Microsoft 365 des Vereins. Zugang über eine M365-Gruppe, Externe als Gast.

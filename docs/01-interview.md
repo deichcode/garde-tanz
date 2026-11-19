@@ -85,6 +85,8 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | Vorgabe | Konsequenz |
 |---|---|
 | *„Anmeldung soll per Office 365 Account möglich sein. Bzw. Microsoft Account.“* | „Mit Microsoft anmelden“ ist die einzige Anmeldeart im MVP. Sie funktioniert für Office-365-/Arbeitskonten und für private Microsoft-Konten. Zugang gibt es nur per Einladung. Nach der ersten Anmeldung bleibt die Sitzung offline erhalten. Details im Konzept unter 6.1, 9 und Risiko 6. |
+| *„Ja, wir haben ein eigenes MS 365.“* | Die App wird im **Vereins-Tenant** registriert. Trainer melden sich mit dem Vereinskonto an, Externe als Gast mit privatem Microsoft-Konto. **Zugang = Mitglied einer M365-Gruppe** statt Einladungslinks, gepflegt dort, wo der Verein seine Konten verwaltet. Konzept 6.1, 9. |
+| *„Aktionen hängen von Gruppe ab (bspw. Grenadiere haben Gewehre und machen mit diesen Aktionen (Schwenken, Klopfen, Präsentieren etc.). Mariechen marschieren oder hüpfen bei Bewegung, schmeißen Beine etc. Das sind nur Beispiele, die pro Tanzgruppe anpassbar sein sollen. Pflege sollte nicht aufwändig sein und entweder automatisiert oder in place erfolgen.“* | Jede Gruppe bekommt eine **Rolle** (Mariechen, Grenadiere …) mit eigenem **Baustein-Katalog**. Der Katalog **lernt beim Schreiben**: Beim zweiten Gebrauch wird ein Begriff zum Baustein, übliche Zeiten und Fortbewegung ergeben sich aus der Nutzung. Gepflegt wird **direkt am Baustein** (Umbenennen, Zusammenführen, Ausblenden). Neue Rollen bekommen einen KI-Start-Katalog. Konzept 6.5. |
 
 ---
 
