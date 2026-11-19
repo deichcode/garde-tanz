@@ -170,8 +170,11 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 ### 6.1 Verein, Konten, Sync
 
-- **Anmeldung** per E-Mail-Link (kein Passwort), danach dauerhaft angemeldet.
-- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Ein Admin lädt Trainer per Link ein. Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.
+- **Anmeldung mit Microsoft:** „Mit Microsoft anmelden“ funktioniert mit **Office-365-/Microsoft-365-Konten** (Arbeits- oder Schulkonto, z. B. ein Vereins-Konto) und mit **privaten Microsoft-Konten** (Outlook.com, Hotmail, Xbox …). Es gibt keine eigenen Passwörter in der App. Andere Anmeldearten gibt es im MVP nicht. Wer kein Microsoft-Konto hat, kann kostenlos ein privates anlegen.
+- **Einmal anmelden, dann dauerhaft:** Microsoft wird nur bei der ersten Anmeldung auf einem Gerät gebraucht. Danach hält die App die Sitzung selbst. Training und Bearbeiten funktionieren offline, ohne erneute Anmeldung.
+- **Zugang nur auf Einladung:** Ein Microsoft-Konto allein gibt keinen Zugang. Ein Admin erzeugt einen Einladungslink. Der Trainer öffnet ihn und meldet sich mit Microsoft an, damit ist das Konto mit dem Verein verknüpft. Unbekannte Konten sehen „Kein Zugang – bitte lass dich von einem Admin einladen“.
+- **Gespeichert wird nur** Name, E-Mail-Adresse und die Microsoft-Konto-ID des Trainers.
+- **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten. Admins verwalten Einladungen und können Zugänge entziehen.
 - **Local-first:** Alle Daten liegen zusätzlich auf dem Gerät. Bearbeiten und Training funktionieren offline, der Abgleich passiert automatisch.
 - **Konflikte:** Jedes Bild ist ein eigenes Dokument, gespeichert wird feldweise. Gleichzeitige Änderungen am selben Feld: die letzte gewinnt. Am Bild steht „zuletzt geändert von Anna, vor 5 Min.“.
 - **Stände sichern:** benannte Versionen (z. B. „vor Turnier Köln“), wiederherstellbar als Kopie. Rückgängig/Wiederholen gilt pro Sitzung.
@@ -353,7 +356,8 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | App | **PWA**, TypeScript, React + Vite, `vite-plugin-pwa` (Workbox) | Ein Code für alle Geräte, installierbar, offline |
 | Darstellung | **SVG** für Bühne, Symbole, Pfeile | Scharf auf jedem Bildschirm, identisch im Druck |
 | Zustand | Zustand (Store) + Befehls-Historie für Rückgängig | Einfach, gut testbar |
-| Daten & Sync | **Firebase** (EU-Region): Auth (E-Mail-Link), Firestore mit Offline-Persistenz, Storage für Musik | Offline-Sync ist eingebaut, für einen Verein im Gratis- oder Kleinstkostenbereich. *Alternative:* Supabase (EU), dann mit eigener Offline-Schicht. |
+| Daten & Sync | **Firebase** (EU-Region): Firestore mit Offline-Persistenz, Storage für Musik | Offline-Sync ist eingebaut, für einen Verein im Gratis- oder Kleinstkostenbereich. *Alternative:* Supabase (EU), dann mit eigener Offline-Schicht. |
+| Anmeldung | **Firebase Auth mit Microsoft-Anbieter.** App-Registrierung in Microsoft Entra ID für „Konten in allen Organisationsverzeichnissen und persönliche Microsoft-Konten“. Anmeldung per Weiterleitung (nicht per Pop-up, wegen installierter PWAs auf iOS). Zugriffsregeln in Firestore prüfen die Vereinsmitgliedschaft. | Deckt Office-365- und private Microsoft-Konten mit einem Ablauf ab. Die Firebase-Sitzung bleibt unabhängig vom Microsoft-Token bestehen, das ist wichtig für Offline-Training. *Alternative:* Supabase mit Azure-Anbieter. |
 | Musik offline | Cache Storage / IndexedDB, `navigator.storage.persist()` | Musik muss ohne Netz in der Halle laufen |
 | Audio | **Web Audio API**, Zeit aus `AudioContext.currentTime` minus `outputLatency` minus Geräte-Verzögerung | Genaue Synchronität |
 | Schlagerkennung | Server-Analyse beim Hochladen (z. B. Python-Dienst mit einem Beat-/Downbeat-Tracker wie *beat_this* oder *madmom*, Lizenz prüfen). Fallback: Mittippen | Medleys mit Tempowechseln brauchen gute Takterkennung |
@@ -369,6 +373,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 | 3 | iOS löscht Offline-Daten von Web-Apps | Installierte PWA, persistenter Speicher, 14 Tage Test | Tanz + Musik nach 14 Tagen offline verfügbar |
 | 4 | KI erzeugt räumlich unsinnige Aufstellungen | 20 echte Beschreibungen aus bestehenden Papier-Tänzen | ≥ 70 % ohne oder mit kleiner Nacharbeit übernehmbar |
 | 5 | 30 Tänzer auf dem Handy präzise verschieben | Prototyp Bearbeiten-Modus | Formation in < 10 s korrekt verschoben |
+| 6 | Microsoft-Anmeldung scheitert. Möglich sind zwei Ursachen: (a) die Weiterleitung in der installierten iOS-PWA (Safari trennt den Speicher von Drittanbietern), (b) ein Trainer nutzt das Office-365-Konto seines Arbeitgebers, und dessen IT erlaubt keine Freigabe fremder Apps | Anmeldung testen mit privatem Konto, Vereins-/Schulkonto und Firmenkonto auf iPhone (installiert), Android und Desktop | Alle Kontoarten außer gesperrten Firmenkonten melden sich an. Für (b) gibt es einen klaren Hinweis „Nutze dein privates Microsoft-Konto“. Die Sitzung hält ≥ 30 Tage, auch über Offline-Phasen. |
 
 ## 11. Erfolgskriterien für das MVP
 
@@ -382,7 +387,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 | Meilenstein | Inhalt | Nutzen danach |
 |---|---|---|
-| **M0 Spikes** | Risiken 1–3 aus Abschnitt 10 | Technik ist abgesichert |
+| **M0 Spikes** | Risiken 1–3 und 6 aus Abschnitt 10 | Technik ist abgesichert |
 | **M1 Fundament** | PWA-Gerüst, Design-System als Komponenten, Datenmodell, Konten und Sync | Daten sind auf allen Geräten |
 | **M2 Schreiben + Drucken** | Seitenansicht 2 × 2, Formationen, Aktionen, Laufwege, Prüfregeln, Druck | **Ersetzt das Schreiben auf Papier**, der Ausdruck bleibt |
 | **M3 Musik** | Hochladen, Analyse, Raster-Editor, Zeitleiste, Bewegungs-Vorschau | Tanz und Musik sind verbunden |
@@ -396,3 +401,4 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 3. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
 4. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
 5. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
+6. Hat der Verein einen eigenen Microsoft-365-Tenant (z. B. über Microsoft für gemeinnützige Organisationen)? Dann registrieren wir die App dort, und Vereinskonten funktionieren ohne Freigabe-Probleme.

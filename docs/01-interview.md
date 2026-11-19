@@ -80,6 +80,12 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | Was steht im Kopf eines Bildes? | **Bildnummer, Anzahl Zeiten** | Kopf: große Bildnummer und „16 Zeiten“. Ein Titel ist optional und nicht Teil des Standards. |
 | Seitenverhältnis der Bühne? | **Breiter als tief, ca. 3:2** | Die Bühne ist fest 3:2. |
 
+## Nachtrag (19.11.2026)
+
+| Vorgabe | Konsequenz |
+|---|---|
+| *„Anmeldung soll per Office 365 Account möglich sein. Bzw. Microsoft Account.“* | „Mit Microsoft anmelden“ ist die einzige Anmeldeart im MVP. Sie funktioniert für Office-365-/Arbeitskonten und für private Microsoft-Konten. Zugang gibt es nur per Einladung. Nach der ersten Anmeldung bleibt die Sitzung offline erhalten. Details im Konzept unter 6.1, 9 und Risiko 6. |
+
 ---
 
 ## Eigene Annahmen (nicht abgefragt, bitte prüfen)

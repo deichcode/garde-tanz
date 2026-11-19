@@ -111,6 +111,7 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 | Sync-Status | `.gm-status` | Immer sichtbar: Synchronisiert / Wird synchronisiert / Offline – auf dem Gerät gespeichert |
 | Bearbeiten-Band | `.gm-modebar` + `.gm-editframe` | Magenta-Band „BEARBEITEN · BILD 10“ + „Fertig“, 5 px Rahmen um den Bildschirm |
 | KI-Rückfrage | `.gm-ask` | Frage, 2–4 Optionen als Tasten, Freitext. Kopfzeile „RÜCKFRAGE 1 VON 2“ |
+| Anmelde-Taste | – | „Mit Microsoft anmelden“ mit Microsoft-Logo, gestaltet nach den Microsoft-Markenvorgaben. Die **einzige Ausnahme** von der Token-Regel. Höhe ≥ 48 px, einzige Taste auf dem Anmeldebildschirm |
 
 ## 7. Layout und Größen
 

@@ -32,3 +32,4 @@ Die Datei lässt sich auch direkt im Browser öffnen.
 - **Training** am Handy: Start ab jedem Bild mit Vorlauf, Zählzeit und laufende Aktion groß, offline.
 - **Drucken** im Papierformat: A4 quer, 2 × 2.
 - **KI-Assistent:** ein Bild beschreiben, die KI fragt bei Unklarheiten nach und schlägt ein Bild vor.
+- **Anmeldung mit Microsoft:** Office-365- oder privates Microsoft-Konto, Zugang per Einladung.

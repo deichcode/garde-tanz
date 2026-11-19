@@ -16,6 +16,7 @@ Laufweg, Raster (`beats[]`), Vorlauf (`preRoll`). In der UI nie „Frame“, „
 - Tänzer sind **anonym** (`groupId:index`). Keine Personendaten speichern.
 - Bühne fest 3:2, normierte Koordinaten 0..1, **y = 1 ist vorne (Publikum unten)**.
 - Musik-Raster = Liste von Schlagzeitpunkten (Tempowechsel möglich), nicht ein globales BPM.
+- Anmeldung **nur mit Microsoft** (Office-365-/Arbeitskonten und private Microsoft-Konten). Zugang nur per Einladung. Die Sitzung muss offline erhalten bleiben.
 
 ## Design-Regeln
 
