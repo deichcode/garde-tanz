@@ -262,6 +262,10 @@
   /* --- Aktionen ------------------------------------------------------------ */
   function trackSum(t) { return t.blocks.reduce(function (s, b) { return s + b[0]; }, 0); }
   function trackText(t) { return t.blocks.map(function (b) { return b[0] + ' ' + b[1]; }).join(' · '); }
+  /** Wie trackText, aber die Anzahl Zeiten fett in Mono, damit „2 1/4 Dreh“ eindeutig bleibt. */
+  function trackHtml(t) {
+    return t.blocks.map(function (b) { return '<b class="gm-track__n">' + b[0] + '</b> ' + esc(b[1]); }).join(' · ');
+  }
   function trackWho(dance, t) {
     return t.groups.map(function (g) {
       var gr = group(dance, g);
@@ -302,7 +306,7 @@
       var bad = warns.some(function (w) { return w.track === ti && w.kind === 'sum'; });
       var sum = trackSum(t);
       html += '<li class="gm-track' + (bad ? ' has-warning' : '') + '"><span class="gm-track__who">' + trackWho(dance, t) + '</span>' +
-        '<span class="gm-track__text">' + esc(trackText(t)) + '</span>' +
+        '<span class="gm-track__text">' + trackHtml(t) + '</span>' +
         '<span class="gm-track__sum">' + (bad || opts.sums ? sum + '/' + frame.counts : '') + '</span></li>';
     });
     return html + '</ul></article>';
@@ -341,6 +345,6 @@
   global.GM = {
     symbol: symbol, symbolIcon: symbolIcon, layoutFormation: layoutFormation, positions: positions, assignShortest: assignShortest,
     renderStage: renderStage, renderFrame: renderFrame, renderChips: renderChips, warnings: warnings,
-    trackText: trackText, trackSum: trackSum, trackWho: trackWho, icon: icon, members: members, alternate: alternate
+    trackText: trackText, trackHtml: trackHtml, trackSum: trackSum, trackWho: trackWho, icon: icon, members: members, alternate: alternate
   };
 })(window);

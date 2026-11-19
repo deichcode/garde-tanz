@@ -1,0 +1,28 @@
+{
+  "stand": "2026-11-19",
+  "hinweis": "Start-Kataloge des Vereins. roleId '*' = gemeinsamer Baustein für alle Rollen. 'moves' ist geschätzt, 'defaultCounts' noch unbekannt (null). Beides lernt die App aus der Nutzung (Konzept 6.5).",
+  "roles": [
+    { "id": "mariechen", "name": "Mariechen" },
+    { "id": "grenadiere", "name": "Grenadiere" },
+    { "id": "reserve", "name": "Reserve" }
+  ],
+  "groupsDefault": [
+    { "symbol": "dot", "name": "Mariechen", "roleId": "mariechen" },
+    { "symbol": "ring", "name": "Grenadiere", "roleId": "grenadiere" },
+    { "symbol": "cross", "name": "Reserve", "roleId": "reserve" }
+  ],
+  "roleActions": [
+    { "roleId": "*", "label": "Marsch", "longName": "marschieren", "moves": true, "defaultCounts": null },
+    { "roleId": "*", "label": "Marsch auf der Stelle", "longName": "marschieren am Platz", "moves": false, "defaultCounts": null },
+    { "roleId": "*", "label": "1/4 Dreh", "longName": "Vierteldrehung", "moves": false, "defaultCounts": null },
+    { "roleId": "*", "label": "1/2 Dreh", "longName": "Drehung", "moves": false, "defaultCounts": null },
+    { "roleId": "*", "label": "Stip", "longName": "Stippeföttche", "moves": false, "defaultCounts": null },
+    { "roleId": "mariechen", "label": "Hüpf", "longName": "hüpfen", "moves": true, "defaultCounts": null },
+    { "roleId": "mariechen", "label": "Schmeiß", "longName": "Beine schmeißen", "moves": false, "defaultCounts": null },
+    { "roleId": "grenadiere", "label": "GewSchw", "longName": "Gewehr schwenken", "moves": false, "defaultCounts": null },
+    { "roleId": "grenadiere", "label": "Präs", "longName": "Gewehr präsentieren", "moves": false, "defaultCounts": null },
+    { "roleId": "grenadiere", "label": "Fuß", "longName": "Gewehr zum Fuß", "moves": false, "defaultCounts": null },
+    { "roleId": "grenadiere", "label": "Klopf", "longName": "Gewehr klopfen", "moves": false, "defaultCounts": null },
+    { "roleId": "reserve", "label": "BeinSchw", "longName": "Beine schwenken", "moves": false, "defaultCounts": null }
+  ]
+}

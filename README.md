@@ -24,10 +24,11 @@ Die Datei lässt sich auch direkt im Browser öffnen.
 
 ## MVP auf einen Blick
 
-- **Gruppen** mit Symbolen ● ○ ✕, 2–3 Gruppen mit je 4–10 Tänzern. Zwei Gruppen können sich wie eine verhalten.
+- **Gruppen** mit Symbolen ● ○ ✕, 2–3 Gruppen mit je 4–10 Tänzern.
 - **Bilder** mit fester Anzahl Zeiten (meist 8 oder 16). Formationen als Formen, die die App in Einzelpositionen auflöst.
-- **Aktionen** pro Gruppe als Bausteine („2 Dreh · 6 M“). Ein Hinweis erscheint, wenn die Zeiten nicht aufgehen.
-- **Rollen mit eigenen Katalogen** (Mariechen: Wurf, Hüpf …; Grenadiere: Schwenken, Klopfen, Präsentieren …). Die Kataloge lernen beim Schreiben und werden direkt am Baustein gepflegt.
+- **Aktionen** pro Gruppe als Bausteine („2 1/4 Dreh · 6 Marsch“). Ein Hinweis erscheint, wenn die Zeiten nicht aufgehen.
+- **Rollen mit eigenen Katalogen** plus gemeinsame Bausteine (alle: Marsch, 1/4 Dreh, 1/2 Dreh, Stip …; Mariechen: Hüpf, Schmeiß; Grenadiere: GewSchw, Präs, Fuß, Klopf; Reserve: BeinSchw). Die Kataloge lernen beim Schreiben und werden direkt am Baustein gepflegt. Start-Kataloge: `seed/start-katalog.json`.
+- **Gruppen beliebig zusammenfassen**, auch für Abschnitte des Tanzes.
 - **Laufwege** automatisch zwischen den Bildern, mit Zuordnung auf kürzeste Wege.
 - **Musik** mit automatischer Schlagerkennung, Korrektur per Mittippen, Tempowechsel möglich.
 - **Training** am Handy: Start ab jedem Bild mit Vorlauf, Zählzeit und laufende Aktion groß, offline.

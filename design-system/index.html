@@ -117,6 +117,12 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 .sg-learn { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: var(--gm-space-2); }
 .sg-learn > span:first-child svg { width: 18px; height: 18px; display: block; }
 .sg-chipfocus { box-shadow: 0 0 0 3px var(--gm-paper), 0 0 0 5px var(--gm-signal); }
+.sg-toggle svg { width: 16px; height: 16px; }
+.sg-toggle[aria-pressed="true"] { border-color: var(--gm-ink); background: var(--gm-signal-tint); box-shadow: inset 0 0 0 1px var(--gm-ink); }
+.sg-band { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 3px; }
+.sg-band__bar { grid-row: 1; grid-column: 3 / 11; display: flex; align-items: center; gap: 4px; min-width: 0; padding: 2px 8px; border: 2px solid var(--gm-signal); border-radius: var(--gm-radius-s); background: var(--gm-signal-tint); font-size: var(--gm-text-xs); font-weight: 700; }
+.sg-band__bar svg { width: 14px; height: 14px; flex: none; }
+.sg-band__cell { grid-row: 2; display: grid; place-items: center; min-height: 32px; border-radius: 3px; background: var(--gm-sunken); font: 700 var(--gm-text-xs) var(--gm-font-mono); }
 .sg-preroll-note { color: var(--gm-signal); font-weight: 800; font-size: var(--gm-text-lg); }
 
 /* Größen */
@@ -390,23 +396,24 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   <section id="rollen" aria-labelledby="h-rollen">
     <div class="sg-sec-head">
       <h2 id="h-rollen">Rollen &amp; Bausteine</h2>
-      <p>Jede Gruppe hat eine Rolle, jede Rolle ihren eigenen Katalog. Grenadiere schwenken, klopfen und präsentieren, Mariechen hüpfen und werfen die Beine. Der Katalog lernt beim Schreiben und wird direkt am Baustein gepflegt. Vorab anlegen muss niemand etwas.</p>
+      <p>Jede Gruppe hat eine Rolle, jede Rolle ihren eigenen Katalog. Grenadiere schwenken, klopfen und präsentieren, Mariechen hüpfen und schmeißen die Beine, die Reserve schwenkt die Beine. Der Katalog lernt beim Schreiben und wird direkt am Baustein gepflegt. Vorab anlegen muss niemand etwas.</p>
     </div>
     <div class="sg-grid sg-grid--wide">
       <div class="sg-panel sg-stack">
         <h3>Kataloge der Rollen</h3>
         <div class="sg-stack" id="role-catalogs" style="gap: var(--gm-space-4)"></div>
-        <p class="sg-caption">Reihenfolge = Häufigkeit in der Rolle, der Pfeil heißt „bewegt sich“. Die Reserve tanzt mit und teilt sich den Katalog der Mariechen.</p>
+        <p class="sg-caption">Eure Start-Kataloge. Jede Rolle hat die gemeinsamen Bausteine plus ihre eigenen. Der Pfeil heißt „bewegt sich“.</p>
       </div>
       <div class="sg-panel sg-stack">
         <h3>Tippen mit Vorschlägen</h3>
-        <div class="sg-learn"><span id="sugg-who"></span><input class="gm-field" id="sugg-input" type="text" value="4 schw" aria-label="Aktionen der Grenadiere in Bild 14"></div>
+        <div class="sg-learn"><span id="sugg-who"></span><input class="gm-field" id="sugg-input" type="text" value="4 gew" aria-label="Aktionen der Grenadiere in Bild 14"></div>
         <ul class="gm-suggest" role="listbox" aria-label="Vorschläge aus dem Katalog der Grenadiere">
-          <li class="gm-suggest__item is-active" role="option" aria-selected="true"><span class="gm-suggest__label"><mark>Schw</mark></span><span class="gm-suggest__meta">Gewehr <mark>schw</mark>enken</span><span class="gm-suggest__counts">üblich 4</span></li>
-          <li class="gm-suggest__item" role="option" aria-selected="false"><span class="gm-suggest__label"><mark>Schw</mark>K</span><span class="gm-suggest__meta">Gewehr im Kreis <mark>schw</mark>enken</span><span class="gm-suggest__counts">üblich 8</span></li>
-          <li class="gm-suggest__item gm-suggest__item--free" role="option" aria-selected="false"><span class="gm-suggest__label">schw</span><span class="gm-suggest__meta">als Freitext übernehmen</span><span class="gm-suggest__counts"></span></li>
+          <li class="gm-suggest__item is-active" role="option" aria-selected="true"><span class="gm-suggest__label"><mark>Gew</mark>Schw</span><span class="gm-suggest__meta"><mark>Gew</mark>ehr schwenken</span><span class="gm-suggest__counts">üblich 4</span></li>
+          <li class="gm-suggest__item" role="option" aria-selected="false"><span class="gm-suggest__label">Präs</span><span class="gm-suggest__meta"><mark>Gew</mark>ehr präsentieren</span><span class="gm-suggest__counts">üblich 4</span></li>
+          <li class="gm-suggest__item" role="option" aria-selected="false"><span class="gm-suggest__label">Fuß</span><span class="gm-suggest__meta"><mark>Gew</mark>ehr zum Fuß</span><span class="gm-suggest__counts">üblich 2</span></li>
+          <li class="gm-suggest__item gm-suggest__item--free" role="option" aria-selected="false"><span class="gm-suggest__label">gew</span><span class="gm-suggest__meta">als Freitext übernehmen</span><span class="gm-suggest__counts"></span></li>
         </ul>
-        <p class="sg-caption">Sucht in Kürzel, langem Namen und Tippvarianten. <code>Enter</code> übernimmt „4 Schw“, die getippte 4 gewinnt gegen die übliche Zeitenanzahl.</p>
+        <p class="sg-caption">Sucht in Kürzel, langem Namen und Tippvarianten: „gew“ findet alle Gewehr-Bausteine. <code>Enter</code> übernimmt „4 GewSchw“. Die getippte 4 gewinnt gegen die übliche Zeitenanzahl.</p>
       </div>
       <div class="sg-panel sg-stack">
         <h3>Pflegen am Baustein</h3>
@@ -418,6 +425,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
           <li class="gm-menu__item" role="menuitem">Übliche Zeiten<small>4</small></li>
           <li class="gm-menu__item" role="menuitem">Bewegt sich<small>nein</small></li>
           <li class="gm-menu__sep" role="separator"></li>
+          <li class="gm-menu__item" role="menuitem">Für alle Rollen anbieten</li>
           <li class="gm-menu__item" role="menuitem">Oben anheften</li>
           <li class="gm-menu__item" role="menuitem">Nicht mehr vorschlagen</li>
           <li class="gm-menu__item" role="menuitem">Zusammenführen mit …</li>
@@ -429,7 +437,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         <div class="sg-learn"><span id="learn-1"></span><span class="sg-row" style="gap:6px"><span class="gm-chip gm-chip--free"><span class="gm-chip__n">2</span> Salut</span><span class="gm-chip"><span class="gm-chip__n">6</span> Präs</span></span></div>
         <p class="sg-caption">Sofort nutzbar, ohne Rückfrage. Gestrichelt heißt: noch nicht im Katalog.</p>
         <p class="sg-label">Bild 21: zum zweiten Mal getippt</p>
-        <div class="sg-learn"><span id="learn-2"></span><span class="sg-row" style="gap:6px"><span class="gm-chip"><span class="gm-chip__n">2</span> Salut</span><span class="gm-chip"><span class="gm-chip__n">6</span> M<svg class="gm-icon" role="img" aria-label="bewegend"><use href="#i-move"/></svg></span></span></div>
+        <div class="sg-learn"><span id="learn-2"></span><span class="sg-row" style="gap:6px"><span class="gm-chip"><span class="gm-chip__n">2</span> Salut</span><span class="gm-chip"><span class="gm-chip__n">6</span> Marsch<svg class="gm-icon" role="img" aria-label="bewegend"><use href="#i-move"/></svg></span></span></div>
         <div class="gm-toast" role="status"><span class="gm-toast__text">Neu bei Grenadiere: Salut</span><button class="gm-btn" type="button">Rückgängig</button></div>
         <p class="sg-caption">Ab jetzt steht „Salut“ in den Vorschlägen der Grenadiere. Übliche Zeiten und „bewegt sich“ ergeben sich aus der Nutzung.</p>
       </div>
@@ -437,18 +445,32 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         <h3>Neue Rolle: Fahnenträger</h3>
         <p class="gm-ask__eyebrow"><svg class="gm-icon"><use href="#i-spark"/></svg>START-KATALOG, VORGESCHLAGEN VON DER KI</p>
         <div>
-          <label class="gm-check" for="fa-1"><input type="checkbox" id="fa-1" checked><span class="gm-check__label">Schw</span><span class="sg-caption">Fahne schwenken</span><span class="gm-check__meta">4</span></label>
+          <label class="gm-check" for="fa-1"><input type="checkbox" id="fa-1" checked><span class="gm-check__label">FahnSchw</span><span class="sg-caption">Fahne schwenken</span><span class="gm-check__meta">4</span></label>
           <label class="gm-check" for="fa-2"><input type="checkbox" id="fa-2" checked><span class="gm-check__label">Kreis</span><span class="sg-caption">Fahne kreisen</span><span class="gm-check__meta">8</span></label>
           <label class="gm-check" for="fa-3"><input type="checkbox" id="fa-3" checked><span class="gm-check__label">Hoch</span><span class="sg-caption">Fahne hoch</span><span class="gm-check__meta">2</span></label>
           <label class="gm-check" for="fa-4"><input type="checkbox" id="fa-4" checked><span class="gm-check__label">Gruß</span><span class="sg-caption">Grüßen</span><span class="gm-check__meta">2</span></label>
-          <label class="gm-check" for="fa-5"><input type="checkbox" id="fa-5" checked><span class="gm-check__label">M</span><span class="sg-caption">Marschieren, bewegt sich</span><span class="gm-check__meta">8</span></label>
+          <label class="gm-check" for="fa-5"><input type="checkbox" id="fa-5" checked><span class="gm-check__label">Wechsel</span><span class="sg-caption">Fahne in die andere Hand</span><span class="gm-check__meta">2</span></label>
           <label class="gm-check" for="fa-6"><input type="checkbox" id="fa-6"><span class="gm-check__label">Wurf</span><span class="sg-caption">Fahne werfen</span><span class="gm-check__meta">4</span></label>
         </div>
         <div class="sg-row">
           <button class="gm-btn gm-btn--signal" type="button">5 Bausteine übernehmen</button>
           <button class="gm-btn gm-btn--ghost" type="button">Leer starten</button>
         </div>
-        <p class="sg-caption">„Wurf“ heißt hier Fahnenwerfen, bei Mariechen Beinwurf. Jede Rolle hat ihre eigenen Begriffe.</p>
+        <p class="sg-caption">Die gemeinsamen Bausteine (Marsch, 1/4 Dreh, Stip …) hat jede neue Rolle sofort. Die KI schlägt nur das Rollen-Eigene vor.</p>
+      </div>
+      <div class="sg-panel sg-stack">
+        <h3>Gruppen zusammenfassen</h3>
+        <p class="sg-label">Gruppen</p>
+        <div class="sg-row" style="gap:6px" id="merge-groups"></div>
+        <p class="sg-label">Gilt für</p>
+        <div class="gm-seg" role="group" aria-label="Bereich des Verbunds">
+          <button type="button" aria-pressed="false">Nur Bild 11</button>
+          <button type="button" aria-pressed="true">Bild 11 bis 18</button>
+          <button type="button" aria-pressed="false">Bis auf Weiteres</button>
+        </div>
+        <div class="sg-band" id="merge-band" role="img" aria-label="Zeitleiste: Mariechen und Reserve zusammen von Bild 11 bis 18"></div>
+        <button class="gm-btn gm-btn--signal" type="button" style="justify-self:start">Mariechen und Reserve zusammenfassen</button>
+        <p class="sg-caption">Gemeinsame Spur und gemeinsamer Laufweg-Pfeil, jede Position behält ihr Symbol. Neue Bilder übernehmen den Verbund, bis er getrennt wird.</p>
       </div>
     </div>
   </section>
@@ -532,7 +554,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         <p class="gm-ask__eyebrow"><svg class="gm-icon"><use href="#i-spark"/></svg>RÜCKFRAGE 1 VON 2 · BILD 13</p>
         <p class="gm-ask__q">Wie lange marschiert die Reserve nach vorne in die Mitte?</p>
         <div class="gm-ask__options">
-          <button class="gm-btn gm-btn--secondary" type="button">8 Zeiten, danach Pose</button>
+          <button class="gm-btn gm-btn--secondary" type="button">8 Zeiten, danach BeinSchw</button>
           <button class="gm-btn gm-btn--secondary" type="button">16 Zeiten, das ganze Bild</button>
         </div>
         <input class="gm-field" id="ask-own" type="text" placeholder="Eigene Antwort">
@@ -675,7 +697,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   var dance = { groups: [
     { id: 'a', name: 'Mariechen', role: 'Mariechen', symbol: 'dot' },
     { id: 'b', name: 'Grenadiere', role: 'Grenadiere', symbol: 'ring' },
-    { id: 'c', name: 'Reserve', role: 'Mariechen', symbol: 'cross' }
+    { id: 'c', name: 'Reserve', role: 'Reserve', symbol: 'cross' }
   ] };
   var A = GM.members('a', 6), B = GM.members('b', 6), C = GM.members('c', 4);
   var F = {
@@ -684,40 +706,40 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         { shape: 'line', cx: 0.5, cy: 0.76, length: 0.84, members: GM.alternate('a', 'b', 6) },
         { shape: 'line', cx: 0.5, cy: 0.32, length: 0.36, members: C }],
       tracks: [
-        { groups: ['a', 'b'], blocks: [[4, 'Dreh'], [4, 'Pose'], [8, 'M', 1]] },
-        { groups: ['c'], blocks: [[2, 'Dreh'], [6, 'Wurf'], [8, 'M', 1]] }] },
+        { groups: ['a', 'b'], blocks: [[4, '1/2 Dreh'], [4, 'Stip'], [8, 'Marsch', 1]] },
+        { groups: ['c'], blocks: [[2, '1/4 Dreh'], [6, 'BeinSchw'], [8, 'Marsch', 1]] }] },
     10: { num: 10, counts: 8, note: 'Hintere Reihe kommt zu spät',
       formations: [
         { shape: 'block', cx: 0.2, cy: 0.46, length: 0.2, rows: 2, depth: 0.22, members: A },
         { shape: 'block', cx: 0.8, cy: 0.46, length: 0.2, rows: 2, depth: 0.22, members: B },
         { shape: 'line', cx: 0.5, cy: 0.84, length: 0.3, members: C }],
       tracks: [
-        { groups: ['a'], blocks: [[8, 'M', 1]] },
+        { groups: ['a'], blocks: [[8, 'Hüpf', 1]] },
         { groups: ['b'], blocks: [[6, 'Präs']] },
-        { groups: ['c'], blocks: [[4, 'Wurf'], [4, 'Hüpf', 1]] }] },
+        { groups: ['c'], blocks: [[4, 'BeinSchw'], [4, 'Marsch', 1]] }] },
     11: { num: 11, counts: 16,
       formations: [
         { shape: 'circle', cx: 0.5, cy: 0.47, radius: 0.31, members: GM.alternate('a', 'b', 6) },
         { shape: 'line', cx: 0.5, cy: 0.47, length: 0.17, members: C }],
       tracks: [
-        { groups: ['a', 'c'], blocks: [[4, 'Dreh'], [4, 'Wurf'], [8, 'Hüpf', 1]] },
-        { groups: ['b'], blocks: [[4, 'Schw'], [4, 'Klopf'], [8, 'M', 1]] }] },
+        { groups: ['a', 'c'], blocks: [[4, '1/2 Dreh'], [4, 'Stip'], [8, 'Marsch', 1]] },
+        { groups: ['b'], blocks: [[4, 'GewSchw'], [4, 'Klopf'], [8, 'Marsch', 1]] }] },
     12: { num: 12, counts: 8,
       formations: [
         { shape: 'line', cx: 0.47, cy: 0.52, length: 0.86, rotation: 24, members: A.concat(B) },
         { shape: 'line', cx: 0.84, cy: 0.2, length: 0.18, members: C }],
       tracks: [
-        { groups: ['a', 'b'], blocks: [[2, 'Dreh'], [6, 'M', 1]] },
-        { groups: ['c'], blocks: [[8, 'M', 1]] }] },
+        { groups: ['a', 'b'], blocks: [[2, '1/4 Dreh'], [6, 'Marsch', 1]] },
+        { groups: ['c'], blocks: [[8, 'Marsch', 1]] }] },
     13: { num: 13, counts: 16,
       formations: [
         { shape: 'line', cx: 0.5, cy: 0.22, length: 0.62, members: A },
         { shape: 'arc', cx: 0.5, cy: 0.48, radius: 0.36, spread: 120, members: B },
         { shape: 'line', cx: 0.5, cy: 0.58, length: 0.2, members: C }],
       tracks: [
-        { groups: ['a'], blocks: [[16, 'Pose']] },
-        { groups: ['b'], blocks: [[8, 'Präs'], [8, 'Pose']] },
-        { groups: ['c'], blocks: [[8, 'M', 1], [8, 'Pose']] }] }
+        { groups: ['a'], blocks: [[16, 'Schmeiß']] },
+        { groups: ['b'], blocks: [[8, 'Präs'], [8, 'Fuß']] },
+        { groups: ['c'], blocks: [[8, 'Marsch', 1], [8, 'BeinSchw']] }] }
   };
   // Wie in der App: Wer wohin läuft, wird auf kürzeste Wege zugeordnet.
   for (var n = 10; n <= 13; n++) F[n] = GM.assignShortest(F[n - 1], F[n]);
@@ -762,7 +784,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
     ['--gm-text-display', '48 · 800', '7', 'font-size:var(--gm-text-display);font-weight:800;line-height:1;color:var(--gm-signal)', 'Vorlauf-Zähler'],
     ['--gm-text-2xl', '36 · 800', 'Bild 11', 'font-size:var(--gm-text-2xl);font-weight:800', 'Bildnummer im Training'],
     ['--gm-text-xl', '28 · 800', 'Seite 3 von 11', 'font-size:var(--gm-text-xl);font-weight:800', 'Überschriften'],
-    ['--gm-text-lg', '22 · 700', '4 Dreh · 4 Wurf · 8 Hüpf', 'font-size:var(--gm-text-lg);font-weight:700', 'Aktionen im Training'],
+    ['--gm-text-lg', '22 · 700', '4 1/2 Dreh · 4 Stip · 8 Marsch', 'font-size:var(--gm-text-lg);font-weight:700', 'Aktionen im Training'],
     ['--gm-text-md', '18 · 400', 'Die Musik startet 8 Zeiten vor Bild 12.', 'font-size:var(--gm-text-md)', 'Standard am Handy'],
     ['--gm-text-sm', '16 · 400', 'Grenadiere – 6 von 8 Zeiten belegt, 2 fehlen.', 'font-size:var(--gm-text-sm)', 'Standard am Desktop'],
     ['--gm-text-xs', '14 · 700', 'Stand 19.11.2026 · Seite 3 / 11', 'font-size:var(--gm-text-xs);font-weight:700', 'Fußzeilen, Legenden, nie für Tasten'],
@@ -832,9 +854,9 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   $('count-preroll').innerHTML = count(7, 8, { preroll: true });
 
   $('chip-states').innerHTML =
-    '<span class="gm-chip gm-chip--past"><span class="gm-chip__n">4</span> Dreh</span>' +
+    '<span class="gm-chip gm-chip--past"><span class="gm-chip__n">4</span> 1/2 Dreh</span>' +
     '<span class="gm-chip gm-chip--now" style="--gm-progress:62%"><span class="gm-chip__n">8</span> Hüpf' + I('move', 'bewegend') + '</span>' +
-    '<span class="gm-chip"><span class="gm-chip__n">8</span> Pose</span>' +
+    '<span class="gm-chip"><span class="gm-chip__n">8</span> Schmeiß</span>' +
     '<span class="gm-chip gm-chip--free"><span class="gm-chip__n">2</span> Salut</span>';
 
   function trainingTracks(frame, at) {
@@ -852,9 +874,13 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 
   /* --- Kataloge der Rollen (Reihenfolge = Häufigkeit) ------------------------------ */
   var CAT = {
-    Mariechen: [['M', 1], ['Hüpf', 1], ['Wurf'], ['Dreh'], ['Pose'], ['Spagat'], ['Rad'], ['Wechsel']],
-    Grenadiere: [['M', 1], ['Schw'], ['Klopf'], ['Präs'], ['Schult'], ['Pose'], ['Dreh'], ['Salut']]
+    Alle: [['Marsch', 1], ['1/2 Dreh'], ['1/4 Dreh'], ['Stip'], ['Marsch auf der Stelle']],
+    Mariechen: [['Hüpf', 1], ['Schmeiß']],
+    Grenadiere: [['Präs'], ['GewSchw'], ['Klopf'], ['Fuß']],
+    Reserve: [['BeinSchw']]
   };
+  // Leiste einer Rolle: eigene Bausteine und gemeinsame, nach Häufigkeit (Beispiel)
+  function palette(role) { return [CAT.Alle[0]].concat(CAT[role], CAT.Alle.slice(1)); }
   function keys(list) {
     return list.map(function (b) {
       return '<button class="gm-chip gm-chip--key" type="button">' + b[0] + (b[1] ? I('move', 'bewegend') : '') + '</button>';
@@ -862,11 +888,17 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   }
   $('role-catalogs').innerHTML = Object.keys(CAT).map(function (role) {
     var who = dance.groups.filter(function (g) { return g.role === role; });
-    return '<div class="sg-stack" style="gap:8px"><div class="sg-rolehead">' +
-      who.map(function (g) { return GM.symbolIcon(g.symbol, g.name); }).join('') + '<strong>' + role + '</strong>' +
-      (who.some(function (g) { return g.name !== role; }) ? '<span class="sg-caption">' + who.map(function (g) { return g.name; }).join(', ') + '</span>' : '') + '</div>' +
+    var head = role === 'Alle' ? '<strong>Alle Rollen</strong><span class="sg-caption">gemeinsame Bausteine</span>'
+      : who.map(function (g) { return GM.symbolIcon(g.symbol, g.name); }).join('') + '<strong>' + role + '</strong><span class="sg-caption">+ gemeinsame</span>';
+    return '<div class="sg-stack" style="gap:8px"><div class="sg-rolehead">' + head + '</div>' +
       '<div class="sg-row" style="gap:6px">' + keys(CAT[role]) + '</div></div>';
   }).join('');
+  $('merge-groups').innerHTML = dance.groups.map(function (g) {
+    return '<button class="gm-chip gm-chip--key sg-toggle" type="button" aria-pressed="' + (g.id !== 'b') + '">' + GM.symbolIcon(g.symbol, '') + g.name + '</button>';
+  }).join('');
+  var cells = '';
+  for (var k = 9; k <= 20; k++) cells += '<span class="sg-band__cell">' + k + '</span>';
+  $('merge-band').innerHTML = '<span class="sg-band__bar">' + GM.symbolIcon('dot', '') + GM.symbolIcon('cross', '') + 'zusammen</span>' + cells;
   var gren = dance.groups[1];
   $('sugg-who').innerHTML = GM.symbolIcon(gren.symbol, gren.name);
   $('learn-1').innerHTML = GM.symbolIcon(gren.symbol, gren.name);
@@ -897,10 +929,10 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
           '<span class="gm-num' + (sum !== f10.counts ? ' is-bad' : '') + '">' + sum + '/' + f10.counts + '</span></div>' +
           '<div class="sg-row" style="gap:6px">' + GM.renderChips(t) + '</div>' +
           bad.map(function (w) { return '<span class="sg-insp__hint">' + I('warn') + ' ' + w.text + '</span>'; }).join('') +
-          (bad.length ? '<button class="gm-btn gm-btn--secondary" type="button" style="justify-self:start">' + I('plus') + '2 M ergänzen</button>' : '') + '</div>';
+          (bad.length ? '<button class="gm-btn gm-btn--secondary" type="button" style="justify-self:start">' + I('plus') + '2 Marsch ergänzen</button>' : '') + '</div>';
       }).join('') + '</div>' +
     '<div class="sg-insp__block"><span class="sg-label">Bausteine · Grenadiere</span><div class="sg-row" style="gap:6px">' +
-      keys(CAT.Grenadiere) + '<button class="gm-chip gm-chip--key gm-chip--free" type="button">Freitext</button></div>' +
+      keys(palette('Grenadiere')) + '<button class="gm-chip gm-chip--key gm-chip--free" type="button">Freitext</button></div>' +
       '<span class="sg-caption">Für die gewählte Spur. Ein Tipp füllt die fehlenden 2 Zeiten auf.</span></div>' +
     '<button class="gm-btn gm-btn--secondary" type="button">' + I('spark') + 'Mit KI beschreiben</button>';
 
@@ -976,8 +1008,8 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
           '<button type="button" aria-label="Weniger">' + I('minus') + '</button><output>6</output><button type="button" aria-label="Mehr">' + I('plus') + '</button></div></div>' +
         '<span class="gm-badge gm-badge--warn">' + I('warn') + '6 von 8 Zeiten · 2 fehlen</span>' +
         '<span class="gm-badge gm-badge--warn">' + I('warn') + 'Läuft ins Bild 11 ohne Lauf-Aktion</span>' +
-        '<button class="gm-btn gm-btn--secondary" type="button" style="justify-self:start">' + I('plus') + '2 M ergänzen</button>' +
-        '<div class="sg-row" style="gap:6px">' + keys(CAT.Grenadiere.slice(0, 5)) + '</div>' +
+        '<button class="gm-btn gm-btn--secondary" type="button" style="justify-self:start">' + I('plus') + '2 Marsch ergänzen</button>' +
+        '<div class="sg-row" style="gap:6px">' + keys(palette('Grenadiere').slice(0, 5)) + '</div>' +
       '</div>' +
       '<button class="gm-btn gm-btn--secondary" type="button" style="margin-top:auto">' + I('note') + 'Notiz: Hintere Reihe kommt zu spät</button>' +
     '</div>';

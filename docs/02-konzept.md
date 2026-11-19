@@ -50,12 +50,12 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 | **Tanz** | Eine Choreografie einer Garde für eine Saison | `Dance` |
 | **Gruppe** | Feste Teilmenge der Tänzer mit eigenem Symbol (● ○ ✕). Meist 2–3 Gruppen mit je 4–10 Tänzern | `Group` |
 | **Rolle** | Was eine Gruppe ist, z. B. *Mariechen* oder *Grenadiere*. Bestimmt, welche Aktionen es gibt (Grenadiere schwenken, klopfen, präsentieren das Gewehr). Gilt vereinsweit, mehrere Gruppen können dieselbe Rolle haben | `Role` |
-| **Gruppenverbund** | Zwei oder mehr Gruppen, die sich in einem Bild wie eine verhalten (z. B. eine Linie ●○●○) | `Track.groupIds` |
+| **Gruppenverbund** | Beliebig viele Gruppen, die sich in einem Bild oder einem Abschnitt des Tanzes wie eine Gruppe verhalten (z. B. ●✕ von Bild 11 bis 18) | `Track.groupIds` |
 | **Bild** | Eine Aufstellung mit einer festen Anzahl Zeiten. Zeigt die Startaufstellung und die Laufwege ins nächste Bild | `Frame` |
 | **Zeit** | Ein Schlag. Kleinste Einheit, nur ganze Zeiten | `count` |
 | **Achter** | 8 Zeiten. Ein Bild mit 16 Zeiten hat 2 Achter | – |
 | **Formation** | Form, in der Tänzer stehen: Linie, Block, Kreis, Bogen, Keil, frei | `Formation` |
-| **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 Dreh`, `6 M`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
+| **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 1/4 Dreh`, `6 Marsch`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
 | **Laufweg** | Weg von der Aufstellung in Bild *n* zur Aufstellung in Bild *n+1* | `Path` |
 | **Raster** | Die Schlagzeitpunkte der Musik | `BeatGrid` |
 | **Vorlauf** | Zeiten, die die Musik vor dem gewählten Startbild anläuft | `preRoll` |
@@ -70,13 +70,13 @@ Bild 7 · 16 Zeiten                          Bild 8 · 8 Zeiten
 │   ● ○ ● ○ ● ○ ● ○       │   ──Laufweg──▶  │  ●  ●  ●  ●             │
 │        ✕ ✕ ✕ ✕          │                 │  ○  ○  ○  ○    ✕ ✕ ✕ ✕  │
 └──────── Publikum ───────┘                 └──────── Publikum ───────┘
-●○  8 Wurf · 8 M  (16/16)                    …
-✕   2 Schw · 6 Präs · 8 M  (16/16)
+●○  8 Stip · 8 Marsch  (16/16)                    …
+✕   2 1/4 Dreh · 6 BeinSchw · 8 Marsch  (16/16)
 ```
 
 - Ein Bild beschreibt die **Startaufstellung** und was jede Gruppe in den Zeiten des Bildes tut.
-- Die **Laufwege** führen zur Aufstellung des nächsten Bildes. Sie liegen **innerhalb** der Zeiten des Bildes, und zwar in den Aktionen, die als *bewegend* markiert sind (z. B. `8 M`).
-- **Bewegung läuft nur während bewegender Aktionen.** Beispiel `4 M · 2 Dreh · 2 M`: Die Gruppe läuft 4 Zeiten, dreht 2 Zeiten am Platz und läuft 2 Zeiten weiter. Die Vorschau-Animation bildet das genau so ab.
+- Die **Laufwege** führen zur Aufstellung des nächsten Bildes. Sie liegen **innerhalb** der Zeiten des Bildes, und zwar in den Aktionen, die als *bewegend* markiert sind (z. B. `8 Marsch`).
+- **Bewegung läuft nur während bewegender Aktionen.** Beispiel `4 Marsch · 2 1/2 Dreh · 2 Marsch`: Die Gruppe läuft 4 Zeiten, dreht 2 Zeiten am Platz und läuft 2 Zeiten weiter. Die Vorschau-Animation bildet das genau so ab.
 - Beim Anlegen ist ein neues Bild eine **Kopie des vorherigen**. Verschiebt der Trainer im neuen Bild Formationen, entstehen die Laufwege im vorherigen Bild automatisch.
 
 ### 5.2 Datenmodell (vereinfacht)
@@ -130,8 +130,8 @@ interface Formation {
 }
 
 interface Track {
-  groupIds: Id[];             // ["g1"] oder Gruppenverbund ["g1","g2"]
-  blocks: ActionBlock[];
+  groupIds: Id[];             // ["g1"] oder beliebiger Verbund ["g1","g3"], auch alle Gruppen
+  blocks: ActionBlock[];      // ein neues Bild übernimmt die Verbünde des vorherigen
 }
 
 interface ActionBlock {
@@ -143,14 +143,14 @@ interface ActionBlock {
 // --- Rollen und Kataloge: vereinsweit, pflegen sich beim Schreiben selbst (siehe 6.5)
 interface Role {
   id: Id;
-  name: string;               // "Mariechen", "Grenadiere", "Fahnenträger"
+  name: string;               // "Mariechen", "Grenadiere", "Reserve"
 }
 
 interface RoleAction {        // Eintrag im Katalog einer Rolle
-  roleId: Id;
+  roleId: Id | '*';          // '*' = gemeinsamer Baustein für alle Rollen
   key: string;                // normalisierter Begriff ("präs"); Rolle + key → offline keine Doppelten
   label: string;              // Kürzel wie auf Papier: "Präs"
-  longName?: string;          // "Gewehr präsentieren"; pro Rolle, "Wurf" darf je Rolle etwas anderes sein
+  longName?: string;          // "Gewehr präsentieren"; pro Rolle
   aliases: string[];          // Suchwörter, Tippvarianten
   state: 'candidate' | 'learned' | 'pinned' | 'hidden'; // candidate = 1× benutzt (Freitext)
   defaultCounts: number;      // häufigste benutzte Zeitenanzahl in dieser Rolle
@@ -205,7 +205,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 ### 6.2 Tanz anlegen
 
 - Titel, Garde, Saison.
-- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (z. B. ● Mariechen mit Rolle *Mariechen*, ○ Grenadiere mit Rolle *Grenadiere*, ✕ Reserve mit Rolle *Mariechen*, weil sie dieselben Aktionen tanzt) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
+- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (bei euch: ● Mariechen, ○ Grenadiere und ✕ Reserve, jede mit eigener Rolle) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
 - Ein neuer Tanz übernimmt Gruppen und Rollen vom letzten Tanz derselben Garde. Optional: aus einem anderen Tanz kopieren.
 
 ### 6.3 Seitenansicht und Bild-Editor (Desktop, Tablet)
@@ -220,9 +220,9 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 │ │ │ ● ○ ● ○ ● ○ │      │  ●  ●  ●  ● │   │ │  ▸ Linie ●○ (8)           │ │
 │ │ │    ✕ ✕ ✕    │      │ ✕ ✕   ○ ○ ○ │   │ │  ▸ Block ✕ (4)            │ │
 │ │ └─────────────┘      └─────────────┘   │ │ Aktionen                  │ │
-│ │ ●○ 8 Wurf · 8 M      ●  8 M            │ │  ●○ [8 Wurf][8 M]  16/16  │ │
-│ │ ✕  2 Schw · 14 M     ○  6 Wurf ⚠ 6/8   │ │  ✕  [2 Schw][14 M] 16/16  │ │
-│ │ 11 · …               12 · …            │ │ Bausteine ✕: M Schw Präs  │ │
+│ │ ●○ 8 Stip · 8 Marsch ●  8 Hüpf         │ │  ●○ [8 Stip][8 Marsch] ✓  │ │
+│ │ ✕  16 BeinSchw       ○  6 Präs ⚠ 6/8   │ │  ✕  [16 BeinSchw] ✓       │ │
+│ │ 11 · …               12 · …            │ │ Bausteine ✕: BeinSchw …   │ │
 │ └────────────────────────────────────────┘ │ Notiz                     │ │
 │ ‹ Seite 2   ■■■□□□□□□□□   Seite 4 ›        │ ✦ Mit KI beschreiben      │ │
 ├ Zeitleiste: Musik-Wellenform + Bilder als Blöcke (Breite = Zeiten) + Abspielkopf ┤
@@ -245,23 +245,25 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 ### 6.5 Aktionen, Rollen und Kataloge
 
-**Ausgangslage:** Welche Aktionen es gibt, hängt davon ab, wer tanzt. Grenadiere haben Gewehre und schwenken, klopfen, präsentieren. Mariechen marschieren oder hüpfen, wenn sie sich bewegen, und werfen die Beine. Eine gemeinsame Liste für alle wäre lang und passt für keinen richtig. Eine Liste, die man getrennt pflegen muss, veraltet.
+**Ausgangslage:** Welche Aktionen es gibt, hängt davon ab, wer tanzt. Grenadiere haben Gewehre und schwenken, klopfen, präsentieren. Mariechen marschieren oder hüpfen, wenn sie sich bewegen, und schmeißen die Beine. Manches machen alle, etwa Marsch, Drehungen oder das Stippeföttche. Eine gemeinsame Liste für alle wäre lang und passt für keinen richtig. Eine Liste, die man getrennt pflegen muss, veraltet.
 
-**Grundidee:** Jede Gruppe hat eine **Rolle**, jede Rolle hat einen eigenen **Katalog**. Der Katalog füllt sich beim Schreiben von selbst. Korrigiert wird er dort, wo man gerade arbeitet. Niemand muss vorab etwas anlegen oder regelmäßig aufräumen.
+**Grundidee:** Jede Gruppe hat eine **Rolle**, jede Rolle hat einen eigenen **Katalog**. Dazu kommen **gemeinsame Bausteine**, die alle Rollen haben. Der Katalog füllt sich beim Schreiben von selbst. Korrigiert wird er dort, wo man gerade arbeitet. Niemand muss vorab etwas anlegen oder regelmäßig aufräumen.
 
 ```
-Gruppe ● Mariechen ───┐
-Gruppe ✕ Reserve ─────┴─▶ Rolle Mariechen  ─▶ M→  Hüpf→  Wurf  Dreh  Pose  Spagat …
-Gruppe ○ Grenadiere ────▶ Rolle Grenadiere ─▶ M→  Schw  Klopf  Präs  Schult  Pose …
-                                              (→ = bewegt sich, Reihenfolge = Häufigkeit)
+Alle Rollen ────────────────────────────▶   Marsch→  Marsch auf der Stelle  1/4 Dreh  1/2 Dreh  Stip
+Gruppe ● Mariechen  ─▶ Rolle Mariechen  ─▶ + Hüpf→  Schmeiß
+Gruppe ○ Grenadiere ─▶ Rolle Grenadiere ─▶ + GewSchw  Präs  Fuß  Klopf
+Gruppe ✕ Reserve    ─▶ Rolle Reserve    ─▶ + BeinSchw
+                          (→ = bewegt sich · + = zusätzlich zu den gemeinsamen Bausteinen)
 ```
 
 **Schreiben**
 
-- Pro Bild gibt es **eine Spur je Gruppe oder Gruppenverbund**. Ein Verbund (●○) entsteht, indem man Spuren zusammenzieht oder Gruppen in der Spur-Auswahl kombiniert.
-- **Tippen wie auf Papier:** „2 schw 6 präs“ wird zu `2 Schw` `6 Präs`. Ab dem ersten Buchstaben erscheint eine Vorschlagsliste aus dem Katalog der Rolle. Sie sucht in Kürzel, langem Namen und Tippvarianten und verträgt Tippfehler. `Enter` übernimmt.
-- **Baustein-Leiste:** die 8 häufigsten Bausteine der Rolle als Tasten. Ein Tipp hängt den Baustein mit seinen üblichen Zeiten an. Fehlen weniger Zeiten, nimmt er genau den Rest (bei `6/8` wird ein Tipp auf `M` zu `2 M`).
-- **Gruppenverbund aus verschiedenen Rollen** (Mariechen und Grenadiere in einer Linie): Zuerst kommen Bausteine, die beide Rollen kennen, dann die übrigen mit Kennzeichen der Rolle.
+- Pro Bild gibt es **eine Spur je Gruppe oder Gruppenverbund** (siehe „Gruppen zusammenfassen“ weiter unten).
+- **Tippen wie auf Papier:** „2 gewschw 6 präs“ wird zu `2 GewSchw` `6 Präs`. Ab dem ersten Buchstaben erscheint eine Vorschlagsliste aus dem Katalog der Rolle. Sie sucht in Kürzel, langem Namen und Tippvarianten und verträgt Tippfehler. `Enter` übernimmt.
+- **Zahlen im Begriff:** Die erste Zahl ist immer die Anzahl Zeiten, Brüche gehören zum Begriff. „2 1/4 dreh“ heißt 2 Zeiten Vierteldrehung. Darum steht die Anzahl Zeiten überall fett und in Mono-Schrift (**2** 1/4 Dreh).
+- **Baustein-Leiste:** die 8 häufigsten Bausteine aus dem Katalog der Rolle und den gemeinsamen Bausteinen, als Tasten. Ein Tipp hängt den Baustein mit seinen üblichen Zeiten an. Fehlen weniger Zeiten, nimmt er genau den Rest (bei `6/8` wird ein Tipp auf `Marsch` zu `2 Marsch`). Kennt die App noch keine üblichen Zeiten, nimmt sie den Rest des Bildes.
+- **Gruppenverbund aus verschiedenen Rollen** (z. B. Mariechen und Grenadiere): Zuerst kommen die gemeinsamen Bausteine, dann die der beteiligten Rollen mit Kennzeichen der Rolle.
 - **Zeiten ändern** per Stepper oder Zahl. Die Summe der Spur steht daneben: `16/16` neutral, `6/8 ⚠` als Hinweis.
 
 **Lernen durch Benutzen (automatisch)**
@@ -273,8 +275,8 @@ Gruppe ○ Grenadiere ────▶ Rolle Grenadiere ─▶ M→  Schw  Klopf 
 | Übliche Zeiten | Die Zeitenanzahl, die in dieser Rolle am häufigsten für den Baustein benutzt wurde. |
 | Bewegt sich | Beim ersten Mal geschätzt (Wortstämme wie *marsch, lauf, hüpf, geh, schritt*). Stellt ein Trainer es an einem Baustein um, merkt sich die Rolle das. |
 | Reihenfolge | Häufigkeit in dieser Rolle, die letzten Tänze zählen mehr. Angeheftete Bausteine stehen immer vorn. |
-| Übliche Fortbewegung | Der häufigste bewegende Baustein der Rolle (Mariechen: `M` oder `Hüpf`, Grenadiere: `M`). Den bietet der Hinweis „läuft ohne Lauf-Aktion“ direkt an: `2 Hüpf ergänzen`. |
-| Doppelte vermeiden | Ähnliche Schreibweisen („Schwenkn“) bekommen „Meinst du Schwenken?“. Gleicher Text ist derselbe Begriff, auch wenn zwei Geräte offline arbeiten. |
+| Übliche Fortbewegung | Der häufigste bewegende Baustein der Rolle (Mariechen: `Marsch` oder `Hüpf`, Grenadiere und Reserve: `Marsch`). Den bietet der Hinweis „läuft ohne Lauf-Aktion“ direkt an: `2 Hüpf ergänzen`. |
+| Doppelte vermeiden | Ähnliche Schreibweisen („Stipp“) bekommen „Meinst du Stip?“. Gleicher Text ist derselbe Begriff, auch wenn zwei Geräte offline arbeiten. |
 
 **Pflegen, wo man gerade ist (in place)**
 
@@ -284,6 +286,7 @@ Lange drücken (Handy) oder Rechtsklick bzw. `…` (Desktop) auf einen Baustein 
 - **Langer Name und Tippvarianten**
 - **Übliche Zeiten** für diese Rolle
 - **Bewegt sich** ja/nein für diese Rolle
+- **Für alle Rollen anbieten** / **Nur für diese Rolle:** macht einen Baustein gemeinsam oder wieder rollenspezifisch
 - **Oben anheften** / **Nicht mehr vorschlagen** (bestehende Verwendungen bleiben)
 - **Zusammenführen mit …:** für Doppelte und Tippfehler, alle Verwendungen werden umgehängt
 
@@ -291,10 +294,39 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 **Rollen**
 
-- Rollen gelten **vereinsweit**, damit z. B. Jugend und Aktive voneinander profitieren. Mehrere Gruppen können dieselbe Rolle haben: Die ✕ Reserve tanzt mit und teilt sich den Katalog mit den ● Mariechen.
-- **Jede Rolle hat ihre eigenen Begriffe.** Langer Name, übliche Zeiten und „bewegt sich“ gelten je Rolle. `Wurf` darf bei Mariechen der Beinwurf und bei Fahnenträgern das Fahnenwerfen sein. Gleiche Kürzel (`M`, `Dreh`) gelten im Gruppenverbund als gemeinsamer Baustein.
-- **Neue Rolle in Sekunden:** Name eingeben, z. B. „Fahnenträger“. Die KI schlägt einen Start-Katalog mit 8–12 Bausteinen vor (Kürzel, Zeiten, bewegt sich), alle vorausgewählt. Ein Tipp übernimmt. Alternativ: Kopie einer bestehenden Rolle, oder leer starten, dann füllt sich der Katalog beim Schreiben.
+- Rollen gelten **vereinsweit**, damit z. B. Jugend und Aktive voneinander profitieren. Mehrere Gruppen können dieselbe Rolle haben (z. B. zwei Mariechen-Gruppen). Bei euch hat jede Gruppe ihre eigene Rolle, auch die ✕ Reserve.
+- **Gemeinsame Bausteine** (Rolle „Alle“) stehen jeder Rolle zur Verfügung, auch neu angelegten. Ihre Statistik (Häufigkeit, übliche Zeiten) ist gemeinsam.
+- **Jede Rolle hat ihre eigenen Begriffe.** Langer Name, übliche Zeiten und „bewegt sich“ gelten je Rolle. Ein Kürzel darf je Rolle etwas anderes bedeuten. Ihr unterscheidet Gewehr und Beine schon mit `GewSchw` und `BeinSchw`, die App würde aber auch `Schw` in beiden Rollen mit eigener Bedeutung erlauben. Gleiche Kürzel gelten im Gruppenverbund als gemeinsamer Baustein.
+- **Neue Rolle in Sekunden:** Name eingeben, z. B. „Fahnenträger“. Die gemeinsamen Bausteine hat sie sofort. Für das Übrige schlägt die KI einen Start-Katalog mit 5–10 Bausteinen vor (Kürzel, Zeiten, bewegt sich), alle vorausgewählt. Ein Tipp übernimmt. Alternativ: Kopie einer bestehenden Rolle, oder leer starten, dann füllt sich der Katalog beim Schreiben.
 - Braucht eine Garde eigene Begriffe, legt sie eine eigene Rolle als Kopie an (z. B. „Mariechen Jugend“).
+
+**Start-Kataloge des Vereins** (Stand 19.11.2026, maschinenlesbar in `seed/start-katalog.json`)
+
+| Rolle | Kürzel | Bedeutung | Bewegt sich* |
+|---|---|---|---|
+| Alle | Marsch | marschieren | ja |
+| Alle | Marsch auf der Stelle | marschieren am Platz | nein |
+| Alle | 1/4 Dreh | Vierteldrehung | nein |
+| Alle | 1/2 Dreh | Drehung | nein |
+| Alle | Stip | Stippeföttche | nein |
+| Mariechen | Hüpf | hüpfen | ja |
+| Mariechen | Schmeiß | Beine schmeißen | nein |
+| Grenadiere | GewSchw | Gewehr schwenken | nein |
+| Grenadiere | Präs | Gewehr präsentieren | nein |
+| Grenadiere | Fuß | Gewehr zum Fuß | nein |
+| Grenadiere | Klopf | Gewehr klopfen | nein |
+| Reserve | BeinSchw | Beine schwenken | nein |
+
+\* geschätzt. Übliche Zeiten sind noch leer. Beides lernt die App aus der Nutzung, umstellbar direkt am Baustein.
+
+**Gruppen zusammenfassen, auch für Teile des Tanzes**
+
+- **Beliebige Kombinationen:** ●○, ●✕, ○✕ oder alle drei lassen sich zu einem Verbund zusammenfassen. Ein Verbund hat eine gemeinsame Aktionsspur und einen gemeinsamen Laufweg-Pfeil. Jede Position behält ihr Symbol.
+- **Für einen Abschnitt:** Gruppen markieren, `Zusammenfassen` wählen und den Bereich festlegen: *nur dieses Bild*, *bis Bild …* oder *bis auf Weiteres*. Neue Bilder übernehmen den Verbund des vorherigen Bildes, bis er getrennt wird.
+- **Trennen** geht genauso, ab einem bestimmten Bild. Die Aktionen der gemeinsamen Spur werden dabei in jede Gruppe kopiert, damit nichts verloren geht.
+- **Einzelne Abweichung:** Macht eine Gruppe in einem Bild etwas anderes, löst man sie nur für dieses Bild heraus. Die anderen Bilder des Abschnitts bleiben zusammengefasst.
+- **Überblick:** Über den Bildern zeigt die Zeitleiste, welche Gruppen wann zusammen sind (z. B. ein Balken „●✕ Bild 11–18“).
+- **Formationen sind davon unabhängig:** Eine Linie kann ●○ mischen, während die Aktionen in ●✕ und ○ aufgeteilt sind.
 
 **Was ein Trainer nie tun muss:** einen Katalog vorab anlegen, übliche Zeiten pflegen oder Listen aufräumen, damit die App funktioniert.
 
@@ -360,8 +392,8 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 │ └──────── Publikum ────────┘ │
 │   5  /8     2. Achter        │  ← Zählzeit, riesig
 │  ▮▮▮▮▮▯▯▯ ▮▮▮▮▮▮▮▮           │  ← Achter-Segmente
-│ ●○ ┃ 8 Wurf ┃ ▌8 M▐          │  ← laufende Aktion invertiert
-│ ✕  ┃ 2 Schw ┃ ▌14 M▐         │
+│ ●✕ ┃ 8 Stip ┃ ▌8 Marsch▐     │  ← laufende Aktion invertiert
+│ ○  ┃ 8 Klopf ┃ ▌8 Marsch▐    │
 │ Weiter: Bild 13 · 8 Zeiten   │
 │ [Vorlauf 8 ▾]   [✎ Bearbeiten]│
 │  ◀ Bild 11   ( ▶ )  Bild 13 ▶ │  ← Daumenbereich, große Tasten
@@ -417,7 +449,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Bühnenmaße, Raster, umschaltbare Perspektive | „Freie Fläche reicht“, Publikum immer unten |
 | Halbe Zeiten | Nicht benötigt |
 | KI räumt Kataloge auf (Synonyme erkennen, z. B. „Gewehr hoch“ = „Präs“) | Erst nötig, wenn Kataloge groß werden. Zusammenführen geht im MVP von Hand am Baustein |
-| Reihenfolgen lernen („nach Wurf folgt meist M“) | Häufigkeit reicht für gute Vorschläge zum Start |
+| Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start |
 | Mehrere Vereine, Abo | Nur der eigene Verein |
 | Streaming-Dienste als Musikquelle | Synchronisation braucht die Datei |
 
@@ -469,9 +501,8 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 ## 13. Offene Fragen für später
 
-1. Welche Aktionen schreibt ihr heute unter die Bilder, und wie kürzt ihr sie ab (z. B. „M“ für marschieren, „Präs“ für präsentieren)? Am besten getrennt nach Mariechen, Grenadieren und Reserve. Daraus werden die Start-Kataloge. Das ist optional: Ohne Liste schlägt die KI einen vor, und der Rest lernt sich beim Schreiben.
-2. Zählt ihr laut „1–8, 2–2–3–…“ oder „1–16“? (Das bestimmt die Zählanzeige, Standard sind Achter.)
-3. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
-4. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
-5. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
-6. Stimmt die Zuordnung ● Mariechen, ○ Grenadiere, ✕ Reserve? Und tanzt die Reserve dieselben Aktionen wie die Mariechen (dann teilen sie sich einen Katalog) oder eigene?
+1. Zählt ihr laut „1–8, 2–2–3–…“ oder „1–16“? (Das bestimmt die Zählanzeige, Standard sind Achter.)
+2. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
+3. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
+4. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
+5. Schreibt ihr „Marsch auf der Stelle“ aus, oder gibt es dafür ein Kürzel?

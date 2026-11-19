@@ -78,6 +78,7 @@
 /* --- Segment-Auswahl (z. B. Laufweg: Gruppe | Einzeln) ------------------- */
 .gm-seg {
   display: inline-flex;
+  flex-wrap: wrap;
   padding: 3px;
   gap: 3px;
   border-radius: var(--gm-radius-m);
@@ -155,7 +156,14 @@
   font: var(--gm-weight-bold) var(--gm-text-sm) / 1.2 var(--gm-font-ui);
   white-space: nowrap;
 }
-.gm-chip__n { font-family: var(--gm-font-mono); font-variant-numeric: tabular-nums; }
+/* Anzahl Zeiten: fett, Mono, mit Trennstrich, weil Begriffe Zahlen enthalten können (1/4 Dreh) */
+.gm-chip__n {
+  padding-right: 0.4em;
+  border-right: 1.5px solid color-mix(in srgb, currentColor 40%, transparent);
+  font-family: var(--gm-font-mono);
+  font-weight: var(--gm-weight-heavy);
+  font-variant-numeric: tabular-nums;
+}
 .gm-chip .gm-icon { width: 1em; height: 1em; stroke-width: 2.5; }
 .gm-chip--free { border-style: dashed; }
 .gm-chip--past { border-color: var(--gm-line); background: transparent; color: var(--gm-ink-3); }
@@ -256,6 +264,7 @@
 .gm-track__who { display: inline-flex; gap: 3px; align-items: center; }
 .gm-track__who svg { width: 0.95em; height: 0.95em; display: block; }
 .gm-track__text { min-width: 0; overflow-wrap: anywhere; }
+.gm-track__n { font-family: var(--gm-font-mono); font-weight: var(--gm-weight-heavy); }
 .gm-track__sum { font-family: var(--gm-font-mono); font-size: 0.85em; color: var(--gm-ink-3); }
 .gm-track.has-warning { background: var(--gm-warn-tint); border-left-color: var(--gm-warn-line); }
 .gm-track.has-warning .gm-track__sum { color: var(--gm-warn); font-weight: var(--gm-weight-bold); }
