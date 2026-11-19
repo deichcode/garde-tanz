@@ -12,7 +12,7 @@ Heute schreiben Trainer Tänze mit Stift und Papier:
 
 - **4 Bilder pro Seite**, A4 quer, 2 × 2. Unter jedem Bild stehen die Aktionen.
 - Jedes Bild hat **Nummer und Anzahl Zeiten** (meist 8 oder 16).
-- Gruppen werden mit **Symbolen** gekennzeichnet: gefüllter Kreis, leerer Kreis, „R“.
+- Gruppen werden mit **Symbolen** gekennzeichnet: gefüllter Kreis, leerer Kreis, „R“ (für die Gruppe *Reserve*, die voll mittanzt).
 - Aktionen werden als **Anzahl + Kürzel** notiert: „2 drehen, 6 M“.
 - Ein Tanz hat **30–50 Bilder**, also 8–13 Seiten.
 
@@ -97,7 +97,7 @@ interface Dance {
 
 interface Group {
   id: Id;
-  name: string;               // frei, z. B. "Gruppe 1" oder "Große"
+  name: string;               // frei, z. B. "Mariechen", "Reserve"
   symbol: 'dot' | 'ring' | 'cross' | 'triangle' | 'square' | 'diamond' | { letter: string };
   size: number;               // Anzahl Tänzer, 4–10 typisch
   roleId: Id;                 // Rolle, z. B. "Grenadiere" → bestimmt den Baustein-Katalog
@@ -191,9 +191,11 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 
 - **Anmeldung über das Microsoft 365 des Vereins:** „Mit Microsoft anmelden“ läuft über den eigenen Microsoft-365-Tenant des Vereins. Trainer nutzen ihr **Vereinskonto**. Wer keins hat, wird mit seinem **privaten Microsoft-Konto als Gast** in den Tenant eingeladen oder bekommt ein Vereinskonto. Es gibt keine eigenen Passwörter in der App und keine anderen Anmeldearten.
 - **Einmal anmelden, dann dauerhaft:** Microsoft wird nur bei der ersten Anmeldung auf einem Gerät gebraucht. Danach hält die App die Sitzung selbst. Training und Bearbeiten funktionieren offline, ohne erneute Anmeldung.
-- **Zugang = Mitglied einer M365-Gruppe**, z. B. eines bestehenden Teams „Trainer“ oder einer neuen Gruppe „Garde-Tanz“. Wer Zugang bekommt oder verliert, pflegt der Verein dort, wo er seine Konten ohnehin verwaltet. Die App hat **keine eigene Benutzerverwaltung** und keine Einladungslinks. **Admins** (Garden anlegen, Rollen zusammenführen oder löschen) sind Mitglieder einer zweiten Gruppe, z. B. „Garde-Tanz Admins“.
+- **Zugang = Mitglied der M365-Gruppe „Garde-Tanz“.** Die Gruppe wird für die App neu angelegt. Wer Zugang bekommt oder verliert, pflegt der Verein dort, wo er seine Konten ohnehin verwaltet. Die App hat **keine eigene Benutzerverwaltung** und keine Einladungslinks.
+- **Admins** (Garden anlegen, Rollen zusammenführen oder löschen) sind die **Besitzer** dieser Gruppe. Eine zweite Gruppe ist nicht nötig.
 - **Prüfung:** Bei jeder Anmeldung und einmal täglich prüft der Server die Gruppenmitgliedschaft. Wer aus der Gruppe entfernt wird, verliert den Zugang beim nächsten Online-Abgleich. Die Daten auf seinem Gerät werden dann gelöscht.
 - **Gespeichert wird nur** Name, E-Mail-Adresse und die Microsoft-Konto-ID des Trainers.
+- **Einrichtung (einmalig durch den M365-Admin, ca. 15 Minuten):** App in Entra ID registrieren, Gruppe „Garde-Tanz“ anlegen, Trainer als Mitglieder und die Trainerleitung als Besitzer eintragen, Externe als Gäste einladen, der Graph-Berechtigung einmal zustimmen. Eine Schritt-für-Schritt-Anleitung entsteht in M1.
 - **Ein Vereins-Arbeitsbereich** mit Garden (Teams). Alle Trainer dürfen alle Tänze des Vereins lesen und bearbeiten.
 - **Local-first:** Alle Daten liegen zusätzlich auf dem Gerät. Bearbeiten und Training funktionieren offline, der Abgleich passiert automatisch.
 - **Konflikte:** Jedes Bild ist ein eigenes Dokument, gespeichert wird feldweise. Gleichzeitige Änderungen am selben Feld: die letzte gewinnt. Am Bild steht „zuletzt geändert von Anna, vor 5 Min.“.
@@ -203,7 +205,7 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 ### 6.2 Tanz anlegen
 
 - Titel, Garde, Saison.
-- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (z. B. ● Mariechen groß und ○ Mariechen klein mit Rolle *Mariechen*, ✕ mit Rolle *Grenadiere*) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
+- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (z. B. ● Mariechen mit Rolle *Mariechen*, ○ Grenadiere mit Rolle *Grenadiere*, ✕ Reserve mit Rolle *Mariechen*, weil sie dieselben Aktionen tanzt) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
 - Ein neuer Tanz übernimmt Gruppen und Rollen vom letzten Tanz derselben Garde. Optional: aus einem anderen Tanz kopieren.
 
 ### 6.3 Seitenansicht und Bild-Editor (Desktop, Tablet)
@@ -248,10 +250,10 @@ Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer L
 **Grundidee:** Jede Gruppe hat eine **Rolle**, jede Rolle hat einen eigenen **Katalog**. Der Katalog füllt sich beim Schreiben von selbst. Korrigiert wird er dort, wo man gerade arbeitet. Niemand muss vorab etwas anlegen oder regelmäßig aufräumen.
 
 ```
-Gruppe ● Mariechen groß ─┐
-Gruppe ○ Mariechen klein ─┴─▶ Rolle Mariechen   ─▶ M→  Hüpf→  Wurf  Dreh  Pose  Spagat …
-Gruppe ✕ Grenadiere ─────────▶ Rolle Grenadiere ─▶ M→  Schw  Klopf  Präs  Schult  Pose …
-                                                    (→ = bewegt sich, Reihenfolge = Häufigkeit)
+Gruppe ● Mariechen ───┐
+Gruppe ✕ Reserve ─────┴─▶ Rolle Mariechen  ─▶ M→  Hüpf→  Wurf  Dreh  Pose  Spagat …
+Gruppe ○ Grenadiere ────▶ Rolle Grenadiere ─▶ M→  Schw  Klopf  Präs  Schult  Pose …
+                                              (→ = bewegt sich, Reihenfolge = Häufigkeit)
 ```
 
 **Schreiben**
@@ -289,7 +291,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 **Rollen**
 
-- Rollen gelten **vereinsweit**, damit z. B. Jugend und Aktive voneinander profitieren. Mehrere Gruppen können dieselbe Rolle haben (● Mariechen groß, ○ Mariechen klein).
+- Rollen gelten **vereinsweit**, damit z. B. Jugend und Aktive voneinander profitieren. Mehrere Gruppen können dieselbe Rolle haben: Die ✕ Reserve tanzt mit und teilt sich den Katalog mit den ● Mariechen.
 - **Jede Rolle hat ihre eigenen Begriffe.** Langer Name, übliche Zeiten und „bewegt sich“ gelten je Rolle. `Wurf` darf bei Mariechen der Beinwurf und bei Fahnenträgern das Fahnenwerfen sein. Gleiche Kürzel (`M`, `Dreh`) gelten im Gruppenverbund als gemeinsamer Baustein.
 - **Neue Rolle in Sekunden:** Name eingeben, z. B. „Fahnenträger“. Die KI schlägt einen Start-Katalog mit 8–12 Bausteinen vor (Kürzel, Zeiten, bewegt sich), alle vorausgewählt. Ein Tipp übernimmt. Alternativ: Kopie einer bestehenden Rolle, oder leer starten, dann füllt sich der Katalog beim Schreiben.
 - Braucht eine Garde eigene Begriffe, legt sie eine eigene Rolle als Kopie an (z. B. „Mariechen Jugend“).
@@ -385,7 +387,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 - **Format:** A4 quer, 2 × 2, identisch mit der Seitenansicht, in Schwarz-Weiß optimiert.
 - **Optionen:** alle Seiten oder Bereich, mit/ohne Laufwege, mit/ohne Notizen.
-- **Fußzeile:** Tanzname · Legende der Gruppen (● Mariechen groß · ○ Mariechen klein · ✕ Grenadiere) · Stand (Datum, Version) · Seite x / y.
+- **Fußzeile:** Tanzname · Legende der Gruppen (● Mariechen · ○ Grenadiere · ✕ Reserve) · Stand (Datum, Version) · Seite x / y.
 - **Optional:** eine Schlussseite mit den Kürzeln aller beteiligten Rollen.
 - **Umsetzung:** Druck-Stylesheet (`@page A4 landscape`), dieselben SVG-Komponenten wie am Bildschirm. Ausgabe über den Druckdialog bzw. „Als PDF sichern“.
 - Gleiche Seitenaufteilung in App und Druck, damit „Seite 4, Bild 14“ im Team auf beiden Wegen dasselbe meint.
@@ -467,10 +469,9 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 ## 13. Offene Fragen für später
 
-1. Welche Begriffe und Kürzel nutzen Mariechen und Grenadiere heute? Daraus werden die Start-Kataloge. Ohne Liste schlägt die KI einen vor, und der Rest lernt sich beim Schreiben.
+1. Welche Aktionen schreibt ihr heute unter die Bilder, und wie kürzt ihr sie ab (z. B. „M“ für marschieren, „Präs“ für präsentieren)? Am besten getrennt nach Mariechen, Grenadieren und Reserve. Daraus werden die Start-Kataloge. Das ist optional: Ohne Liste schlägt die KI einen vor, und der Rest lernt sich beim Schreiben.
 2. Zählt ihr laut „1–8, 2–2–3–…“ oder „1–16“? (Das bestimmt die Zählanzeige, Standard sind Achter.)
 3. Sollen alle Trainer des Vereins alle Tänze bearbeiten dürfen oder nur die eigene Garde?
 4. Gibt es Einmarsch und Ausmarsch als eigene Bilder oder gehören sie nicht zur Choreografie?
 5. Braucht ihr Bildtitel (z. B. „Diagonale“) als optionales Feld, z. B. für die Bildübersicht im Training?
-6. Welche Rollen gibt es außer Mariechen und Grenadieren (z. B. Kommandant, Fahnenträger, Tanzpaar)?
-7. Gibt es in eurem Microsoft 365 schon eine Gruppe oder ein Team mit allen Trainern, über das der Zugang laufen kann?
+6. Stimmt die Zuordnung ● Mariechen, ○ Grenadiere, ✕ Reserve? Und tanzt die Reserve dieselben Aktionen wie die Mariechen (dann teilen sie sich einen Katalog) oder eigene?

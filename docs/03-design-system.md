@@ -76,7 +76,7 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 |---|---|---|
 | 1 | ● gefüllter Kreis | gefüllter Kreis |
 | 2 | ○ leerer Kreis | leerer Kreis |
-| 3 | ✕ Kreuz | „R“ |
+| 3 (Reserve) | ✕ Kreuz | „R“ für Reserve |
 | 4, 5 oder als Ersatz | ▲ Dreieck, ■ Quadrat, ◆ Raute, Buchstabe | – |
 
 - Das **Kreuz** unterscheidet sich von beiden Kreisen in **Form und Füllung** (offene Striche statt Fläche oder Ring). Darum ist es die beste dritte Wahl. „R“ bleibt als Buchstaben-Option.
@@ -144,7 +144,7 @@ Die App **duzt** und spricht wie ein Trainer. Tasten sagen, was passiert. Hinwei
 | Nicht so | Sondern so |
 |---|---|
 | Frame 12 (16 Counts) | Bild 12 · 16 Zeiten |
-| Validierungsfehler: Summe ungültig | Gruppe 2 – 6 von 8 Zeiten belegt, 2 fehlen |
+| Validierungsfehler: Summe ungültig | Grenadiere – 6 von 8 Zeiten belegt, 2 fehlen |
 | Pre-Roll aktiv | Musik startet 8 Zeiten vor Bild 12 |
 | Cache synchronisiert | Offline bereit: Bilder und Musik sind auf dem Handy |
 | Sind Sie sicher? | Bild 14 löschen? Du kannst es rückgängig machen. |

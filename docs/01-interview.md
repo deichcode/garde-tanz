@@ -87,6 +87,8 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | *„Anmeldung soll per Office 365 Account möglich sein. Bzw. Microsoft Account.“* | „Mit Microsoft anmelden“ ist die einzige Anmeldeart im MVP. Sie funktioniert für Office-365-/Arbeitskonten und für private Microsoft-Konten. Zugang gibt es nur per Einladung. Nach der ersten Anmeldung bleibt die Sitzung offline erhalten. Details im Konzept unter 6.1, 9 und Risiko 6. |
 | *„Ja, wir haben ein eigenes MS 365.“* | Die App wird im **Vereins-Tenant** registriert. Trainer melden sich mit dem Vereinskonto an, Externe als Gast mit privatem Microsoft-Konto. **Zugang = Mitglied einer M365-Gruppe** statt Einladungslinks, gepflegt dort, wo der Verein seine Konten verwaltet. Konzept 6.1, 9. |
 | *„Aktionen hängen von Gruppe ab (bspw. Grenadiere haben Gewehre und machen mit diesen Aktionen (Schwenken, Klopfen, Präsentieren etc.). Mariechen marschieren oder hüpfen bei Bewegung, schmeißen Beine etc. Das sind nur Beispiele, die pro Tanzgruppe anpassbar sein sollen. Pflege sollte nicht aufwändig sein und entweder automatisiert oder in place erfolgen.“* | Jede Gruppe bekommt eine **Rolle** (Mariechen, Grenadiere …) mit eigenem **Baustein-Katalog**. Der Katalog **lernt beim Schreiben**: Beim zweiten Gebrauch wird ein Begriff zum Baustein, übliche Zeiten und Fortbewegung ergeben sich aus der Nutzung. Gepflegt wird **direkt am Baustein** (Umbenennen, Zusammenführen, Ausblenden). Neue Rollen bekommen einen KI-Start-Katalog. Konzept 6.5. |
+| *Gibt es schon eine M365-Gruppe mit allen Trainern? – „Nein.“* | Für die App wird eine neue Gruppe „Garde-Tanz“ angelegt. Mitglieder sind die Trainer, Besitzer sind die Admins. Eine zweite Admin-Gruppe ist nicht nötig. Konzept 6.1. |
+| *Weitere Rollen? – „Dritte Gruppe heißt ‚Reserve‘ (tanzt aber mit).“* | Das „R“ auf dem Papier steht für **Reserve**. Die Reserve ist eine vollwertige Gruppe in jedem Bild, keine Ersatzbank. Ob sie eigene Aktionen hat oder den Katalog einer anderen Rolle teilt, entscheidet die Rolle der Gruppe. Das Symbol bleibt ✕, „R“ ist wählbar. |
 
 ---
 
@@ -98,7 +100,7 @@ Diese Punkte habe ich festgelegt, damit das Konzept vollständig ist. Jeder läs
 2. **Zählanzeige in Achtern:** Im Training zeigt die große Zahl die Zeit innerhalb des aktuellen Achters (1–8), daneben steht „2. Achter“. Das passt zum lauten Mitzählen „5, 6, 7, 8“.
 3. **Standard-Vorlauf: 8 Zeiten.** Pro Gerät auf 0, 4, 8 oder 16 einstellbar.
 4. **Heller Modus als Standard** (Papier-Anmutung, helle Hallen). Ein dunkler Modus ist verfügbar.
-5. **Drittes Gruppensymbol: ✕.** Es unterscheidet sich von ● und ○ sowohl in der Form als auch in der Füllung. Alternativen: ▲ ■ ◆ oder der Buchstabe „R“.
+5. **Drittes Gruppensymbol: ✕.** Es unterscheidet sich von ● und ○ sowohl in der Form als auch in der Füllung. Alternativen: ▲ ■ ◆ oder der Buchstabe „R“ (für Reserve).
 6. **KI-Kosten** laufen zentral über einen API-Schlüssel des Vereins auf dem Server, mit Monatslimit. Ein eigener Schlüssel pro Trainer ist nicht nötig.
 7. **Backend:** ein verwalteter Dienst mit Rechenzentrum in der EU (Vorschlag Firebase, Alternative Supabase). Siehe Konzept, Abschnitt Technik.
 8. **Bewegungs-Vorschau:** In der Vorschau laufen die Tänzer animiert entlang der Laufwege. Im Training ist das abschaltbar, der Standard ist das ruhige Papierbild mit Pfeilen.
