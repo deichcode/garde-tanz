@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gardemaß Design-System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;700&family=Atkinson+Hyperlegible+Next:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+/* Styleguide-Seite. Layout-Konzept: ein ruhiges Nachschlagewerk auf Leinwand-Grau,
+   Beispiele liegen auf „Papier“, Screen-Entwürfe in Geräterahmen. */
+:root { --sg-bezel: #1B1F26; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sg-bezel: #3A414D; } }
+:root[data-theme="dark"] { --sg-bezel: #3A414D; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--gm-canvas); }
+body {
+  margin: 0;
+  background: var(--gm-canvas);
+  color: var(--gm-ink);
+  font: var(--gm-weight-regular) var(--gm-text-sm) / var(--gm-leading-body) var(--gm-font-ui);
+  -webkit-text-size-adjust: 100%;
+}
+.sg {
+  display: grid;
+  gap: var(--gm-space-8);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: var(--gm-space-6) var(--gm-space-8);
+}
+h1, h2, h3 { margin: 0; line-height: var(--gm-leading-snug); text-wrap: balance; }
+p { margin: 0; }
+code, .sg-mono { font-family: var(--gm-font-mono); font-size: 0.92em; }
+
+/* Kopf */
+.sg-head { display: grid; gap: var(--gm-space-5); }
+.sg-brand { display: flex; align-items: center; gap: var(--gm-space-4); flex-wrap: wrap; }
+.sg-mark { width: 92px; height: auto; flex: none; }
+.sg-eyebrow { margin-bottom: 6px; color: var(--gm-ink-2); font-size: var(--gm-text-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.sg-brand h1 { font-size: clamp(2.5rem, 8vw, 4.25rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.sg-lead { max-width: 60ch; color: var(--gm-ink-2); font-size: var(--gm-text-md); }
+.sg-headbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--gm-space-3) var(--gm-space-5); }
+.sg-nav { display: flex; flex-wrap: wrap; gap: var(--gm-space-2); }
+.sg-nav a {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px;
+  border: 1.5px solid var(--gm-line-strong); border-radius: var(--gm-radius-pill);
+  background: var(--gm-paper); color: var(--gm-ink); font-size: var(--gm-text-xs); font-weight: 700; text-decoration: none;
+}
+.sg-nav a:hover { border-color: var(--gm-ink); }
+
+/* Abschnitte */
+section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-space-4); min-width: 0; }
+.sg-sec-head { display: grid; gap: var(--gm-space-2); max-width: 72ch; }
+.sg-sec-head h2 { font-size: var(--gm-text-xl); font-weight: 800; }
+.sg-sec-head p { color: var(--gm-ink-2); }
+.sg-panel { min-width: 0; padding: var(--gm-space-5); border-radius: var(--gm-radius-l); background: var(--gm-paper); }
+.sg-panel > h3, .sg-h3 { font-size: var(--gm-text-md); font-weight: 800; }
+.sg-stack { display: grid; align-content: start; gap: var(--gm-space-3); min-width: 0; }
+.sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gm-space-3); }
+.sg-grid { display: grid; gap: var(--gm-space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.sg-grid--wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.sg-label { color: var(--gm-ink-2); font-size: var(--gm-text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.sg-caption { color: var(--gm-ink-3); font-size: var(--gm-text-xs); }
+.sg-rules { display: grid; gap: var(--gm-space-2); margin: 0; padding-left: 1.2em; color: var(--gm-ink-2); }
+.sg-rules strong { color: var(--gm-ink); }
+
+/* Prinzipien */
+.sg-principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--gm-space-5) var(--gm-space-6); }
+.sg-principle { display: grid; gap: var(--gm-space-2); align-content: start; padding-top: var(--gm-space-3); border-top: var(--gm-stroke-strong) solid var(--gm-ink); }
+.sg-principle h3 { font-size: var(--gm-text-md); font-weight: 800; }
+.sg-principle p { color: var(--gm-ink-2); }
+
+/* Farben */
+.sg-colorgroup { display: grid; gap: var(--gm-space-3); }
+.sg-swatches { display: grid; gap: var(--gm-space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.sg-swatch { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: center; gap: var(--gm-space-3); padding: var(--gm-space-3); border-radius: var(--gm-radius-m); background: var(--gm-paper); }
+.sg-swatch__chip { width: 56px; height: 56px; border: 1px solid var(--gm-line); border-radius: var(--gm-radius-m); }
+.sg-swatch__name { font-weight: 700; }
+.sg-swatch__meta { color: var(--gm-ink-3); font-size: var(--gm-text-xs); line-height: 1.35; }
+
+/* Schrift */
+.sg-type { display: grid; }
+.sg-type-row { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: var(--gm-space-2) var(--gm-space-5); align-items: baseline; padding-block: var(--gm-space-3); border-top: 1px solid var(--gm-line); }
+.sg-type-row:first-child { border-top: 0; }
+.sg-type-sample { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .sg-type-row { grid-template-columns: 1fr; } }
+
+/* Symbole */
+.sg-symbols { display: grid; gap: var(--gm-space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
+.sg-symbol { display: grid; justify-items: center; gap: var(--gm-space-2); padding: var(--gm-space-4) var(--gm-space-3); border-radius: var(--gm-radius-m); background: var(--gm-paper); text-align: center; }
+.sg-symbol svg { width: 56px; height: 56px; }
+.sg-symbol strong { font-size: var(--gm-text-sm); }
+.sg-alts { display: flex; flex-wrap: wrap; gap: var(--gm-space-3); }
+.sg-alt { display: inline-flex; align-items: center; gap: var(--gm-space-2); padding: 6px 12px; border: 1.5px solid var(--gm-line-strong); border-radius: var(--gm-radius-pill); background: var(--gm-paper); font-size: var(--gm-text-xs); font-weight: 700; }
+.sg-alt svg { width: 20px; height: 20px; }
+
+/* Blatt */
+.sg-sheetbox { min-width: 0; padding: var(--gm-space-5); border-radius: var(--gm-radius-l); background: var(--gm-sunken); }
+.sg-sheetbox .gm-sheet { box-shadow: var(--gm-shadow-float); }
+
+/* Zählzeit, Aktionen */
+.sg-ttracks { display: grid; gap: var(--gm-space-3); }
+.sg-ttrack { display: grid; grid-template-columns: 46px minmax(0, 1fr); align-items: center; gap: var(--gm-space-2); }
+.sg-ttrack__who { display: flex; gap: 4px; }
+.sg-ttrack__who svg { width: 18px; height: 18px; }
+.sg-ttrack__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sg-preroll-note { color: var(--gm-signal); font-weight: 800; font-size: var(--gm-text-lg); }
+
+/* Größen */
+.sg-hits { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--gm-space-5); }
+.sg-hit { display: grid; justify-items: center; gap: var(--gm-space-2); font-size: var(--gm-text-xs); color: var(--gm-ink-2); }
+.sg-hit__box { display: grid; place-items: center; border: 2px dashed var(--gm-signal); border-radius: var(--gm-radius-m); background: var(--gm-signal-tint); color: var(--gm-signal); font: 800 var(--gm-text-sm) var(--gm-font-mono); }
+.sg-spaces { display: grid; gap: 6px; }
+.sg-space { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: var(--gm-space-3); font-size: var(--gm-text-xs); }
+.sg-space__bar { height: 14px; border-radius: 2px; background: var(--gm-ink); }
+
+/* Tabellen */
+.sg-tablewrap { overflow-x: auto; border-radius: var(--gm-radius-l); background: var(--gm-paper); }
+.sg-table { width: 100%; min-width: 560px; border-collapse: collapse; }
+.sg-table th, .sg-table td { padding: var(--gm-space-3) var(--gm-space-4); border-top: 1px solid var(--gm-line); text-align: left; vertical-align: top; }
+.sg-table thead th { border-top: 0; color: var(--gm-ink-2); font-size: var(--gm-text-xs); letter-spacing: 0.06em; text-transform: uppercase; }
+.sg-table td.is-dont { color: var(--gm-ink-3); text-decoration: line-through; text-decoration-color: var(--gm-danger); }
+
+/* Screen-Entwürfe: Desktop */
+.sg-scroll { overflow-x: auto; border-radius: var(--gm-radius-l); }
+.sg-desk { display: grid; min-width: 1040px; border: 1px solid var(--gm-line-strong); border-radius: var(--gm-radius-l); background: var(--gm-canvas); overflow: hidden; }
+.sg-desk__top { display: flex; align-items: center; gap: var(--gm-space-3); padding: var(--gm-space-2) var(--gm-space-3); border-bottom: 1px solid var(--gm-line); background: var(--gm-paper); }
+.sg-desk__title { display: grid; line-height: 1.2; }
+.sg-desk__title small { color: var(--gm-ink-3); font-size: var(--gm-text-xs); }
+.sg-desk__title strong { font-size: var(--gm-text-md); }
+.sg-desk__spacer { flex: 1; }
+.sg-desk__main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.sg-desk__sheet { display: grid; align-content: start; gap: var(--gm-space-3); padding: var(--gm-space-5); }
+.sg-desk__sheet .gm-sheet { box-shadow: var(--gm-shadow-float); }
+.sg-pager { display: flex; align-items: center; justify-content: space-between; gap: var(--gm-space-3); }
+.sg-pager__dots { display: flex; gap: 4px; }
+.sg-pager__dot { width: 18px; height: 8px; border-radius: 2px; background: var(--gm-line-strong); }
+.sg-pager__dot.is-on { background: var(--gm-signal); }
+.sg-insp { display: grid; align-content: start; gap: var(--gm-space-5); padding: var(--gm-space-4); border-left: 1px solid var(--gm-line); background: var(--gm-paper); }
+.sg-insp__block { display: grid; gap: var(--gm-space-2); }
+.sg-insp__head { display: flex; align-items: center; justify-content: space-between; gap: var(--gm-space-3); }
+.sg-insp__title { font-size: var(--gm-text-xl); font-weight: 800; }
+.sg-insp__list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.sg-insp__item { display: flex; align-items: center; gap: var(--gm-space-2); min-height: 40px; padding: 0 var(--gm-space-2); border-radius: var(--gm-radius-s); background: var(--gm-sunken); font-weight: 700; }
+.sg-insp__item.is-sel { background: var(--gm-signal-tint); box-shadow: inset 0 0 0 2px var(--gm-signal); }
+.sg-insp__item svg { width: 16px; height: 16px; }
+.sg-insp__item small { margin-left: auto; color: var(--gm-ink-3); font-weight: 400; }
+.sg-insp__track { display: grid; gap: 6px; padding: var(--gm-space-2); border-left: 3px solid transparent; border-radius: var(--gm-radius-s); background: var(--gm-sunken); }
+.sg-insp__track.has-warning { border-left-color: var(--gm-warn-line); background: var(--gm-warn-tint); }
+.sg-insp__trackhead { display: flex; align-items: center; gap: 6px; }
+.sg-insp__trackhead svg { width: 16px; height: 16px; }
+.sg-insp__trackhead .gm-num { margin-left: auto; font-size: var(--gm-text-xs); font-weight: 700; }
+.sg-insp__trackhead .is-bad { color: var(--gm-warn); }
+.sg-insp__hint { color: var(--gm-warn); font-size: var(--gm-text-xs); font-weight: 700; }
+.sg-timeline { display: grid; gap: var(--gm-space-2); padding: var(--gm-space-3) var(--gm-space-4) var(--gm-space-4); border-top: 1px solid var(--gm-line); background: var(--gm-paper); }
+.sg-timeline > svg { display: block; width: 100%; height: auto; }
+.sg-tl-wave { fill: var(--gm-line-strong); }
+.sg-tl-frame { fill: var(--gm-sunken); stroke: var(--gm-paper); stroke-width: 2; }
+.sg-tl-frame.is-active { fill: var(--gm-signal-tint); stroke: var(--gm-signal); }
+.sg-tl-frame.is-warn { fill: var(--gm-warn-tint); }
+.sg-tl-num { fill: var(--gm-ink); font: 700 14px var(--gm-font-ui); }
+.sg-tl-time { fill: var(--gm-ink-3); font: 400 12px var(--gm-font-mono); }
+.sg-tl-head { stroke: var(--gm-signal); stroke-width: 2.5; }
+.sg-tl-headknob { fill: var(--gm-signal); }
+.sg-tl-mini { fill: var(--gm-line-strong); }
+.sg-tl-mini.is-view { fill: var(--gm-ink-2); }
+
+/* Screen-Entwürfe: Handy */
+.sg-phones { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--gm-space-6); }
+.sg-phonecol { display: grid; gap: var(--gm-space-3); width: 375px; max-width: 100%; }
+.sg-phone { overflow: hidden; border: 10px solid var(--sg-bezel); border-radius: 42px; background: var(--gm-paper); box-shadow: var(--gm-shadow-float); }
+.sg-phone__inner { display: flex; flex-direction: column; min-height: 760px; }
+.sg-phone__screen { display: flex; flex: 1; flex-direction: column; gap: 14px; padding: 14px 14px 18px; }
+.sg-tbar { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 4px; }
+.sg-tbar__title { justify-self: center; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 10px; border: 0; border-radius: var(--gm-radius-m); background: var(--gm-sunken); color: var(--gm-ink); font: 800 var(--gm-text-lg) / 1 var(--gm-font-ui); }
+.sg-tbar__title small { color: var(--gm-ink-2); font-weight: 700; font-size: var(--gm-text-sm); }
+.sg-tbar__status { display: grid; place-items: center; width: 48px; height: 48px; color: var(--gm-ok); }
+.sg-next { color: var(--gm-ink-2); font-size: var(--gm-text-md); }
+.sg-next strong { color: var(--gm-ink); }
+.sg-tools { display: flex; justify-content: space-between; gap: var(--gm-space-3); margin-top: auto; }
+.sg-transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--gm-hit-gap); }
+.sg-transport .gm-btn--stack { width: 100%; }
+.sg-editrow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gm-space-2); }
+.sg-chipsel { box-shadow: 0 0 0 3px var(--gm-paper), 0 0 0 5px var(--gm-edit); }
+.sg-editpanel { display: grid; gap: var(--gm-space-3); padding: var(--gm-space-3); border-radius: var(--gm-radius-m); background: var(--gm-edit-tint); }
+.sg-editpanel__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--gm-space-2); }
+</style>
+</head>
+<body>
+
+<!-- Icon-Satz: 24er Raster, 2 px Strich, runde Enden -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.8L2.6 20h18.8z"/><path d="M12 10v4.2"/><path d="M12 17.3v.2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.2a4 4 0 0 0 .4-8 6 6 0 0 0-11.4-1.2A4.6 4.6 0 0 0 7 18.5z"/><path d="M9.5 13.8l2 2 3.6-3.6"/></symbol>
+  <symbol id="i-cloud-off" viewBox="0 0 24 24"><path d="M7 18.5h10.2a4 4 0 0 0 .4-8 6 6 0 0 0-11.4-1.2A4.6 4.6 0 0 0 7 18.5z"/><path d="M3 3l18 18"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-14.3 4.9"/><path d="M4 12A8 8 0 0 1 18.3 7.1"/><path d="M18.5 3v4.3h-4.3"/><path d="M5.5 21v-4.3h4.3"/></symbol>
+  <symbol id="i-ready" viewBox="0 0 24 24"><path d="M12 3.5v11"/><path d="M7.5 10.5l4.5 4.5 4.5-4.5"/><path d="M4.5 20h15"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19.5 8.5l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M11 3l1.9 5.6L18.5 10.5l-5.6 1.9L11 18l-1.9-5.6L3.5 10.5l5.6-1.9z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="1.5"/><path d="M7 14h10v6.5H7z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="M14 6.5l5.5 5.5-5.5 5.5"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5"/><path d="M8.5 9h7M8.5 12.5h4"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-play-o" viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15"/><path d="M9.5 7V4.5h5V7"/><path d="M6.5 7l1 13h9l1-13"/></symbol>
+</svg>
+
+<div class="sg">
+
+  <header class="sg-head">
+    <div class="sg-brand">
+      <svg class="sg-mark" viewBox="0 0 92 56" aria-hidden="true">
+        <rect x="2" y="2" width="88" height="46" fill="var(--gm-paper)" stroke="var(--gm-ink)" stroke-width="2"/>
+        <line x1="2" y1="48" x2="90" y2="48" stroke="var(--gm-ink)" stroke-width="5"/>
+        <circle cx="26" cy="26" r="7" fill="var(--gm-ink)"/>
+        <circle cx="46" cy="26" r="5.8" fill="var(--gm-paper)" stroke="var(--gm-ink)" stroke-width="2.6"/>
+        <path d="M60.5 20.5l11 11M71.5 20.5l-11 11" stroke="var(--gm-ink)" stroke-width="3.2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p class="sg-eyebrow">Design-System · Garde-Tanz</p>
+        <h1>Gardemaß</h1>
+      </div>
+    </div>
+    <p class="sg-lead">Für Trainer in der Halle: lesbar mit einem Blick, bedienbar mit einem Daumen, druckbar wie das Papierblatt mit vier Bildern pro Seite.</p>
+    <div class="sg-headbar">
+      <nav class="sg-nav" aria-label="Abschnitte">
+        <a href="#prinzipien">Prinzipien</a><a href="#farben">Farben</a><a href="#schrift">Schrift</a>
+        <a href="#symbole">Symbole</a><a href="#buehne">Bühne</a><a href="#blatt">Bildkarte &amp; Blatt</a>
+        <a href="#zaehlzeit">Zählzeit &amp; Aktionen</a><a href="#bedienung">Bedienelemente</a>
+        <a href="#ki">KI-Assistent</a><a href="#screens">Screens</a><a href="#sprache">Sprache</a><a href="#groessen">Größen</a>
+      </nav>
+      <div class="gm-seg" role="group" aria-label="Darstellung" id="theme">
+        <button type="button" id="theme-auto" data-theme-set="" aria-pressed="true">Auto</button>
+        <button type="button" id="theme-light" data-theme-set="light" aria-pressed="false">Hell</button>
+        <button type="button" id="theme-dark" data-theme-set="dark" aria-pressed="false">Dunkel</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Prinzipien -->
+  <section id="prinzipien" aria-labelledby="h-prinzipien">
+    <div class="sg-sec-head">
+      <h2 id="h-prinzipien">Prinzipien</h2>
+      <p>Jede Gestaltungsentscheidung lässt sich auf einen dieser Sätze zurückführen. Im Zweifel gewinnt das Training.</p>
+    </div>
+    <div class="sg-principles">
+      <div class="sg-principle"><h3>Papier-Parität</h3><p>Die Seitenansicht ist das Papierblatt: A4 quer, 2 × 2 Bilder, Aktionen unter der Bühne, „2 Dreh · 6 M“. Seite 3 in der App ist Seite 3 im Ausdruck.</p></div>
+      <div class="sg-principle"><h3>Auf einen Blick</h3><p>Bild und Zählzeit sind aus 1,5 m lesbar. Text im Training hat mindestens 7:1 Kontrast. Was gerade läuft, ist gefüllt, alles andere nur umrandet oder gedimmt.</p></div>
+      <div class="sg-principle"><h3>Daumen statt Präzision</h3><p>Jede Taste ist mindestens 48 px groß, im Training 64 px, Play 88 px. Die Steuerung liegt im Daumenbereich unten, mit mindestens 12 px Abstand zwischen den Tasten.</p></div>
+      <div class="sg-principle"><h3>Form vor Farbe</h3><p>Gruppen unterscheiden sich durch die Symbolform (● ○ ✕), nie nur durch Farbe. Hinweise haben immer Icon und Text. Alles funktioniert im Schwarz-Weiß-Druck.</p></div>
+      <div class="sg-principle"><h3>Jeder Modus ist sichtbar</h3><p>Training ist schreibgeschützt. Bearbeiten hat eine eigene Farbe, einen Rahmen und ein Band mit „Fertig“. Sync- und Offline-Status sind immer zu sehen.</p></div>
+      <div class="sg-principle"><h3>Ruhe statt Deko</h3><p>Keine Verläufe, keine dekorative Bewegung. Animation zeigt nur Bedeutung: Abspielkopf, Laufwege, Fortschritt. Bei „Bewegung reduzieren“ entfällt auch das.</p></div>
+    </div>
+  </section>
+
+  <!-- Farben -->
+  <section id="farben" aria-labelledby="h-farben">
+    <div class="sg-sec-head">
+      <h2 id="h-farben">Farben</h2>
+      <p>Tinte auf Papier, dazu wenige Farben mit genau einer Bedeutung. Gruppen haben bewusst keine Farbe. Die Kontrastwerte gelten für den hellen Modus auf Papier, der dunkle Modus liegt überall darüber.</p>
+    </div>
+    <div id="swatches" class="sg-stack" style="gap: var(--gm-space-5)"></div>
+    <ul class="sg-rules">
+      <li><strong>Signal-Blau</strong> heißt: aktiv, ausgewählt, jetzt. Laufende Aktion, Abspielkopf, Fokus, Auswahl.</li>
+      <li><strong>Bernstein</strong> heißt: Hinweis, z. B. wenn die Zeiten nicht aufgehen. Bernstein sperrt nie etwas.</li>
+      <li><strong>Magenta</strong> gibt es nur im Bearbeiten-Modus. Sieht man Magenta, wird gerade geändert.</li>
+      <li><strong>Rot</strong> nur für Löschen und echte Fehler, <strong>Grün</strong> nur für „synchronisiert“ und „offline bereit“.</li>
+    </ul>
+  </section>
+
+  <!-- Schrift -->
+  <section id="schrift" aria-labelledby="h-schrift">
+    <div class="sg-sec-head">
+      <h2 id="h-schrift">Schrift</h2>
+      <p><strong>Atkinson Hyperlegible Next</strong> für alles, <strong>Atkinson Hyperlegible Mono</strong> für Zahlen in Spalten und Zeitangaben. Die Familie wurde für maximale Unterscheidbarkeit entworfen (1 l I, 0 O, 6 8). Gewichte nur 400, 700, 800. Keine dünnen Schnitte, kein Kursiv als Bedeutungsträger. Die App bringt die Schrift selbst mit, damit sie offline funktioniert.</p>
+    </div>
+    <div class="sg-panel"><div class="sg-type" id="typescale"></div></div>
+  </section>
+
+  <!-- Symbole -->
+  <section id="symbole" aria-labelledby="h-symbole">
+    <div class="sg-sec-head">
+      <h2 id="h-symbole">Gruppensymbole</h2>
+      <p>Wie auf dem Papier: gefüllter Kreis, leerer Kreis, und statt „R“ ein Kreuz. Das Kreuz unterscheidet sich von beiden Kreisen in Form und Füllung. Symbole werden immer als SVG gezeichnet, nie als Schriftzeichen, damit sie auf jedem Gerät gleich aussehen.</p>
+    </div>
+    <div class="sg-symbols" id="symbols"></div>
+    <div class="sg-stack">
+      <p class="sg-label">Weitere Symbole für Gruppe 4 und 5, oder statt des Kreuzes</p>
+      <div class="sg-alts" id="symbol-alts"></div>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-panel sg-stack"><h3>Gruppenverbund: abwechselnd</h3><div id="mix-alt"></div><p class="sg-caption">Zwei Gruppen verhalten sich wie eine Linie, jede Position behält ihr Symbol.</p></div>
+      <div class="sg-panel sg-stack"><h3>Gruppenverbund: blockweise</h3><div id="mix-block"></div><p class="sg-caption">Muster blockweise: erst alle aus Gruppe 1, dann alle aus Gruppe 2.</p></div>
+    </div>
+    <ul class="sg-rules">
+      <li><strong>Größe:</strong> Durchmesser ≈ 3 % der Bühnenbreite, nie unter 10 px am Bildschirm. Bei 30 Tänzern bleibt so genug Luft.</li>
+      <li><strong>Strich:</strong> Ring und Kreuz haben ≈ 24 % des Durchmessers Strichstärke, damit sie neben dem gefüllten Kreis gleich schwer wirken.</li>
+      <li><strong>Aktionszeilen</strong> beginnen mit denselben Symbolen. Gruppen sind nie nur über ihren Namen benannt.</li>
+    </ul>
+  </section>
+
+  <!-- Bühne -->
+  <section id="buehne" aria-labelledby="h-buehne">
+    <div class="sg-sec-head">
+      <h2 id="h-buehne">Bühne</h2>
+      <p>Freie Fläche im Verhältnis 3:2, Publikum immer unten. Die dicke Vorderkante zeigt die Richtung auch ohne Beschriftung. Kein Raster: Hilfslinien erscheinen nur kurz beim Ziehen.</p>
+    </div>
+    <div class="sg-grid sg-grid--wide">
+      <div class="sg-panel sg-stack">
+        <h3>Anatomie: Bild 9 mit Laufwegen ins Bild 10</h3>
+        <div id="stage-anatomy"></div>
+        <ul class="sg-rules">
+          <li><strong>Rahmen</strong> 1,5 Einheiten Tinte, <strong>Vorderkante</strong> 5 Einheiten.</li>
+          <li><strong>Laufwege</strong> eine Stufe leiser als die Symbole (Tinte 2 statt Tinte), mit Pfeilspitze am Ziel.</li>
+          <li><strong>Ein Pfeil pro Gruppe</strong> läuft vom Schwerpunkt der Startaufstellung zum Schwerpunkt der Zielaufstellung.</li>
+        </ul>
+      </div>
+      <div class="sg-stack">
+        <div class="sg-panel sg-stack"><h3>Einzelwege (Gruppe 2 in Bild 10)</h3><div id="stage-individual"></div><p class="sg-caption">Pro Formation umschaltbar. Kreuzen sich Wege, schlägt die App Einzelwege vor.</p></div>
+        <div class="sg-panel sg-stack"><h3>Formation ausgewählt</h3><div id="stage-selected"></div><p class="sg-caption">Gestrichelter Rahmen in Signal-Blau, Anfasser zum Skalieren und Drehen. Hilfslinie zur Bühnenmitte nur beim Ziehen.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bildkarte & Blatt -->
+  <section id="blatt" aria-labelledby="h-blatt">
+    <div class="sg-sec-head">
+      <h2 id="h-blatt">Bildkarte &amp; Blatt</h2>
+      <p>Der Kopf zeigt Bildnummer und Zeiten, wie auf dem Papier. Darunter die Bühne, darunter eine Zeile pro Gruppe oder Gruppenverbund. Die Summe der Zeiten erscheint nur, wenn sie nicht aufgeht.</p>
+    </div>
+    <div class="sg-grid" id="frame-states"></div>
+    <div class="sg-stack">
+      <p class="sg-label">Blatt: A4 quer, 2 × 2. Bildschirm und Ausdruck sind identisch</p>
+      <div class="sg-sheetbox"><div id="sheet"></div></div>
+      <ul class="sg-rules">
+        <li>Das Blatt skaliert mit seiner Breite. Aktionstext fällt nie unter 13 px. Ist das Blatt schmaler als 880 px, zeigt der Editor 2 Bilder untereinander.</li>
+        <li>Druck: <code>@page A4 landscape</code>, keine Farbflächen, Hinweise und Auswahl werden nicht gedruckt. Fußzeile mit Tanz, Stand und Seite.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Zählzeit & Aktionen -->
+  <section id="zaehlzeit" aria-labelledby="h-zaehlzeit">
+    <div class="sg-sec-head">
+      <h2 id="h-zaehlzeit">Zählzeit &amp; Aktionen</h2>
+      <p>Gezählt wird in Achtern, wie in der Halle: Die große Zahl ist die Zeit im aktuellen Achter, darunter steht, welcher Achter läuft. Die Segmente zeigen den Fortschritt im ganzen Bild.</p>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-panel sg-stack"><h3>Zählzeit: Bild mit 16 Zeiten, Zeit 13</h3><div id="count-now"></div></div>
+      <div class="sg-panel sg-stack"><h3>Vorlauf vor dem Startbild</h3><div id="count-preroll"></div><p class="sg-caption">Während des Vorlaufs ist die Zahl blau und das Bild noch nicht gestartet.</p></div>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-panel sg-stack">
+        <h3>Aktionsbausteine</h3>
+        <div class="sg-row" id="chip-states"></div>
+        <ul class="sg-rules">
+          <li><strong>Vorbei</strong> gedimmt, <strong>jetzt</strong> blau gefüllt mit Fortschritt, <strong>kommt</strong> umrandet.</li>
+          <li>Der Pfeil markiert bewegende Bausteine. In diesen Zeiten wird ins nächste Bild gelaufen.</li>
+          <li>Gestrichelt: Freitext, der keinem Baustein des Vereinskatalogs entspricht.</li>
+        </ul>
+      </div>
+      <div class="sg-panel sg-stack"><h3>Aktionen im Training</h3><div class="sg-ttracks" id="training-tracks"></div></div>
+    </div>
+  </section>
+
+  <!-- Bedienelemente -->
+  <section id="bedienung" aria-labelledby="h-bedienung">
+    <div class="sg-sec-head">
+      <h2 id="h-bedienung">Bedienelemente</h2>
+      <p>Wenige Tastenarten mit klarer Rangfolge. Primär ist Tinte, nicht Farbe. Signal-Blau bekommt nur die eine Aktion, um die sich gerade alles dreht (Abspielen, Übernehmen).</p>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-panel sg-stack">
+        <h3>Tasten</h3>
+        <div class="sg-row">
+          <button class="gm-btn gm-btn--primary" type="button">Training starten</button>
+          <button class="gm-btn gm-btn--secondary" type="button"><svg class="gm-icon"><use href="#i-print"/></svg>Drucken</button>
+          <button class="gm-btn gm-btn--ghost" type="button"><svg class="gm-icon"><use href="#i-undo"/></svg>Rückgängig</button>
+        </div>
+        <div class="sg-row">
+          <button class="gm-btn gm-btn--signal" type="button">Übernehmen</button>
+          <button class="gm-btn gm-btn--danger" type="button"><svg class="gm-icon"><use href="#i-trash"/></svg>Bild löschen</button>
+        </div>
+        <p class="sg-caption">Höhe 48 px. Text immer dabei, Icons nur zur Unterstützung.</p>
+      </div>
+      <div class="sg-panel sg-stack">
+        <h3>Training: groß und beschriftet</h3>
+        <div class="sg-transport">
+          <button class="gm-btn gm-btn--secondary gm-btn--stack" type="button"><svg class="gm-icon"><use href="#i-prev"/></svg>Bild 10</button>
+          <button class="gm-btn gm-btn--play" type="button" aria-label="Abspielen ab Bild 11"><svg class="gm-icon"><use href="#i-play"/></svg></button>
+          <button class="gm-btn gm-btn--secondary gm-btn--stack" type="button"><svg class="gm-icon"><use href="#i-next"/></svg>Bild 12</button>
+        </div>
+        <p class="sg-caption">64 px und 88 px, Abstand 12 px. Die Tasten nennen das Ziel („Bild 12“) statt „Weiter“.</p>
+      </div>
+      <div class="sg-panel sg-stack">
+        <h3>Zeiten und Auswahl</h3>
+        <div class="sg-row">
+          <div class="gm-stepper" role="group" aria-label="Zeiten des Bildes">
+            <button type="button" aria-label="Weniger Zeiten"><svg class="gm-icon"><use href="#i-minus"/></svg></button>
+            <output>16</output>
+            <button type="button" aria-label="Mehr Zeiten"><svg class="gm-icon"><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="gm-seg" role="group" aria-label="Laufwege">
+            <button type="button" aria-pressed="true">Pfeil pro Gruppe</button>
+            <button type="button" aria-pressed="false">Einzelwege</button>
+          </div>
+        </div>
+        <label class="sg-stack" for="demo-note" style="gap:6px"><span class="sg-label">Notiz zu Bild 10</span>
+          <textarea class="gm-field" id="demo-note" rows="2" placeholder="z. B. Hintere Reihe kommt zu spät"></textarea></label>
+      </div>
+      <div class="sg-panel sg-stack">
+        <h3>Hinweise und Status</h3>
+        <div class="sg-row">
+          <span class="gm-badge gm-badge--warn"><svg class="gm-icon"><use href="#i-warn"/></svg>6 von 8 Zeiten</span>
+          <span class="gm-badge gm-badge--ok"><svg class="gm-icon"><use href="#i-check"/></svg>Offline bereit</span>
+          <span class="gm-badge gm-badge--danger">Musik fehlt</span>
+          <span class="gm-badge gm-badge--edit"><svg class="gm-icon"><use href="#i-edit"/></svg>Bearbeitet</span>
+        </div>
+        <div class="sg-stack" style="gap:6px">
+          <span class="gm-status gm-status--ok"><svg class="gm-icon"><use href="#i-cloud"/></svg>Synchronisiert · 19:42</span>
+          <span class="gm-status"><svg class="gm-icon"><use href="#i-sync"/></svg>Wird synchronisiert …</span>
+          <span class="gm-status gm-status--error"><svg class="gm-icon"><use href="#i-cloud-off"/></svg>Offline – Änderungen sind auf dem Gerät gespeichert</span>
+        </div>
+      </div>
+      <div class="sg-panel sg-stack">
+        <h3>Bearbeiten-Modus</h3>
+        <div class="gm-modebar"><svg class="gm-icon"><use href="#i-edit"/></svg><span class="gm-modebar__title">BEARBEITEN · BILD 10</span><button class="gm-btn" type="button">Fertig</button></div>
+        <p class="sg-caption">Ein Band oben und ein 5 px Rahmen um den ganzen Bildschirm. Nur erreichbar, wenn die Musik pausiert.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KI -->
+  <section id="ki" aria-labelledby="h-ki">
+    <div class="sg-sec-head">
+      <h2 id="h-ki">KI-Assistent</h2>
+      <p>Die KI fragt nach, wenn etwas unklar ist, mit Antwortoptionen wie in einem Interview. Ihr Vorschlag erscheint als Vorschau in Signal-Blau über dem gedimmten aktuellen Bild und wird erst mit „Übernehmen“ Teil des Tanzes.</p>
+    </div>
+    <div class="sg-grid sg-grid--wide">
+      <div class="gm-ask">
+        <p class="gm-ask__eyebrow"><svg class="gm-icon"><use href="#i-spark"/></svg>RÜCKFRAGE 1 VON 2 · BILD 13</p>
+        <p class="gm-ask__q">Wie lange marschiert Gruppe 3 nach vorne in die Mitte?</p>
+        <div class="gm-ask__options">
+          <button class="gm-btn gm-btn--secondary" type="button">8 Zeiten, danach Pose</button>
+          <button class="gm-btn gm-btn--secondary" type="button">16 Zeiten, das ganze Bild</button>
+        </div>
+        <input class="gm-field" id="ask-own" type="text" placeholder="Eigene Antwort">
+      </div>
+      <div class="sg-panel sg-stack">
+        <div class="sg-row" style="justify-content:space-between"><h3 class="sg-h3">Vorschlag für Bild 13</h3><span class="gm-badge gm-badge--neutral"><svg class="gm-icon"><use href="#i-spark"/></svg>Vorschlag</span></div>
+        <div id="stage-ghost"></div>
+        <p class="sg-caption">Annahmen: Gruppe 2 bildet einen Bogen vorne, Gruppe 1 eine Linie hinten. 16 Zeiten.</p>
+        <div class="sg-row">
+          <button class="gm-btn gm-btn--signal" type="button">Übernehmen</button>
+          <button class="gm-btn gm-btn--secondary" type="button">Anders versuchen</button>
+          <button class="gm-btn gm-btn--ghost" type="button">Verwerfen</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screens -->
+  <section id="screens" aria-labelledby="h-screens">
+    <div class="sg-sec-head">
+      <h2 id="h-screens">Screens</h2>
+      <p>Entwürfe der drei wichtigsten Ansichten. Der Desktop-Entwurf ist auf 1040 px gesetzt und lässt sich auf kleinen Bildschirmen seitlich verschieben.</p>
+    </div>
+    <div class="sg-stack">
+      <p class="sg-label">Desktop/Tablet quer: Seitenansicht, Inspektor, Zeitleiste</p>
+      <div class="sg-scroll" tabindex="0" aria-label="Desktop-Entwurf, seitlich verschiebbar">
+        <div class="sg-desk">
+          <div class="sg-desk__top">
+            <button class="gm-btn gm-btn--ghost" type="button"><svg class="gm-icon"><use href="#i-prev"/></svg>Junioren</button>
+            <div class="sg-desk__title"><small>Gardetanz · Saison 2026/27</small><strong>Junioren-Garde</strong></div>
+            <span class="sg-desk__spacer"></span>
+            <span class="gm-status gm-status--ok"><svg class="gm-icon"><use href="#i-cloud"/></svg>Synchronisiert</span>
+            <button class="gm-btn gm-btn--ghost" type="button"><svg class="gm-icon"><use href="#i-music"/></svg>Musik &amp; Raster</button>
+            <button class="gm-btn gm-btn--secondary" type="button"><svg class="gm-icon"><use href="#i-print"/></svg>Drucken</button>
+            <button class="gm-btn gm-btn--primary" type="button"><svg class="gm-icon"><use href="#i-play"/></svg>Training</button>
+          </div>
+          <div class="sg-desk__main">
+            <div class="sg-desk__sheet">
+              <div id="desk-sheet"></div>
+              <div class="sg-pager">
+                <button class="gm-btn gm-btn--ghost" type="button"><svg class="gm-icon"><use href="#i-prev"/></svg>Seite 2</button>
+                <div class="sg-row" style="gap:10px"><strong>Seite 3 von 11</strong><span class="sg-pager__dots" id="pager-dots"></span></div>
+                <button class="gm-btn gm-btn--ghost" type="button">Seite 4<svg class="gm-icon"><use href="#i-next"/></svg></button>
+              </div>
+            </div>
+            <aside class="sg-insp" aria-label="Inspektor Bild 10" id="inspector"></aside>
+          </div>
+          <div class="sg-timeline" id="timeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sg-phones">
+      <div class="sg-phonecol">
+        <p class="sg-label">Handy: Training, Bild 11 läuft</p>
+        <div class="sg-phone"><div class="sg-phone__inner"><div class="sg-phone__screen" id="phone-training"></div></div></div>
+      </div>
+      <div class="sg-phonecol">
+        <p class="sg-label">Handy: Bearbeiten-Modus, Bild 10</p>
+        <div class="sg-phone"><div class="sg-phone__inner gm-editframe" id="phone-edit"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sprache -->
+  <section id="sprache" aria-labelledby="h-sprache">
+    <div class="sg-sec-head">
+      <h2 id="h-sprache">Sprache</h2>
+      <p>Die App duzt und spricht wie ein Trainer: Bild, Zeiten, Achter, Gruppe, Laufweg, Aktion. Tasten sagen, was passiert. Hinweise sagen, was fehlt und wie viel.</p>
+    </div>
+    <div class="sg-tablewrap">
+      <table class="sg-table">
+        <thead><tr><th scope="col">Nicht so</th><th scope="col">Sondern so</th></tr></thead>
+        <tbody>
+          <tr><td class="is-dont">Frame 12 (16 Counts)</td><td>Bild 12 · 16 Zeiten</td></tr>
+          <tr><td class="is-dont">Validierungsfehler: Summe ungültig</td><td>Gruppe 2 – 6 von 8 Zeiten belegt, 2 fehlen</td></tr>
+          <tr><td class="is-dont">Pre-Roll aktiv</td><td>Musik startet 8 Zeiten vor Bild 12</td></tr>
+          <tr><td class="is-dont">Cache synchronisiert</td><td>Offline bereit: Bilder und Musik sind auf dem Handy</td></tr>
+          <tr><td class="is-dont">Sind Sie sicher?</td><td>Bild 14 löschen? Du kannst es rückgängig machen.</td></tr>
+          <tr><td class="is-dont">OK / Abbrechen</td><td>Übernehmen / Verwerfen</td></tr>
+          <tr><td class="is-dont">KI generiert Frame …</td><td>Vorschlag für Bild 13. Prüfen und übernehmen.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Größen -->
+  <section id="groessen" aria-labelledby="h-groessen">
+    <div class="sg-sec-head">
+      <h2 id="h-groessen">Größen, Abstände, Raster</h2>
+      <p>Abstände auf einem 4-px-Raster. Treffflächen gelten immer, auch wenn die Taste optisch kleiner wirkt.</p>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-panel sg-stack">
+        <h3>Treffflächen</h3>
+        <div class="sg-hits">
+          <div class="sg-hit"><div class="sg-hit__box" style="width:48px;height:48px">48</div>überall</div>
+          <div class="sg-hit"><div class="sg-hit__box" style="width:64px;height:64px">64</div>Training</div>
+          <div class="sg-hit"><div class="sg-hit__box" style="width:88px;height:88px;border-radius:50%">88</div>Play</div>
+        </div>
+      </div>
+      <div class="sg-panel sg-stack"><h3>Abstände</h3><div class="sg-spaces" id="spaces"></div></div>
+    </div>
+    <div class="sg-tablewrap">
+      <table class="sg-table">
+        <thead><tr><th scope="col">Breite</th><th scope="col">Gerät</th><th scope="col">Ansicht</th></tr></thead>
+        <tbody>
+          <tr><td class="sg-mono">&lt; 600 px</td><td>Handy hochkant</td><td>Übersicht, Training, Bearbeiten-Modus, Lesen mit einem Bild pro Bildschirm</td></tr>
+          <tr><td class="sg-mono">600–1023 px</td><td>Tablet hochkant</td><td>Editor mit 2 Bildern untereinander, Inspektor als Leiste unten</td></tr>
+          <tr><td class="sg-mono">≥ 1024 px</td><td>Tablet quer, Laptop</td><td>Seitenansicht 2 × 2 (Standard) mit Inspektor rechts</td></tr>
+          <tr><td class="sg-mono">≥ 1440 px</td><td>Desktop</td><td>Wie oben, Zeitleiste mit mehr Bildern</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<script src="stage.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var I = GM.icon;
+
+  /* --- Darstellung: Auto / Hell / Dunkel -------------------------------- */
+  function setTheme(v) {
+    if (v) document.documentElement.setAttribute('data-theme', v); else document.documentElement.removeAttribute('data-theme');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-theme-set]'), function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-theme-set') === (v || '')));
+    });
+    try { localStorage.setItem('gm-theme', v || ''); } catch (e) { /* ohne Speicher weiter */ }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-theme-set]'), function (b) {
+    b.addEventListener('click', function () { setTheme(b.getAttribute('data-theme-set')); });
+  });
+  try { var saved = localStorage.getItem('gm-theme'); if (saved) setTheme(saved); } catch (e) { /* egal */ }
+
+  /* --- Beispieltanz: Junioren-Garde, Bilder 9–13 -------------------------- */
+  var dance = { groups: [
+    { id: 'a', name: 'Gruppe 1', symbol: 'dot' },
+    { id: 'b', name: 'Gruppe 2', symbol: 'ring' },
+    { id: 'c', name: 'Gruppe 3', symbol: 'cross' }
+  ] };
+  var A = GM.members('a', 6), B = GM.members('b', 6), C = GM.members('c', 4);
+  var F = {
+    9: { num: 9, counts: 16,
+      formations: [
+        { shape: 'line', cx: 0.5, cy: 0.76, length: 0.84, members: GM.alternate('a', 'b', 6) },
+        { shape: 'line', cx: 0.5, cy: 0.32, length: 0.36, members: C }],
+      tracks: [
+        { groups: ['a', 'b'], blocks: [[8, 'Kick'], [8, 'M', 1]] },
+        { groups: ['c'], blocks: [[2, 'Dreh'], [6, 'Pose'], [8, 'M', 1]] }] },
+    10: { num: 10, counts: 8, note: 'Hintere Reihe kommt zu spät',
+      formations: [
+        { shape: 'block', cx: 0.2, cy: 0.46, length: 0.2, rows: 2, depth: 0.22, members: A },
+        { shape: 'block', cx: 0.8, cy: 0.46, length: 0.2, rows: 2, depth: 0.22, members: B },
+        { shape: 'line', cx: 0.5, cy: 0.84, length: 0.3, members: C }],
+      tracks: [
+        { groups: ['a'], blocks: [[8, 'M', 1]] },
+        { groups: ['b'], blocks: [[6, 'Kick']] },
+        { groups: ['c'], blocks: [[4, 'Rad'], [4, 'M', 1]] }] },
+    11: { num: 11, counts: 16,
+      formations: [
+        { shape: 'circle', cx: 0.5, cy: 0.47, radius: 0.31, members: GM.alternate('a', 'b', 6) },
+        { shape: 'line', cx: 0.5, cy: 0.47, length: 0.17, members: C }],
+      tracks: [
+        { groups: ['a', 'b'], blocks: [[4, 'Dreh'], [4, 'Kick'], [8, 'M', 1]] },
+        { groups: ['c'], blocks: [[8, 'Pose'], [8, 'M', 1]] }] },
+    12: { num: 12, counts: 8,
+      formations: [
+        { shape: 'line', cx: 0.47, cy: 0.52, length: 0.86, rotation: 24, members: A.concat(B) },
+        { shape: 'line', cx: 0.84, cy: 0.2, length: 0.18, members: C }],
+      tracks: [
+        { groups: ['a', 'b'], blocks: [[2, 'Dreh'], [6, 'M', 1]] },
+        { groups: ['c'], blocks: [[8, 'M', 1]] }] },
+    13: { num: 13, counts: 16,
+      formations: [
+        { shape: 'line', cx: 0.5, cy: 0.22, length: 0.62, members: A },
+        { shape: 'arc', cx: 0.5, cy: 0.48, radius: 0.36, spread: 120, members: B },
+        { shape: 'line', cx: 0.5, cy: 0.58, length: 0.2, members: C }],
+      tracks: [
+        { groups: ['a'], blocks: [[16, 'Pose']] },
+        { groups: ['b'], blocks: [[8, 'Kick'], [8, 'Pose']] },
+        { groups: ['c'], blocks: [[8, 'M', 1], [8, 'Pose']] }] }
+  };
+  // Wie in der App: Wer wohin läuft, wird auf kürzeste Wege zugeordnet.
+  for (var n = 10; n <= 13; n++) F[n] = GM.assignShortest(F[n - 1], F[n]);
+  var F10individual = Object.assign({}, F[10], { pathMode: { 1: 'individual' } });
+
+  /* --- Farben --------------------------------------------------------------- */
+  var SW = [
+    ['Neutral', [
+      ['Papier', '--gm-paper', '#FFFFFF', '#171B22', 'Blatt, Bühne, Karten'],
+      ['Leinwand', '--gm-canvas', '#EEF0F3', '#0C0F14', 'App-Hintergrund hinter dem Blatt'],
+      ['Vertieft', '--gm-sunken', '#E4E7EC', '#222833', 'Leisten, Stepper, Hover'],
+      ['Tinte', '--gm-ink', '#11151C', '#F1F4F8', 'Text, Symbole, Primärtaste · 18,3:1'],
+      ['Tinte 2', '--gm-ink-2', '#3A4250', '#C5CCD6', 'Sekundärtext · 10,1:1'],
+      ['Tinte 3', '--gm-ink-3', '#596272', '#9AA4B2', 'Hilfstext · 6,2:1'],
+      ['Linie', '--gm-line', '#CDD2DA', '#2C333F', 'Trennlinien, nur dekorativ'],
+      ['Linie stark', '--gm-line-strong', '#7A8392', '#737D8E', 'Rahmen von Bedienelementen · 3,8:1']]],
+    ['Signal: aktiv, ausgewählt, jetzt', [
+      ['Signal', '--gm-signal', '#1846C7', '#8EAEFF', 'Laufende Aktion, Abspielkopf, Fokus · 7,7:1'],
+      ['Signal stark', '--gm-signal-strong', '#0F3192', '#B5CBFF', 'Gedrückt, Fortschritt im Baustein'],
+      ['Signal hell', '--gm-signal-tint', '#E6ECFF', '#1A2747', 'Ausgewählte Flächen']]],
+    ['Status', [
+      ['Hinweis', '--gm-warn', '#8A4600', '#FFC56B', 'Zeiten gehen nicht auf · 6,3:1 auf Fläche'],
+      ['Hinweisfläche', '--gm-warn-tint', '#FFF0D1', '#3A2A0E', 'Hintergrund von Hinweisen'],
+      ['Hinweisrahmen', '--gm-warn-line', '#C77F00', '#E0A23A', 'Randmarkierung, Icon · 3,3:1'],
+      ['Fehler', '--gm-danger', '#B0241B', '#FF8E86', 'Löschen, echte Fehler · 6,7:1'],
+      ['Erledigt', '--gm-ok', '#17663A', '#74D99A', 'Synchronisiert, offline bereit · 7,0:1']]],
+    ['Modus', [
+      ['Bearbeiten', '--gm-edit', '#9C1487', '#F49BE4', 'Nur im Bearbeiten-Modus · 7,3:1'],
+      ['Bearbeiten hell', '--gm-edit-tint', '#FBE6F6', '#3A1233', 'Flächen im Bearbeiten-Modus']]]
+  ];
+  $('swatches').innerHTML = SW.map(function (g) {
+    return '<div class="sg-colorgroup"><p class="sg-label">' + g[0] + '</p><div class="sg-swatches">' + g[1].map(function (s) {
+      return '<div class="sg-swatch"><span class="sg-swatch__chip" style="background:var(' + s[1] + ')"></span><span>' +
+        '<span class="sg-swatch__name">' + s[0] + '</span><br><span class="sg-swatch__meta"><code>' + s[1] + '</code><br>' +
+        'Hell ' + s[2] + ' · Dunkel ' + s[3] + '<br>' + s[4] + '</span></span></div>';
+    }).join('') + '</div></div>';
+  }).join('');
+
+  /* --- Schrift -------------------------------------------------------------- */
+  var TYPE = [
+    ['--gm-text-count', '96 · 800', '5', 'font-size:var(--gm-text-count);font-weight:800;line-height:.9', 'Zählzeit im Training'],
+    ['--gm-text-display', '48 · 800', '7', 'font-size:var(--gm-text-display);font-weight:800;line-height:1;color:var(--gm-signal)', 'Vorlauf-Zähler'],
+    ['--gm-text-2xl', '36 · 800', 'Bild 11', 'font-size:var(--gm-text-2xl);font-weight:800', 'Bildnummer im Training'],
+    ['--gm-text-xl', '28 · 800', 'Seite 3 von 11', 'font-size:var(--gm-text-xl);font-weight:800', 'Überschriften'],
+    ['--gm-text-lg', '22 · 700', '4 Dreh · 4 Kick · 8 M', 'font-size:var(--gm-text-lg);font-weight:700', 'Aktionen im Training'],
+    ['--gm-text-md', '18 · 400', 'Die Musik startet 8 Zeiten vor Bild 12.', 'font-size:var(--gm-text-md)', 'Standard am Handy'],
+    ['--gm-text-sm', '16 · 400', 'Gruppe 2 – 6 von 8 Zeiten belegt, 2 fehlen.', 'font-size:var(--gm-text-sm)', 'Standard am Desktop'],
+    ['--gm-text-xs', '14 · 700', 'Stand 19.11.2026 · Seite 3 / 11', 'font-size:var(--gm-text-xs);font-weight:700', 'Fußzeilen, Legenden, nie für Tasten'],
+    ['--gm-font-mono', '16 · 700', '16/16 · 01:42,350', 'font-family:var(--gm-font-mono);font-weight:700', 'Summen, Zeitangaben']
+  ];
+  $('typescale').innerHTML = TYPE.map(function (t) {
+    return '<div class="sg-type-row"><div><code>' + t[0] + '</code><br><span class="sg-caption">' + t[1] + ' · ' + t[4] + '</span></div>' +
+      '<div class="sg-type-sample" style="' + t[3] + '">' + t[2] + '</div></div>';
+  }).join('');
+
+  /* --- Symbole -------------------------------------------------------------- */
+  var SYM = [['dot', 'Gruppe 1', 'gefüllter Kreis'], ['ring', 'Gruppe 2', 'leerer Kreis'], ['cross', 'Gruppe 3', 'Kreuz, ersetzt „R“']];
+  $('symbols').innerHTML = SYM.map(function (s) {
+    return '<div class="sg-symbol">' + GM.symbolIcon(s[0], s[1]) + '<strong>' + s[1] + '</strong><span class="sg-caption">' + s[2] + '</span></div>';
+  }).join('');
+  var ALTS = [['triangle', 'Dreieck'], ['square', 'Quadrat'], ['diamond', 'Raute'], [{ letter: 'R' }, 'Buchstabe']];
+  $('symbol-alts').innerHTML = ALTS.map(function (s) { return '<span class="sg-alt">' + GM.symbolIcon(s[0], s[1]) + s[1] + '</span>'; }).join('');
+
+  var mixAlt = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.alternate('a', 'b', 5) }] };
+  var mixBlock = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.members('a', 5).concat(GM.members('b', 5)) }] };
+  $('mix-alt').innerHTML = GM.renderStage(dance, mixAlt, null, { label: true, title: 'Linie abwechselnd' });
+  $('mix-block').innerHTML = GM.renderStage(dance, mixBlock, null, { label: true, title: 'Linie blockweise' });
+
+  /* --- Bühne ---------------------------------------------------------------- */
+  $('stage-anatomy').innerHTML = GM.renderStage(dance, F[9], F[10], { label: true, title: 'Bild 9 mit Laufwegen' });
+  $('stage-individual').innerHTML = GM.renderStage(dance, F10individual, F[11], { label: true, title: 'Bild 10 mit Einzelwegen' });
+  $('stage-selected').innerHTML = GM.renderStage(dance, F[12], null, { label: true, selected: 1, title: 'Bild 12, Formation ausgewählt',
+    guides: [{ x1: 0.84, y1: 0, x2: 0.84, y2: 1 }, { x1: 0, y1: 0.2, x2: 1, y2: 0.2 }] });
+  $('stage-ghost').innerHTML = GM.renderStage(dance, F[12], null, { label: true, ghost: F[13], title: 'Vorschlag für Bild 13' });
+
+  /* --- Bildkarten & Blatt ------------------------------------------------------ */
+  function card(label, html) { return '<div class="sg-stack"><p class="sg-label">' + label + '</p>' + html + '</div>'; }
+  $('frame-states').innerHTML =
+    card('Standard', GM.renderFrame(dance, F[9], F[10])) +
+    card('Aktiv (ausgewählt)', GM.renderFrame(dance, F[12], F[13], { active: true })) +
+    card('Mit Hinweisen und Notiz', GM.renderFrame(dance, F[10], F[11]));
+
+  function sheet(activeNum) {
+    return '<div class="gm-sheet" role="img" aria-label="Seite 3 mit Bild 9 bis 12">' +
+      [9, 10, 11, 12].map(function (n) { return GM.renderFrame(dance, F[n], F[n + 1], { active: n === activeNum }); }).join('') +
+      '<div class="gm-sheet__foot"><span>Junioren-Garde · Gardetanz 2026/27</span><span>Stand 19.11.2026 · Version 14</span><span>Seite 3 / 11</span></div></div>';
+  }
+  $('sheet').innerHTML = sheet(null);
+  $('desk-sheet').innerHTML = sheet(10);
+
+  /* --- Zählzeit ---------------------------------------------------------------- */
+  function count(at, total, opts) {
+    opts = opts || {};
+    var eight = Math.ceil(at / 8), inEight = at - (eight - 1) * 8, groups = '';
+    for (var g = 0; g < total / 8; g++) {
+      groups += '<span class="gm-count__group">';
+      for (var s = 1; s <= 8; s++) {
+        var n = g * 8 + s;
+        groups += '<span class="gm-count__seg' + (n < at ? ' is-done' : n === at ? ' is-now' : '') + '"></span>';
+      }
+      groups += '</span>';
+    }
+    return '<div class="gm-count' + (opts.preroll ? ' gm-count--preroll' : '') + '" role="group" aria-label="Zeit ' + inEight + ' im ' + eight + '. Achter">' +
+      '<span class="gm-count__num">' + inEight + '</span><span class="gm-count__meta">' +
+      (opts.preroll ? '<span class="sg-preroll-note">Vorlauf</span><span class="gm-count__eight">gleich Bild 12</span>'
+        : '<span class="gm-count__of">/8</span><span class="gm-count__eight">' + eight + '. Achter von ' + (total / 8) + '</span>') +
+      '</span><span class="gm-count__bar">' + groups + '</span></div>';
+  }
+  $('count-now').innerHTML = count(13, 16);
+  $('count-preroll').innerHTML = count(7, 8, { preroll: true });
+
+  $('chip-states').innerHTML =
+    '<span class="gm-chip gm-chip--past"><span class="gm-chip__n">4</span> Dreh</span>' +
+    '<span class="gm-chip gm-chip--now" style="--gm-progress:62%"><span class="gm-chip__n">8</span> M' + I('move', 'bewegend') + '</span>' +
+    '<span class="gm-chip"><span class="gm-chip__n">8</span> Pose</span>' +
+    '<span class="gm-chip gm-chip--free"><span class="gm-chip__n">2</span> Arme hoch</span>';
+
+  function trainingTracks(frame, at) {
+    return frame.tracks.map(function (t) {
+      return '<div class="sg-ttrack"><span class="sg-ttrack__who">' + GM.trackWho(dance, t) + '</span>' +
+        '<span class="sg-ttrack__chips">' + GM.renderChips(t, { at: at, size: 'l' }) + '</span></div>';
+    }).join('');
+  }
+  $('training-tracks').innerHTML = trainingTracks(F[11], 13);
+
+  /* --- Abstände ------------------------------------------------------------------ */
+  $('spaces').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
+    return '<div class="sg-space"><code>--gm-space-' + i + '</code><span class="sg-space__bar" style="width:var(--gm-space-' + i + ')"></span></div>';
+  }).join('');
+
+  /* --- Desktop: Inspektor ----------------------------------------------------------- */
+  var shapeName = { line: 'Linie', block: 'Block', circle: 'Kreis', arc: 'Bogen', wedge: 'Keil' };
+  var f10 = F[10], w10 = GM.warnings(f10, F[11]);
+  $('inspector').innerHTML =
+    '<div class="sg-insp__block"><div class="sg-insp__head"><span class="sg-insp__title">Bild 10</span>' +
+      '<div class="gm-stepper" role="group" aria-label="Zeiten"><button type="button" aria-label="Weniger">' + I('minus') + '</button><output>8</output>' +
+      '<button type="button" aria-label="Mehr">' + I('plus') + '</button></div></div>' +
+      '<div class="sg-row" style="gap:6px">' + [2, 4, 8, 16, 32].map(function (n) {
+        return '<button class="gm-chip gm-chip--key" type="button"' + (n === 8 ? ' style="border-color:var(--gm-ink)"' : '') + '><span class="gm-chip__n">' + n + '</span></button>';
+      }).join('') + '</div></div>' +
+    '<div class="sg-insp__block"><span class="sg-label">Formationen</span><ul class="sg-insp__list">' +
+      f10.formations.map(function (fm, i) {
+        var g = fm.members[0].split(':')[0];
+        return '<li class="sg-insp__item' + (i === 1 ? ' is-sel' : '') + '">' + GM.symbolIcon(dance.groups.filter(function (x) { return x.id === g; })[0].symbol, '') +
+          shapeName[fm.shape] + '<small>' + fm.members.length + ' Tänzer</small></li>';
+      }).join('') + '</ul>' +
+      '<span class="sg-label" style="margin-top:6px">Laufwege ins Bild 11</span><div class="gm-seg" role="group" aria-label="Laufwege">' +
+      '<button type="button" aria-pressed="false">Pfeil pro Gruppe</button><button type="button" aria-pressed="true">Einzelwege</button></div></div>' +
+    '<div class="sg-insp__block"><span class="sg-label">Aktionen</span>' +
+      f10.tracks.map(function (t, ti) {
+        var sum = GM.trackSum(t), bad = w10.filter(function (w) { return w.track === ti; });
+        return '<div class="sg-insp__track' + (bad.length ? ' has-warning' : '') + '"><div class="sg-insp__trackhead">' + GM.trackWho(dance, t) +
+          '<span class="gm-num' + (sum !== f10.counts ? ' is-bad' : '') + '">' + sum + '/' + f10.counts + '</span></div>' +
+          '<div class="sg-row" style="gap:6px">' + GM.renderChips(t) + '</div>' +
+          bad.map(function (w) { return '<span class="sg-insp__hint">' + I('warn') + ' ' + w.text + '</span>'; }).join('') + '</div>';
+      }).join('') + '</div>' +
+    '<div class="sg-insp__block"><span class="sg-label">Bausteine</span><div class="sg-row" style="gap:6px">' +
+      ['M', 'Dreh', 'Kick', 'Pose', 'Rad', 'Wechsel', 'Spagat', 'Hebung', 'Gruß'].map(function (b) {
+        return '<button class="gm-chip gm-chip--key" type="button">' + b + '</button>';
+      }).join('') + '<button class="gm-chip gm-chip--key gm-chip--free" type="button">Freitext</button></div></div>' +
+    '<button class="gm-btn gm-btn--secondary" type="button">' + I('spark') + 'Mit KI beschreiben</button>';
+
+  /* --- Desktop: Zeitleiste ------------------------------------------------------------ */
+  var counts = [], i;
+  for (i = 1; i <= 42; i++) counts.push(F[i] ? F[i].counts : [16, 8, 8, 16, 16, 8][i % 6]);
+  var startCount = function (n) { var s = 0; for (var k = 1; k < n; k++) s += counts[k - 1]; return s; };
+  var total = startCount(43), bpm = 126, intro = 8;
+  var secAt = function (c) { return ((c + intro) * 60) / bpm; };
+  var mmss = function (s) { var m = Math.floor(s / 60), r = Math.round(s % 60); return m + ':' + (r < 10 ? '0' : '') + r; };
+  var TW = 1000, from = 6, to = 15, c0 = startCount(from), c1 = startCount(to + 1), sx = TW / (c1 - c0);
+  var svg = '<svg viewBox="0 0 ' + TW + ' 108" role="img" aria-label="Zeitleiste mit Bild 6 bis 15 und Musik">';
+  // Übersicht aller 42 Bilder
+  for (i = 1; i <= 42; i++) {
+    var mx = (startCount(i) / total) * TW, mw = (counts[i - 1] / total) * TW;
+    svg += '<rect class="sg-tl-mini' + (i >= from && i <= to ? ' is-view' : '') + '" x="' + (mx + 0.5).toFixed(1) + '" y="0" width="' + Math.max(1, mw - 1).toFixed(1) + '" height="6"/>';
+  }
+  // Wellenform
+  for (var x = 0; x < TW; x += 5) {
+    var a = 0.35 + 0.3 * Math.abs(Math.sin(x * 0.031)) + 0.25 * Math.abs(Math.sin(x * 0.173 + 1.3)) + 0.1 * ((x * 7919) % 13) / 13;
+    var h = 30 * a;
+    svg += '<rect class="sg-tl-wave" x="' + x + '" y="' + (78 - h / 2).toFixed(1) + '" width="3" height="' + h.toFixed(1) + '" rx="1"/>';
+  }
+  // Bilder
+  for (i = from; i <= to; i++) {
+    var bx = (startCount(i) - c0) * sx, bw = counts[i - 1] * sx;
+    var warn = F[i] && GM.warnings(F[i], F[i + 1]).length;
+    svg += '<rect class="sg-tl-frame' + (i === 10 ? ' is-active' : warn ? ' is-warn' : '') + '" x="' + bx.toFixed(1) + '" y="14" width="' + bw.toFixed(1) + '" height="40" rx="4"/>';
+    svg += '<text class="sg-tl-num" x="' + (bx + 8).toFixed(1) + '" y="32">' + i + '</text>';
+    svg += '<text class="sg-tl-time" x="' + (bx + 8).toFixed(1) + '" y="48">' + mmss(secAt(startCount(i))) + '</text>';
+  }
+  var px = (startCount(10) + 3 - c0) * sx;
+  svg += '<line class="sg-tl-head" x1="' + px.toFixed(1) + '" y1="12" x2="' + px.toFixed(1) + '" y2="104"/><circle class="sg-tl-headknob" cx="' + px.toFixed(1) + '" cy="12" r="5"/>';
+  $('timeline').innerHTML = '<div class="sg-row" style="justify-content:space-between"><span class="sg-label">Zeitleiste · Bild 6–15 von 42</span>' +
+    '<span class="gm-status">' + I('music') + 'Gardemarsch-Mix_v3.mp3 · 126 BPM, 2 Tempowechsel</span></div>' + svg + '</svg>';
+
+  $('pager-dots').innerHTML = Array.apply(null, Array(11)).map(function (_, k) {
+    return '<span class="sg-pager__dot' + (k === 2 ? ' is-on' : '') + '"></span>';
+  }).join('');
+
+  /* --- Handy: Training ------------------------------------------------------------------ */
+  $('phone-training').innerHTML =
+    '<div class="sg-tbar"><button class="gm-btn gm-btn--ghost" type="button" aria-label="Zurück zu den Tänzen">' + I('prev') + '</button>' +
+      '<button class="sg-tbar__title" type="button">Bild 11 <small>/ 42</small>' + I('down') + '</button>' +
+      '<span class="sg-tbar__status" title="Offline bereit">' + I('ready', 'Offline bereit') + '</span></div>' +
+    GM.renderStage(dance, F[11], F[12], { label: true, title: 'Bild 11' }) +
+    count(13, 16) +
+    '<div class="sg-ttracks">' + trainingTracks(F[11], 13) + '</div>' +
+    '<p class="sg-next">Weiter: <strong>Bild 12</strong> · 8 Zeiten</p>' +
+    '<div class="sg-tools"><button class="gm-btn gm-btn--secondary" type="button">' + I('play-o') + 'Vorlauf 8' + I('down') + '</button>' +
+      '<button class="gm-btn gm-btn--secondary" type="button">' + I('edit') + 'Bearbeiten</button></div>' +
+    '<div class="sg-transport"><button class="gm-btn gm-btn--secondary gm-btn--stack" type="button">' + I('prev') + 'Bild 10</button>' +
+      '<button class="gm-btn gm-btn--play" type="button" aria-label="Pause">' + I('pause') + '</button>' +
+      '<button class="gm-btn gm-btn--secondary gm-btn--stack" type="button">' + I('next') + 'Bild 12</button></div>';
+
+  /* --- Handy: Bearbeiten ------------------------------------------------------------------ */
+  var tB = F[10].tracks[1];
+  $('phone-edit').innerHTML =
+    '<div class="gm-modebar">' + I('edit') + '<span class="gm-modebar__title">BEARBEITEN · BILD 10</span><button class="gm-btn" type="button">Fertig</button></div>' +
+    '<div class="sg-phone__screen">' +
+      GM.renderStage(dance, F[10], F[11], { label: true, selected: 1, title: 'Bild 10, Gruppe 2 ausgewählt' }) +
+      '<div class="sg-row" style="justify-content:space-between"><span class="sg-label">Formation: Block, Gruppe 2</span>' +
+        '<button class="gm-btn gm-btn--ghost" type="button">' + I('undo') + 'Rückgängig</button></div>' +
+      '<div class="sg-ttracks">' +
+        '<div class="sg-ttrack"><span class="sg-ttrack__who">' + GM.trackWho(dance, F[10].tracks[0]) + '</span><span class="sg-ttrack__chips">' + GM.renderChips(F[10].tracks[0], { size: 'l' }) + '</span></div>' +
+        '<div class="sg-ttrack"><span class="sg-ttrack__who">' + GM.trackWho(dance, tB) + '</span><span class="sg-ttrack__chips">' +
+          '<span class="gm-chip gm-chip--l sg-chipsel"><span class="gm-chip__n">6</span> Kick</span>' +
+          '<button class="gm-btn gm-btn--secondary" type="button" style="min-height:44px">' + I('plus') + 'Baustein</button></span></div>' +
+        '<div class="sg-ttrack"><span class="sg-ttrack__who">' + GM.trackWho(dance, F[10].tracks[2]) + '</span><span class="sg-ttrack__chips">' + GM.renderChips(F[10].tracks[2], { size: 'l' }) + '</span></div>' +
+      '</div>' +
+      '<div class="sg-editpanel">' +
+        '<div class="sg-editpanel__row"><strong>Kick</strong><div class="gm-stepper gm-stepper--l" role="group" aria-label="Zeiten für Kick">' +
+          '<button type="button" aria-label="Weniger">' + I('minus') + '</button><output>6</output><button type="button" aria-label="Mehr">' + I('plus') + '</button></div></div>' +
+        '<span class="gm-badge gm-badge--warn">' + I('warn') + '6 von 8 Zeiten · 2 fehlen</span>' +
+        '<span class="gm-badge gm-badge--warn">' + I('warn') + 'Läuft ins Bild 11 ohne Lauf-Aktion</span>' +
+        '<div class="sg-row" style="gap:6px">' + ['M', 'Dreh', 'Kick', 'Pose', 'Rad'].map(function (b) {
+          return '<button class="gm-chip gm-chip--key" type="button">' + b + '</button>';
+        }).join('') + '</div>' +
+      '</div>' +
+      '<button class="gm-btn gm-btn--secondary" type="button" style="margin-top:auto">' + I('note') + 'Notiz: Hintere Reihe kommt zu spät</button>' +
+    '</div>';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+/* =============================================================================
+   Gardemaß – Design-Tokens für Garde-Tanz
+   Quelle der Wahrheit für Farben, Typografie, Abstände, Größen und Bewegung.
+   Doku: docs/03-design-system.md · Vorschau: design-system/index.html
+
+   Theme-Logik (drei Zustände):
+   - kein data-theme   → folgt dem System (prefers-color-scheme)
+   - data-theme="light" → immer hell
+   - data-theme="dark"  → immer dunkel
+   Druck ist immer hell.
+   ============================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* --- Neutral: Tinte auf Papier (leicht kühl) ----------------------------- */
+  --gm-paper: #FFFFFF;        /* Blatt, Bühne, Karten, Eingabefelder          */
+  --gm-canvas: #EEF0F3;       /* App-Hintergrund hinter dem Blatt             */
+  --gm-sunken: #E4E7EC;       /* vertiefte Flächen: Leisten, Stepper          */
+  --gm-ink: #11151C;          /* Text, Symbole, Bühnenrand, Primärtaste 18:1  */
+  --gm-ink-2: #3A4250;        /* Sekundärtext                         10:1    */
+  --gm-ink-3: #596272;        /* Hilfstext, Platzhalter               ≥5,4:1  */
+  --gm-line: #CDD2DA;         /* Trennlinien (rein dekorativ)                 */
+  --gm-line-strong: #7A8392;  /* Rahmen von Bedienelementen          ≥3,3:1   */
+  --gm-on-ink: #FFFFFF;       /* Text/Icons auf Tinte                         */
+
+  /* --- Signal: Interaktion, Auswahl, „Jetzt“ ------------------------------- */
+  --gm-signal: #1846C7;       /* Auswahl, Fokus, Abspielkopf, laufende Aktion 7,7:1 */
+  --gm-signal-strong: #0F3192;/* gedrückt / Hover                             */
+  --gm-signal-tint: #E6ECFF;  /* ausgewählte Flächen                          */
+  --gm-on-signal: #FFFFFF;
+
+  /* --- Status ------------------------------------------------------------- */
+  --gm-warn: #8A4600;         /* Hinweis-Text (Zeiten gehen nicht auf)  6,3:1 */
+  --gm-warn-tint: #FFF0D1;
+  --gm-warn-line: #C77F00;    /* Hinweis-Rahmen/Icon                    ≥3:1  */
+  --gm-danger: #B0241B;       /* Löschen, Fehler                              */
+  --gm-danger-tint: #FDE7E5;
+  --gm-ok: #17663A;           /* synchronisiert, offline bereit               */
+  --gm-ok-tint: #E2F3E8;
+
+  /* --- Modus: Bearbeiten (nur dafür!) ------------------------------------- */
+  --gm-edit: #9C1487;
+  --gm-edit-tint: #FBE6F6;
+  --gm-on-edit: #FFFFFF;
+
+  /* --- Bühne --------------------------------------------------------------- */
+  --gm-stage-bg: var(--gm-paper);
+  --gm-stage-edge: var(--gm-ink);
+  --gm-dancer: var(--gm-ink);
+  --gm-path: #4A5465;         /* Laufwege, bewusst eine Stufe leiser als Symbole */
+  --gm-ghost: var(--gm-signal); /* KI-Vorschlag                               */
+
+  /* --- Typografie ---------------------------------------------------------- */
+  --gm-font-ui: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui,
+    -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --gm-font-mono: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo,
+    Consolas, monospace;
+
+  --gm-text-xs: 0.875rem;     /* 14 px – absolute Untergrenze, nie interaktiv */
+  --gm-text-sm: 1rem;         /* 16 px – Standard Desktop                     */
+  --gm-text-md: 1.125rem;     /* 18 px – Standard Handy / Training            */
+  --gm-text-lg: 1.375rem;     /* 22 px – Aktionen im Training                 */
+  --gm-text-xl: 1.75rem;      /* 28 px – Überschriften                        */
+  --gm-text-2xl: 2.25rem;     /* 36 px – Bildnummer im Training               */
+  --gm-text-display: 3rem;    /* 48 px – Vorlauf-Zähler                       */
+  --gm-text-count: 6rem;      /* 96 px – Zählzeit, lesbar auf ~1,5 m          */
+
+  --gm-weight-regular: 400;
+  --gm-weight-bold: 700;
+  --gm-weight-heavy: 800;
+
+  --gm-leading-tight: 1.05;   /* Ziffern                                      */
+  --gm-leading-snug: 1.25;    /* Überschriften, Bedienelemente                */
+  --gm-leading-body: 1.5;     /* Fließtext                                    */
+
+  /* --- Abstände (4er-Raster) ----------------------------------------------- */
+  --gm-space-1: 4px;
+  --gm-space-2: 8px;
+  --gm-space-3: 12px;
+  --gm-space-4: 16px;
+  --gm-space-5: 24px;
+  --gm-space-6: 32px;
+  --gm-space-7: 48px;
+  --gm-space-8: 64px;
+
+  /* --- Form ---------------------------------------------------------------- */
+  --gm-radius-s: 4px;         /* Bausteine, Badges                            */
+  --gm-radius-m: 8px;         /* Tasten, Felder                               */
+  --gm-radius-l: 14px;        /* schwebende Flächen, Handy-Rahmen             */
+  --gm-radius-pill: 999px;    /* Chips, runde Play-Taste                      */
+
+  --gm-stroke-hair: 1px;
+  --gm-stroke: 2px;
+  --gm-stroke-strong: 3px;    /* Bühnenvorderkante, aktive Rahmen             */
+
+  /* --- Treffflächen -------------------------------------------------------- */
+  --gm-hit-min: 48px;         /* jede Taste, überall                          */
+  --gm-hit-training: 64px;    /* Tasten im Training                           */
+  --gm-hit-hero: 88px;        /* Play im Training                             */
+  --gm-hit-gap: 12px;         /* Mindestabstand zwischen Tasten im Training   */
+
+  /* --- Fokus, Ebenen, Bewegung -------------------------------------------- */
+  --gm-focus-ring: 0 0 0 3px var(--gm-paper), 0 0 0 6px var(--gm-signal);
+  --gm-shadow-float: 0 1px 2px rgb(17 21 28 / 0.12), 0 8px 24px rgb(17 21 28 / 0.14);
+  --gm-dur-fast: 120ms;
+  --gm-dur: 200ms;
+  --gm-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* --- Dunkel: System-Einstellung (ohne ausdrückliche Wahl) ------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --gm-paper: #171B22;
+    --gm-canvas: #0C0F14;
+    --gm-sunken: #222833;
+    --gm-ink: #F1F4F8;
+    --gm-ink-2: #C5CCD6;
+    --gm-ink-3: #9AA4B2;
+    --gm-line: #2C333F;
+    --gm-line-strong: #737D8E;
+    --gm-on-ink: #0C0F14;
+    --gm-signal: #8EAEFF;
+    --gm-signal-strong: #B5CBFF;
+    --gm-signal-tint: #1A2747;
+    --gm-on-signal: #0C0F14;
+    --gm-warn: #FFC56B;
+    --gm-warn-tint: #3A2A0E;
+    --gm-warn-line: #E0A23A;
+    --gm-danger: #FF8E86;
+    --gm-danger-tint: #3E1714;
+    --gm-ok: #74D99A;
+    --gm-ok-tint: #11301E;
+    --gm-edit: #F49BE4;
+    --gm-edit-tint: #3A1233;
+    --gm-on-edit: #0C0F14;
+    --gm-path: #A9B3C1;
+    --gm-shadow-float: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px rgb(0 0 0 / 0.45);
+  }
+}
+
+/* --- Dunkel: ausdrückliche Wahl ------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --gm-paper: #171B22;
+  --gm-canvas: #0C0F14;
+  --gm-sunken: #222833;
+  --gm-ink: #F1F4F8;
+  --gm-ink-2: #C5CCD6;
+  --gm-ink-3: #9AA4B2;
+  --gm-line: #2C333F;
+  --gm-line-strong: #737D8E;
+  --gm-on-ink: #0C0F14;
+  --gm-signal: #8EAEFF;
+  --gm-signal-strong: #B5CBFF;
+  --gm-signal-tint: #1A2747;
+  --gm-on-signal: #0C0F14;
+  --gm-warn: #FFC56B;
+  --gm-warn-tint: #3A2A0E;
+  --gm-warn-line: #E0A23A;
+  --gm-danger: #FF8E86;
+  --gm-danger-tint: #3E1714;
+  --gm-ok: #74D99A;
+  --gm-ok-tint: #11301E;
+  --gm-edit: #F49BE4;
+  --gm-edit-tint: #3A1233;
+  --gm-on-edit: #0C0F14;
+  --gm-path: #A9B3C1;
+  --gm-shadow-float: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px rgb(0 0 0 / 0.45);
+}
+
+/* --- Druck: immer Tinte auf Papier ---------------------------------------- */
+@media print {
+  :root,
+  :root:not([data-theme="light"]),
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --gm-paper: #FFFFFF;
+    --gm-canvas: #FFFFFF;
+    --gm-ink: #000000;
+    --gm-ink-2: #222222;
+    --gm-ink-3: #444444;
+    --gm-line: #BBBBBB;
+    --gm-line-strong: #666666;
+    --gm-path: #333333;
+    --gm-warn: #000000;
+    --gm-warn-tint: #FFFFFF;
+    --gm-warn-line: #000000;
+  }
+}
