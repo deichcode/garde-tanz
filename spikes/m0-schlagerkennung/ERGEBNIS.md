@@ -10,7 +10,8 @@
 - **Manchmal liegt das Raster auf dem Gegenschlag** (bei Märschen mit „Umpa“-Begleitung). Auch das braucht eine Ein-Tipp-Korrektur.
 - **Die „1“ (Taktanfang) ist automatisch nicht verlässlich.** Der Trainer setzt „Bild 1 beginnt hier“ ohnehin selbst. Von dort zählt die App.
 - **Freie Intros** (Gardetanz 2027, erste ~19 s) haben kein festes Tempo und brauchen kein Raster. Bild 1 beginnt danach.
-- **Ob ≥ 90 % der Schläge stimmen, ist noch offen.** Dafür fehlt eine Referenz. Die nächste Stufe ist der **Hörtest mit den Klick-Spuren** (unten).
+- **Hörtest Gardetanz 2027 (schwierigste Musik):** Alle Abschnittsgrenzen passen bis auf wenige Sekunden. Nur ein Abschnitt (Viva Colonia) ist doppelt so schnell erkannt. **Mit einem Tipp „halb so schnell“ stimmt das Raster im ganzen Tanz.** Ohne Korrektur liegen 92 % der Klicks auf gezählten Schritten.
+- **Die übrigen drei Musiken** sind noch im Hörtest. Vorhersagen dafür stehen unten.
 
 ## Vorgehen
 
@@ -56,11 +57,40 @@ Einzelwerte je Abschnitt stehen in [`zusammenfassung.json`](zusammenfassung.json
 6. **Freie Abschnitte** (Intro ohne festen Takt) bekommen kein Raster.
 7. **Server-Analyse:** Essentia als Grundlage (Lizenz AGPL-3.0 prüfen). Ein neuronales Verfahren (beat_this, MIT) sollte vor der Entscheidung noch getestet werden, es erkennt auch Taktanfänge.
 
-## Nächster Schritt: Hörtest
+## Hörtest Gardetanz 2027 (20.11.2026)
+
+| Zeit laut Trainer | Erkannter Abschnitt | Erkanntes Tempo | Urteil | Hohe Klicks („1“) |
+|---|---|---|---|---|
+| 0:00–0:43 | 0:01–0:19 und 0:19–0:40 | 108 (Intro) und 88 | ✔ passt gut | auf 3 und 7 |
+| 0:43–1:05 (Übergang zu **Viva Colonia**) | 0:40–1:05 | 162 | ⏩ doppelt so schnell wie gezählt, richtig wären ~81 | – |
+| 1:05–1:44 | 1:05–1:44 | 144 | ✔ passt | auf 3 und 7 |
+| 1:44–Ende | 1:44–2:56 | 126 | ✔ passt | auf 4 und 8 |
+
+**Auswertung**
+
+- **Abschnittsgrenzen:** 1:05 und 1:44 stimmen auf die Sekunde. Der Übergang zu Viva Colonia liegt etwa 3 Sekunden zu früh, dort klingt die Musik über.
+- **Raster:** 313 von 377 Klicks liegen in Abschnitten, die genau passen. Im Viva-Colonia-Abschnitt liegt jeder zweite Klick auf einem gezählten Schritt. Zusammen sind das **92 % der Klicks auf gezählten Schritten**, und kein gezählter Schritt fehlt.
+- **Korrekturaufwand:** **1 Tipp** („halb so schnell“ für Viva Colonia), dazu „Bild 1 beginnt hier“ setzen. Deutlich unter dem Ziel von 5 Minuten.
+- **Die „1“:** Die hohen Klicks liegen auf 3/7 bzw. 4/8. Das bestätigt, dass die automatische „1“ nicht taugt. Der Trainer setzt den Zählbeginn selbst. Gezählt wird bis 8, solange ein Bild nichts anderes verlangt (Konzept 5.4).
+- **Prüf-Hinweise waren zu vorsichtig:** 4 Abschnitte waren als „Tempo-Ebene prüfen“ markiert, nur einer war wirklich falsch. Wo librosa widersprach, hatte in 3 von 4 Fällen Essentia recht.
+
+**Neue Hypothese für bessere Prüf-Hinweise:** Gezählt werden Schritte zwischen etwa **75 und 150 pro Minute** (hier 81, 88, 108, 126, 144). Ein Abschnitt außerhalb dieses Bereichs ist vermutlich doppelt oder halb erkannt. Die App schlägt dann direkt „halb so schnell“ bzw. „doppelt so schnell“ vor. Mit dieser Regel wäre im Gardetanz genau der eine falsche Abschnitt markiert gewesen.
+
+**Vorhersagen nach dieser Regel**, zu prüfen mit dem Hörtest der übrigen Musiken:
+
+| Musik | Vorhersage |
+|---|---|
+| Piccolotanz 2027 | Alle drei Abschnitte (129, 144, 136) passen in der Tempo-Ebene |
+| Piccolos 2026 (Rohschnitt) | Alle drei Abschnitte (136, 129, 136) passen. Ab 2:20 stimmen Essentia und librosa nicht überein, vermutlich liegt librosa daneben, nicht die Klick-Spur |
+| Piccolos 2025 | 1:35–2:21 (erkannt 167) ist **doppelt so schnell**, richtig wären ~83. Alle anderen Abschnitte passen |
+
+Außerdem fiel im Hörtest auf: **Trainer orientieren sich an den Liedern im Medley** („im Übergang zu Viva Colonia“). Eine Idee fürs Produkt: Musikteile in der Zeitleiste benennen.
+
+## Hörtest: Vorgehen
 
 Für jede Musik gibt es eine **Klick-Spur**: die Musik leiser, darüber Klicks auf jedem erkannten Schlag. Hoher Klick = vermutete „1“ (unsicher, siehe oben), tiefer Klick = übrige Schläge. Die Dateien liegen nicht im Repository, sie wurden direkt übergeben.
 
-Bitte pro Abschnitt notieren:
+Bitte pro Abschnitt notieren (die Lage der hohen Klicks ist nicht mehr nötig):
 
 | Musik | Abschnitt (Zeit) | Klicks liegen … |
 |---|---|---|
