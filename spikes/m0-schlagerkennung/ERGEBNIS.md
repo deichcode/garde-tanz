@@ -11,7 +11,8 @@
 - **Die „1“ (Taktanfang) ist automatisch nicht verlässlich.** Der Trainer setzt „Bild 1 beginnt hier“ ohnehin selbst. Von dort zählt die App.
 - **Freie Intros** (Gardetanz 2027, erste ~19 s) haben kein festes Tempo und brauchen kein Raster. Bild 1 beginnt danach.
 - **Hörtest Gardetanz 2027 (schwierigste Musik):** Die erkannten Abschnitte entsprechen den gehörten Musikteilen (die Zeitangaben des Trainers sind grob). Nur ein Abschnitt (Viva Colonia) ist doppelt so schnell erkannt. **Mit einem Tipp „halb so schnell“ stimmt das Raster im ganzen Tanz.** Ohne Korrektur liegen 92 % der Klicks auf gezählten Schritten.
-- **Die übrigen drei Musiken** sind noch im Hörtest. Vorhersagen dafür stehen unten.
+- **Hörtest Piccolotanz 2027:** passt komplett, **keine Korrektur** nötig (außer „Bild 1 beginnt hier“).
+- **Piccolos 2026 und 2025** sind noch im Hörtest. Vorhersagen dafür stehen unten.
 
 ## Vorgehen
 
@@ -80,11 +81,18 @@ Einzelwerte je Abschnitt stehen in [`zusammenfassung.json`](zusammenfassung.json
 
 | Musik | Vorhersage |
 |---|---|
-| Piccolotanz 2027 | Alle drei Abschnitte (129, 144, 136) passen in der Tempo-Ebene |
+| Piccolotanz 2027 | Alle drei Abschnitte (129, 144, 136) passen in der Tempo-Ebene · **✔ bestätigt** |
 | Piccolos 2026 (Rohschnitt) | Alle drei Abschnitte (136, 129, 136) passen. Ab 2:20 stimmen Essentia und librosa nicht überein, vermutlich liegt librosa daneben, nicht die Klick-Spur |
 | Piccolos 2025 | 1:35–2:21 (erkannt 167) ist **doppelt so schnell**, richtig wären ~83. Alle anderen Abschnitte passen |
 
 Außerdem fiel im Hörtest auf: **Trainer orientieren sich an den Liedern im Medley** („im Übergang zu Viva Colonia“). Eine Idee fürs Produkt: Musikteile in der Zeitleiste benennen.
+
+## Hörtest Piccolotanz 2027 (20.11.2026)
+
+- **Raster:** passt in allen drei Abschnitten (129, 144, 136). Die Vorhersage nach der 75–150-Regel ist bestätigt. Kein Abschnitt hätte markiert werden müssen. Die alten Prüf-Hinweise hatten zwei Abschnitte unnötig markiert.
+- **Die „1“:** Im ersten Teil liegt der hohe Klick richtig auf der 1, ab dem zweiten Teil auf 2 und 6. Die Taktlage stimmt also innerhalb eines Abschnitts, geht aber beim Tempowechsel verloren. Eine Erkennung pro Abschnitt wäre besser, verlässlich wird sie damit aber nicht. Es bleibt dabei: Der Trainer setzt den Zählbeginn.
+
+**Stand nach 2 von 4 Musiken:** Mit der 75–150-Regel wäre in beiden Musiken genau der eine falsche Abschnitt markiert worden und kein richtiger. Korrekturaufwand: 1 Tipp (Gardetanz) bzw. 0 Tipps (Piccolotanz).
 
 ## Hörtest: Vorgehen
 
