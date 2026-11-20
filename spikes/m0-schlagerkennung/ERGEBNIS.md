@@ -10,7 +10,7 @@
 - **Manchmal liegt das Raster auf dem Gegenschlag** (bei Märschen mit „Umpa“-Begleitung). Auch das braucht eine Ein-Tipp-Korrektur.
 - **Die „1“ (Taktanfang) ist automatisch nicht verlässlich.** Der Trainer setzt „Bild 1 beginnt hier“ ohnehin selbst. Von dort zählt die App.
 - **Freie Intros** (Gardetanz 2027, erste ~19 s) haben kein festes Tempo und brauchen kein Raster. Bild 1 beginnt danach.
-- **Hörtest Gardetanz 2027 (schwierigste Musik):** Alle Abschnittsgrenzen passen bis auf wenige Sekunden. Nur ein Abschnitt (Viva Colonia) ist doppelt so schnell erkannt. **Mit einem Tipp „halb so schnell“ stimmt das Raster im ganzen Tanz.** Ohne Korrektur liegen 92 % der Klicks auf gezählten Schritten.
+- **Hörtest Gardetanz 2027 (schwierigste Musik):** Die erkannten Abschnitte entsprechen den gehörten Musikteilen (die Zeitangaben des Trainers sind grob). Nur ein Abschnitt (Viva Colonia) ist doppelt so schnell erkannt. **Mit einem Tipp „halb so schnell“ stimmt das Raster im ganzen Tanz.** Ohne Korrektur liegen 92 % der Klicks auf gezählten Schritten.
 - **Die übrigen drei Musiken** sind noch im Hörtest. Vorhersagen dafür stehen unten.
 
 ## Vorgehen
@@ -59,7 +59,7 @@ Einzelwerte je Abschnitt stehen in [`zusammenfassung.json`](zusammenfassung.json
 
 ## Hörtest Gardetanz 2027 (20.11.2026)
 
-| Zeit laut Trainer | Erkannter Abschnitt | Erkanntes Tempo | Urteil | Hohe Klicks („1“) |
+| Zeit laut Trainer (grob) | Erkannter Abschnitt | Erkanntes Tempo | Urteil | Hohe Klicks („1“) |
 |---|---|---|---|---|
 | 0:00–0:43 | 0:01–0:19 und 0:19–0:40 | 108 (Intro) und 88 | ✔ passt gut | auf 3 und 7 |
 | 0:43–1:05 (Übergang zu **Viva Colonia**) | 0:40–1:05 | 162 | ⏩ doppelt so schnell wie gezählt, richtig wären ~81 | – |
@@ -68,7 +68,7 @@ Einzelwerte je Abschnitt stehen in [`zusammenfassung.json`](zusammenfassung.json
 
 **Auswertung**
 
-- **Abschnittsgrenzen:** 1:05 und 1:44 stimmen auf die Sekunde. Der Übergang zu Viva Colonia liegt etwa 3 Sekunden zu früh, dort klingt die Musik über.
+- **Abschnittsgrenzen:** Die erkannten Grenzen (0:40, 1:05, 1:44) decken sich mit den gehörten Musikteilen. Die Zeitangaben des Trainers sind grob, eine genaue Abweichung lässt sich daraus nicht ablesen. Für den Zweck reicht das. Feinheiten korrigiert man später im Raster-Editor beim Hören.
 - **Raster:** 313 von 377 Klicks liegen in Abschnitten, die genau passen. Im Viva-Colonia-Abschnitt liegt jeder zweite Klick auf einem gezählten Schritt. Zusammen sind das **92 % der Klicks auf gezählten Schritten**, und kein gezählter Schritt fehlt.
 - **Korrekturaufwand:** **1 Tipp** („halb so schnell“ für Viva Colonia), dazu „Bild 1 beginnt hier“ setzen. Deutlich unter dem Ziel von 5 Minuten.
 - **Die „1“:** Die hohen Klicks liegen auf 3/7 bzw. 4/8. Das bestätigt, dass die automatische „1“ nicht taugt. Der Trainer setzt den Zählbeginn selbst. Gezählt wird bis 8, solange ein Bild nichts anderes verlangt (Konzept 5.4).
