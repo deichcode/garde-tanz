@@ -123,7 +123,7 @@ Gezählt werden bei euch Schritte zwischen etwa 75 und 150 pro Minute (gehört: 
 | Piccolos 2026 | keiner | ✔ richtig |
 | Piccolos 2025 | 1:37–2:21 (167): halb so schnell | ◐ möglich, hängt vom Tanz ab |
 
-Die Regel hat **keinen nötigen Fall übersehen** und keinen falschen Vorschlag gemacht. Weil die Tempo-Ebene auch eine Frage der Choreografie ist, zeigt die App das als **Vorschlag**, nicht als Fehler. Die alten Prüf-Hinweise aus der librosa-Gegenprobe markierten 9 Abschnitte, von denen 1 nötig war. Sie werden ersetzt.
+Die Regel hat **keinen nötigen Fall übersehen** und keinen falschen Vorschlag gemacht. Weil die Tempo-Ebene auch eine Frage der Choreografie ist, zeigt die App das als **Vorschlag**, nicht als Fehler. Die alten Prüf-Hinweise aus der librosa-Gegenprobe markierten 10 Abschnitte, davon war 1 nötig und 1 optional. Sie werden ersetzt.
 
 ## Folgen für das Produkt (ins Konzept übernommen, 6.7)
 
