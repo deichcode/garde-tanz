@@ -363,12 +363,12 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 ### 6.7 Musik und Raster
 
 1. **Hochladen** (MP3, M4A, WAV) zum Tanz. Die Datei liegt im Vereinsspeicher und wird auf Trainingsgeräten offline zwischengespeichert.
-2. **Automatische Analyse:** Schläge und Tempo-Abschnitte werden erkannt, das dauert einige Sekunden. Liegt ein Abschnitt über 150 oder unter 75 Schlägen pro Minute, schlägt die App „halb so schnell“ bzw. „doppelt so schnell zählen“ vor. Gezählt werden Schritte, im Spike lagen sie zwischen 81 und 144. Taktanfänge („die 1“) sind höchstens ein Vorschlag, weil sie im Spike nicht verlässlich erkannt wurden. Den Start von Bild 1 setzt der Trainer.
+2. **Automatische Analyse:** Schläge und Tempo-Abschnitte werden erkannt, das dauert einige Sekunden. Liegt ein Abschnitt über 150 oder unter 75 Schlägen pro Minute, schlägt die App „halb so schnell“ bzw. „doppelt so schnell zählen“ vor. Gezählt werden Schritte, im Spike lagen sie zwischen 81 und 144. Die Analyse kombiniert zwei Verfahren: Essentia liefert das Raster, ein KI-Verfahren (beat_this) die Taktanfänge („die 1“) und eine Zweitmeinung. Den Start von Bild 1 schlägt die App auf einer erkannten 1 vor, der Trainer bestätigt.
 3. **Korrigieren im Raster-Editor:**
    - Wellenform mit Schlagstrichen, jede „1“ eines Achters hervorgehoben.
    - **„Bild 1 beginnt hier“** auf einen Schlag ziehen. Das Intro davor gehört zum Vorlauf. Einmarsch und Ausmarsch werden nicht erfasst.
    - **Doppelt / halb so schnell** pro Tempo-Abschnitt, mit einem Tipp. Das ist auch eine Frage der Choreografie: Manche Teile kann man je nach Tanz auf beiden Ebenen zählen (Spike M0.1).
-   - **Auf den Gegenschlag:** Raster in einem **frei markierten Bereich** um einen halben Schlag verschieben. Solche Stellen beginnen nicht an Tempowechseln. Weil Trainer den Fehler hören, aber schwer benennen können („passt irgendwie nicht“), fragt der Raster-Editor beim Kontroll-Klick: „Klingt es hier irgendwie falsch? Dann liegt das Raster meist auf dem Gegenschlag.“ Eine automatische Korrektur gibt es nicht, sie war im Spike unzuverlässig.
+   - **Auf den Gegenschlag:** Raster in einem **frei markierten Bereich** um einen halben Schlag verschieben. Solche Stellen beginnen nicht an Tempowechseln. Weil Trainer den Fehler hören, aber schwer benennen können („passt irgendwie nicht“), fragt der Raster-Editor beim Kontroll-Klick: „Klingt es hier irgendwie falsch? Dann liegt das Raster meist auf dem Gegenschlag.“ Liegt die KI über mindestens 8 s einen halben Schlag neben Essentia, zeigt die App von selbst „Zwei Möglichkeiten: A · B anhören“, ein Tipp übernimmt die bessere. Eine stille automatische Korrektur gibt es nicht, im Spike war sie unzuverlässig.
    - **Freier Abschnitt:** Ein Intro ohne festen Takt bleibt ohne Raster.
    - **Mittippen:** Während die Musik läuft, auf die Schläge tippen (Taste oder Fläche). Die App passt das Raster im markierten Abschnitt an.
    - **Tempo-Abschnitt:** „Ab hier neues Tempo“ an einem Schlag setzen, BPM per Mittippen oder Zahl.
@@ -489,7 +489,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Kataloge | Schlüssel eines Bausteins = Rolle + normalisierter Text. Häufigkeit, übliche Zeiten und „bewegt sich“ aktualisiert ein Function-Trigger beim Speichern eines Bildes. Vorschläge berechnet das Gerät aus dem lokal gespeicherten Katalog, auch offline. | Keine Doppelten durch Offline-Arbeit, alle Geräte sehen dieselben Vorschläge. |
 | Musik offline | Cache Storage / IndexedDB, `navigator.storage.persist()` | Musik muss ohne Netz in der Halle laufen |
 | Audio | **Web Audio API**, Zeit aus `AudioContext.currentTime` minus `outputLatency` minus Geräte-Verzögerung | Genaue Synchronität |
-| Schlagerkennung | Server-Analyse beim Hochladen. **Grundlage: Essentia** (im Spike stabil bei Tempowechseln, Lizenz AGPL-3.0 prüfen). Vor der Entscheidung noch ein neuronales Verfahren testen (*beat_this*, MIT, erkennt auch Taktanfänge). Korrektur-Werkzeuge siehe 6.7 | Ergebnis Spike M0.1: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md) |
+| Schlagerkennung | Server-Analyse beim Hochladen mit **zwei Verfahren**: **Essentia** für das Raster, **beat_this** (KI, PyTorch auf CPU) für die „1“ und als Zweitmeinung gegen den Gegenschlag. Tempo-Ebene per Regel 75–150 Schritte/min. Als Container-Dienst (z. B. Cloud Run), wenige Sekunden pro Musik. Lizenzen prüfen: Essentia AGPL-3.0, beat_this-Code MIT, Modellgewichte separat | Ergebnis Spike M0.1: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md) |
 | KI | Server-Funktion mit Anthropic SDK, `claude-opus-5-5`, strukturierte Ausgabe | Schlüssel sicher, Antwort schema-valide |
 | Tests | Vitest (Logik: Zeiten, Prüfregeln, Formen), Playwright (Abläufe, Druck) | – |
 
@@ -506,7 +506,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 **Stand 19.11.2026:**
 
-- **Risiko 1** ist geprüft, mit 4 Vereinsmusiken und Hörtest durch den Trainer: **Erfolgskriterium erreicht.** Ohne Korrektur liegen rund 90 % der Klicks auf den gezählten Schritten, mit 0–2 Korrekturen pro Tanz stimmt alles. Fehlerarten: Tempo-Ebene und Gegenschlag. Die „1“ ist unzuverlässig. Daraus folgen die Korrektur-Werkzeuge in 6.7. Offen ist der Test mit einem neuronalen Verfahren. Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
+- **Risiko 1** ist geprüft, mit 4 Vereinsmusiken und Hörtest durch den Trainer: **Erfolgskriterium erreicht.** Ohne Korrektur liegen rund 90 % der Klicks auf den gezählten Schritten, mit 0–2 Korrekturen pro Tanz stimmt alles. Fehlerarten: Tempo-Ebene und Gegenschlag. Die „1“ ist unzuverlässig. Ein KI-Verfahren erkennt die „1“ zu 82–97 % und ergänzt sich mit Essentia. Empfehlung: beide kombinieren (6.7, 9). Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
 - **Risiko 2** (Bluetooth-Box) wird später vor Ort getestet.
 
 ## 11. Erfolgskriterien für das MVP

@@ -1,0 +1,164 @@
+[
+  {
+    "name": "Gardetanz_2027",
+    "schlaege_f": {
+      "ki": 0.842,
+      "essentia": 1.0
+    },
+    "tempo_ebene": [
+      {
+        "bereich": "40-65s",
+        "essentia_bpm": 156.6,
+        "ki_bpm": 157.9
+      }
+    ],
+    "eins": {
+      "echte_einsen": 77,
+      "ki_getroffen": 0.818,
+      "ki_schlaege_pro_takt": 4
+    },
+    "ki_abschnitte": [
+      {
+        "start": 4.52,
+        "ende": 18.28,
+        "bpm": 81.1
+      },
+      {
+        "start": 18.3,
+        "ende": 32.38,
+        "bpm": 88.2
+      },
+      {
+        "start": 32.42,
+        "ende": 40.88,
+        "bpm": 176.5
+      },
+      {
+        "start": 41.2,
+        "ende": 63.2,
+        "bpm": 157.9
+      },
+      {
+        "start": 63.16,
+        "ende": 106.88,
+        "bpm": 142.9
+      },
+      {
+        "start": 106.9,
+        "ende": 176.4,
+        "bpm": 125.0
+      }
+    ]
+  },
+  {
+    "name": "Piccolotanz_2027",
+    "schlaege_f": {
+      "ki": 0.873,
+      "essentia": 1.0
+    },
+    "eins": {
+      "echte_einsen": 97,
+      "ki_getroffen": 0.835,
+      "ki_schlaege_pro_takt": 4
+    },
+    "ki_abschnitte": [
+      {
+        "start": 0.3,
+        "ende": 8.76,
+        "bpm": 130.4
+      },
+      {
+        "start": 8.76,
+        "ende": 16.74,
+        "bpm": 125.0
+      },
+      {
+        "start": 16.74,
+        "ende": 28.94,
+        "bpm": 127.7
+      },
+      {
+        "start": 28.94,
+        "ende": 55.5,
+        "bpm": 130.4
+      },
+      {
+        "start": 55.5,
+        "ende": 110.84,
+        "bpm": 142.9
+      },
+      {
+        "start": 110.82,
+        "ende": 167.8,
+        "bpm": 136.4
+      }
+    ]
+  },
+  {
+    "name": "Piccolos_2026_Rohschnitt",
+    "schlaege_f": {
+      "ki": 0.965,
+      "essentia": 1.0
+    },
+    "eins": {
+      "echte_einsen": 118,
+      "ki_getroffen": 0.966,
+      "ki_schlaege_pro_takt": 4
+    },
+    "ki_abschnitte": [
+      {
+        "start": 0.26,
+        "ende": 63.24,
+        "bpm": 136.4
+      },
+      {
+        "start": 63.24,
+        "ende": 149.14,
+        "bpm": 130.4
+      },
+      {
+        "start": 149.14,
+        "ende": 211.86,
+        "bpm": 136.4
+      }
+    ]
+  },
+  {
+    "name": "Piccolos_2025",
+    "schlaege_f": {
+      "ki": 0.93,
+      "essentia": 0.697
+    },
+    "gegenschlag_stellen": {
+      "ki_richtig": 0.926,
+      "essentia_richtig": 0.0
+    },
+    "eins": {
+      "echte_einsen": 70,
+      "ki_getroffen": 0.957,
+      "ki_schlaege_pro_takt": 4
+    },
+    "ki_abschnitte": [
+      {
+        "start": 0.04,
+        "ende": 96.6,
+        "bpm": 130.4
+      },
+      {
+        "start": 96.6,
+        "ende": 142.22,
+        "bpm": 166.7
+      },
+      {
+        "start": 142.2,
+        "ende": 148.68,
+        "bpm": 142.9
+      },
+      {
+        "start": 148.72,
+        "ende": 190.44,
+        "bpm": 136.4
+      }
+    ]
+  }
+]
