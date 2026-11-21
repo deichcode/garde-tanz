@@ -363,12 +363,12 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 ### 6.7 Musik und Raster
 
 1. **Hochladen** (MP3, M4A, WAV) zum Tanz. Die Datei liegt im Vereinsspeicher und wird auf Trainingsgeräten offline zwischengespeichert.
-2. **Automatische Analyse:** Schläge und Tempo-Abschnitte werden erkannt, das dauert einige Sekunden. Unsichere Abschnitte sind markiert („Tempo-Ebene prüfen“), nur diese muss man nachhören. Taktanfänge („die 1“) sind höchstens ein Vorschlag, weil sie im Spike nicht verlässlich erkannt wurden. Den Start von Bild 1 setzt der Trainer.
+2. **Automatische Analyse:** Schläge und Tempo-Abschnitte werden erkannt, das dauert einige Sekunden. Liegt ein Abschnitt über 150 oder unter 75 Schlägen pro Minute, schlägt die App „halb so schnell“ bzw. „doppelt so schnell zählen“ vor. Gezählt werden Schritte, im Spike lagen sie zwischen 81 und 144. Taktanfänge („die 1“) sind höchstens ein Vorschlag, weil sie im Spike nicht verlässlich erkannt wurden. Den Start von Bild 1 setzt der Trainer.
 3. **Korrigieren im Raster-Editor:**
    - Wellenform mit Schlagstrichen, jede „1“ eines Achters hervorgehoben.
    - **„Bild 1 beginnt hier“** auf einen Schlag ziehen. Das Intro davor gehört zum Vorlauf. Einmarsch und Ausmarsch werden nicht erfasst.
-   - **Doppelt / halb so schnell** pro Tempo-Abschnitt, mit einem Tipp. Das ist die häufigste Korrektur: Die Analyse zählt oft jeden zweiten Schlag oder doppelt so viele (Spike M0.1).
-   - **Auf den Gegenschlag:** Raster eines Abschnitts um einen halben Schlag verschieben (bei Märschen mit „Umpa“-Begleitung).
+   - **Doppelt / halb so schnell** pro Tempo-Abschnitt, mit einem Tipp. Das ist auch eine Frage der Choreografie: Manche Teile kann man je nach Tanz auf beiden Ebenen zählen (Spike M0.1).
+   - **Auf den Gegenschlag:** Raster in einem **frei markierten Bereich** um einen halben Schlag verschieben. Solche Stellen beginnen nicht an Tempowechseln. Weil Trainer den Fehler hören, aber schwer benennen können („passt irgendwie nicht“), fragt der Raster-Editor beim Kontroll-Klick: „Klingt es hier irgendwie falsch? Dann liegt das Raster meist auf dem Gegenschlag.“ Eine automatische Korrektur gibt es nicht, sie war im Spike unzuverlässig.
    - **Freier Abschnitt:** Ein Intro ohne festen Takt bleibt ohne Raster.
    - **Mittippen:** Während die Musik läuft, auf die Schläge tippen (Taste oder Fläche). Die App passt das Raster im markierten Abschnitt an.
    - **Tempo-Abschnitt:** „Ab hier neues Tempo“ an einem Schlag setzen, BPM per Mittippen oder Zahl.
@@ -506,7 +506,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 **Stand 19.11.2026:**
 
-- **Risiko 1** ist teilweise geprüft, mit 4 Vereinsmusiken. Tempowechsel werden gut erkannt, die Tempo-Ebene und die „1“ sind unsicher. Daraus folgen die Korrektur-Werkzeuge in 6.7. Offen sind der Hörtest und der Test mit einem neuronalen Verfahren. Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
+- **Risiko 1** ist geprüft, mit 4 Vereinsmusiken und Hörtest durch den Trainer: **Erfolgskriterium erreicht.** Ohne Korrektur liegen rund 90 % der Klicks auf den gezählten Schritten, mit 0–2 Korrekturen pro Tanz stimmt alles. Fehlerarten: Tempo-Ebene und Gegenschlag. Die „1“ ist unzuverlässig. Daraus folgen die Korrektur-Werkzeuge in 6.7. Offen ist der Test mit einem neuronalen Verfahren. Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
 - **Risiko 2** (Bluetooth-Box) wird später vor Ort getestet.
 
 ## 11. Erfolgskriterien für das MVP

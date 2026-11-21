@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Gardetanz_2027",
+    "verschoben_anteil": 0.244,
+    "bereiche": [
+      "0:00–0:04",
+      "1:58–2:03",
+      "2:10–2:21",
+      "2:25–2:34",
+      "2:42–2:53"
+    ]
+  },
+  {
+    "name": "Piccolotanz_2027",
+    "verschoben_anteil": 0.135,
+    "bereiche": [
+      "1:21–1:27",
+      "2:24–2:29"
+    ]
+  },
+  {
+    "name": "Piccolos_2026_Rohschnitt",
+    "verschoben_anteil": 0.297,
+    "bereiche": [
+      "1:50–2:05",
+      "2:27–2:34",
+      "2:42–2:58",
+      "3:11–3:28"
+    ]
+  },
+  {
+    "name": "Piccolos_2025",
+    "verschoben_anteil": 0.156,
+    "bereiche": [
+      "0:21–0:29",
+      "0:37–0:40",
+      "1:22–1:33"
+    ]
+  }
+]
