@@ -13,8 +13,11 @@ Heute schreiben Trainer Tänze mit Stift und Papier:
 - **4 Bilder pro Seite**, A4 quer, 2 × 2. Unter jedem Bild stehen die Aktionen.
 - Jedes Bild hat **Nummer und Anzahl Zeiten** (meist 8 oder 16).
 - Gruppen werden mit **Symbolen** gekennzeichnet: gefüllter Kreis, leerer Kreis, „R“ (für die Gruppe *Reserve*, die voll mittanzt).
-- Aktionen werden als **Anzahl + Kürzel** notiert: „2 drehen, 6 M“.
+- Aktionen werden als **Anzahl + Begriff + Zusatz** notiert: „14 Marsch nach vorne | 2 drehen“. Sie gelten für **alle**, für einen Gruppenverbund („O+R“), für eine Gruppe oder für einen Teil („● linke Reihe“). Wiederholungen werden mit `||: … :||` geschrieben.
+- Am ersten Bild eines Lieds steht eine **Zusammenfassung** des Lieds: Name, Startzeit, Länge und die Zeiten in 16ern („Lied 4: Toi, toi, toi · 1:44 (1:05) · Instr. 16/16/12 · Strophe 16/16 …“). Damit prüft der Trainer, ob alle Zeiten des Lieds verplant sind. Gezählt wird beim Tanzen immer bis 8, die Zusammenfassung rechnet aber in 16ern.
 - Ein Tanz hat **30–50 Bilder**, also 8–13 Seiten.
+
+Ein echter Papier-Tanz ist im [Interview-Protokoll, Runde 9](01-interview.md#runde-9-abgleich-mit-einem-echten-papier-tanz-22112026) ausgewertet.
 
 Was Papier nicht kann: die Musik synchron mitlaufen lassen, im Training direkt zu einem Bild springen, Änderungen im Team verteilen, Laufwege sauber und wiederholbar zeichnen.
 
@@ -51,14 +54,21 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 | **Gruppe** | Feste Teilmenge der Tänzer mit eigenem Symbol (● ○ ✕). Meist 2–3 Gruppen mit je 4–10 Tänzern | `Group` |
 | **Rolle** | Was eine Gruppe ist, z. B. *Mariechen* oder *Grenadiere*. Bestimmt, welche Aktionen es gibt (Grenadiere schwenken, klopfen, präsentieren das Gewehr). Gilt vereinsweit, mehrere Gruppen können dieselbe Rolle haben | `Role` |
 | **Gruppenverbund** | Beliebig viele Gruppen, die sich in einem Bild oder einem Abschnitt des Tanzes wie eine Gruppe verhalten (z. B. ●✕ von Bild 11 bis 18) | `Track.groupIds` |
+| **Spur** | Eine Zeile Aktionen unter der Bühne. Sie gilt für eine Auswahl von Tänzern: **Alle**, einen Gruppenverbund, eine Gruppe oder einen Teil („● linke Reihe“, „Innerer Kreis“, „Eine“) | `Track` |
 | **Bild** | Eine Aufstellung mit einer festen Anzahl Zeiten. Zeigt die Startaufstellung und die Laufwege ins nächste Bild | `Frame` |
 | **Zeit** | Ein Schlag. Kleinste Einheit, nur ganze Zeiten | `count` |
 | **Achter** | 8 Zeiten. Ein Bild mit 16 Zeiten hat 2 Achter | – |
 | **Zählweise** | Wie laut gezählt wird: in Achtern, durch (1–16) oder aufgeteilt (1–4, 1–12) | `Frame.countSplit` |
 | **Formation** | Form, in der Tänzer stehen: Linie, Block, Kreis, Bogen, Keil, frei | `Formation` |
-| **Aktion** | Baustein mit Anzahl Zeiten, z. B. `2 1/4 Dreh`, `6 Marsch`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
+| **Blickrichtung** | Wohin die Tänzer einer Formation schauen. Standard: nach vorne zum Publikum | `Formation.facing` |
+| **Aktion** | Baustein mit Anzahl Zeiten und optionalem Zusatz, z. B. `2 1/4 Dreh`, `14 Marsch nach vorne`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
+| **Zusatz** | Richtung oder Ziel einer Aktion: „nach vorne“, „zur Mitte“, „auf der Stelle“. Freier Text, wird nicht als Baustein gelernt | `ActionBlock.detail` |
+| **Wiederholung** | Bausteine, die mehrmals hintereinander getanzt werden: `||: 2 GewSchl · 2 Steh · 4 GewSchl :|| ×2` | `RepeatBlock` |
+| **Drehung / Schwenk** | Eine Formation dreht sich als Ganzes um einen Punkt: um ihre Mitte (Drehung) oder um ein Ende (Schwenk) | `PathStyle.turn` |
 | **Laufweg** | Weg von der Aufstellung in Bild *n* zur Aufstellung in Bild *n+1* | `Path` |
 | **Raster** | Die Schlagzeitpunkte der Musik | `BeatGrid` |
+| **Lied, Teil** | Ein Lied des Medleys, z. B. „Lied 4: Toi, toi, toi“, optional gegliedert in Teile wie „Strophe“ oder „Refrain“ | `Song`, `SongPart` |
+| **Zusammenfassung** | Die Zeiten eines Lieds oder Teils in 16ern, z. B. `16/16/12`. Basis 16, auch wenn beim Tanzen bis 8 gezählt wird | `summary` |
 | **Vorlauf** | Zeiten, die die Musik vor dem gewählten Startbild anläuft | `preRoll` |
 
 ## 5. Fachliches Kernmodell
@@ -75,10 +85,11 @@ Bild 7 · 16 Zeiten                          Bild 8 · 8 Zeiten
 ✕   2 1/4 Dreh · 6 BeinSchw · 8 Marsch  (16/16)
 ```
 
-- Ein Bild beschreibt die **Startaufstellung** und was jede Gruppe in den Zeiten des Bildes tut.
+- Ein Bild beschreibt die **Startaufstellung** und was jede Spur (Alle, Verbund, Gruppe oder Teil) in den Zeiten des Bildes tut.
 - Die **Laufwege** führen zur Aufstellung des nächsten Bildes. Sie liegen **innerhalb** der Zeiten des Bildes, und zwar in den Aktionen, die als *bewegend* markiert sind (z. B. `8 Marsch`).
 - **Bewegung läuft nur während bewegender Aktionen.** Beispiel `4 Marsch · 2 1/2 Dreh · 2 Marsch`: Die Gruppe läuft 4 Zeiten, dreht 2 Zeiten am Platz und läuft 2 Zeiten weiter. Die Vorschau-Animation bildet das genau so ab.
-- Beim Anlegen ist ein neues Bild eine **Kopie des vorherigen**. Verschiebt der Trainer im neuen Bild Formationen, entstehen die Laufwege im vorherigen Bild automatisch.
+- Beim Anlegen ist ein neues Bild eine **Kopie des vorherigen**: Aufstellung, Blickrichtungen und **Spuraufteilung** (Verbünde und Teile) werden übernommen, die Spuren sind leer. Verschiebt oder dreht der Trainer im neuen Bild Formationen, entstehen die Laufwege im vorherigen Bild automatisch.
+- **Ein Bild hat genau eine Startaufstellung.** Laufen Tänzer innerhalb eines Bildes hin und zurück („6 Marsch nach außen | 2 drehen | 6 Marsch nach innen“), wird das Bild in **zwei Bilder** geteilt (8 + 8). Dafür gibt es „Bild teilen nach Zeit …“. Zwischenaufstellungen innerhalb eines Bildes gibt es bewusst nicht.
 
 ### 5.2 Datenmodell (vereinfacht)
 
@@ -112,7 +123,7 @@ interface Frame {
   id: Id;
   counts: number;             // ganze Zeiten, meist 8 oder 16
   formations: Formation[];    // Startaufstellung; jeder Tänzer genau 1×
-  tracks: Track[];            // Aktionen; jede Gruppe in genau 1 Track
+  tracks: Track[];            // Aktionen; jeder Tänzer in genau 1 Track
   pathStyle: PathStyle[];     // Darstellung der Laufwege ins nächste Bild
   countSplit?: number[];      // Zählweise: Längen der Zählabschnitte, z. B. [8,8], [16], [4,12]; fehlt = automatisch
   note?: string;              // Trainer-Notiz
@@ -129,17 +140,29 @@ interface Formation {
   members: DancerRef[];       // Reihenfolge entlang der Form; gemischte Gruppen erlaubt
   pattern?: 'alternate' | 'blocks' | 'custom';
   overrides: Record<string, { x: number; y: number }>; // einzeln verschobene Positionen
+  facing: number;             // Blickrichtung in Grad, 0 = nach vorne (Publikum), 180 = abgewandt
+  facingOverrides: Record<string, number>; // einzelne Tänzer mit eigener Blickrichtung
 }
 
 interface Track {
-  groupIds: Id[];             // ["g1"] oder beliebiger Verbund ["g1","g3"], auch alle Gruppen
-  blocks: ActionBlock[];      // ein neues Bild übernimmt die Verbünde des vorherigen
+  groupIds: Id[];             // ["g1"] oder beliebiger Verbund ["g1","g3"], alle Gruppen = "Alle"
+  members?: DancerRef[];      // nur bei Teilen einer Gruppe ("● linke Reihe"); fehlt = ganze Gruppen
+  label?: string;             // Name des Teils: "linke Reihe", "Innerer Kreis", "Eine"
+  blocks: (ActionBlock | RepeatBlock)[]; // ein neues Bild übernimmt die Spuraufteilung des vorherigen
 }
 
 interface ActionBlock {
   term: string;               // Begriff wie geschrieben: "Präs" (Schlüssel normalisiert: "präs")
+  detail?: string;            // Zusatz: "nach vorne", "zur Mitte (auf Lücke)" – wird nicht als Baustein gelernt
   counts: number;             // ganze Zeiten
   moves: boolean;             // Laufweg in diesen Zeiten (Vorgabe aus RoleAction, pro Block änderbar)
+}
+// Sonderbegriff "Lauf": im Verbund steht er für die übliche Fortbewegung jeder Rolle (O: Hüpf, R: Marsch).
+
+interface RepeatBlock {
+  repeat: number;             // ×2, ×3 …
+  mirrored?: boolean;         // "mit rechts beginnen" / gespiegelt
+  blocks: ActionBlock[];      // zählt repeat × Summe der Zeiten
 }
 
 // --- Rollen und Kataloge: vereinsweit, pflegen sich beim Schreiben selbst (siehe 6.5)
@@ -164,17 +187,36 @@ interface PathStyle {
   formationId: Id;
   mode: 'group' | 'individual';     // ein Pfeil pro Gruppe oder Einzelwege
   bend?: { dx: number; dy: number };  // Krümmung (ein Kontrollpunkt)
+  turn?: {                            // Drehung/Schwenk statt kürzester Wege (siehe 6.6)
+    pivot: 'center' | 'start' | 'end' | { x: number; y: number };
+    angle: number;                    // Grad, positiv = im Uhrzeigersinn, auch > 180
+  };
 }
 
 interface Music {
   fileId: Id; fileName: string; durationSec: number; version: number;
   beats: number[];            // Schlagzeitpunkte in Sekunden – die Wahrheit
   sections: { startBeat: number; bpm: number }[]; // nur für die Bearbeitung
+  songs: Song[];              // Lieder des Medleys, geordnet
   firstCountBeat: number;     // Index des Schlags, auf dem Bild 1 / Zeit 1 liegt
+}
+
+interface Song {
+  name: string;               // "Lied 4: Toi, toi, toi"
+  startBeat: number;          // Liedgrenze, von der Analyse vorgeschlagen, vom Trainer bestätigt
+  parts: SongPart[];          // leer = Lied ohne Teile, dann gilt summary am Lied
+  summary: number[];          // Zusammenfassung in 16ern, z. B. [16, 16, 12]; mit Teilen = Teile hintereinander
+  summaryEdited: boolean;     // false = Vorschlag der App, true = vom Trainer angepasst
+}
+
+interface SongPart {
+  name: string;               // "Instr.", "Strophe", "Refr.", "Na, Na"
+  startCount: number;         // Zeit im Lied, an der der Teil beginnt
+  summary: number[];
 }
 ```
 
-**Zeitberechnung:** Bild *i* beginnt bei der globalen Zeit `C_i = Σ counts(Bild 1 … i−1)`. Seine Startzeit in der Musik ist `beats[firstCountBeat + C_i]`. Ändert sich die Zeitenanzahl eines Bildes, verschieben sich alle folgenden Bilder automatisch.
+**Zeitberechnung:** Jeder Schlag im Raster ist eine Zeit (wird anders gezählt, als die Musik schlägt, korrigiert man das Raster mit „doppelt / halb so schnell“, siehe 6.7). Bild *i* beginnt bei der globalen Zeit `C_i = Σ counts(Bild 1 … i−1)`. Seine Startzeit in der Musik ist `beats[firstCountBeat + C_i]`. Ändert sich die Zeitenanzahl eines Bildes, verschieben sich alle folgenden Bilder automatisch.
 
 ### 5.3 Prüfregeln (Hinweise, nie Sperren)
 
@@ -184,6 +226,9 @@ interface Music {
 | Gruppe hat keine Aktion | „✕ – noch keine Aktion“ |
 | Positionen ändern sich zum nächsten Bild, aber keine bewegende Aktion | „● – läuft ins nächste Bild, aber keine Lauf-Aktion“ |
 | Laufwege verschiedener Gruppen kreuzen sich zur selben Zeit | „● und ✕ kreuzen sich in Zeit 5–8. Abstand prüfen.“ (Hinweis, kein Fehler: Durchmärsche sind gewollt) |
+| Tänzer ohne Spur oder in zwei Spuren | „2 Tänzer von R haben keine Aktion“ |
+| Blickrichtung ändert sich zum nächsten Bild, aber die Spur hat keine Drehen-Aktion | „○ – schaut im nächsten Bild nach außen. `2 drehen` ergänzen?“ |
+| Bewegende Aktion, aber keine Position ändert sich (z. B. hin und zurück) | „● – 12 Marsch, aber kein Laufweg. Bild teilen?“ |
 
 Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer Liste „Offene Hinweise (3)“. Auch ein Bild mit Hinweisen kann gespeichert, gedruckt und trainiert werden.
 
@@ -250,7 +295,8 @@ Wie laut gezählt wird, hängt vom Bild ab:
 - **Direkt im Blatt bearbeiten:** Ein Klick auf ein Bild macht es aktiv (Rahmen in Signalfarbe), rechts öffnet sich der Inspektor. Mit **Fokus** (Doppelklick oder `F`) füllt ein einzelnes Bild das Blatt, für Feinarbeit bei 30 Tänzern.
 - **Navigation:** Seiten vor und zurück, Seitenübersicht, Zeitleiste (Klick springt zum Bild), Tastatur (`←` `→` Bild, `Bild↑` `Bild↓` Seite).
 - **Bild einfügen:** `+` nach dem aktiven Bild oder `N` legt eine Kopie des vorherigen Bildes an. Alternativ „Mit KI beschreiben“ (siehe 6.8). Bilder lassen sich verschieben, duplizieren und löschen (mit Rückgängig).
-- **Zeiten pro Bild:** Schnellwahl `8` `16` `4` `2` `32` und freie Eingabe. Daneben die **Zählweise** (siehe 5.4). Bilder haben keine Titel, der Kopf zeigt nur Nummer, Zeiten und gegebenenfalls die Zählweise.
+- **Zeiten pro Bild:** Schnellwahl `8` `16` `12` `4` `2` `32` und freie Eingabe (im Papier-Tanz kommen auch 20, 24 und 40 vor). Daneben die **Zählweise** (siehe 5.4). Bilder haben keine Titel, der Kopf zeigt nur Nummer, Zeiten und gegebenenfalls die Zählweise.
+- **Bild teilen:** „Bild teilen nach Zeit …“ macht aus einem Bild zwei. Die Spuren werden an dieser Zeit getrennt, das zweite Bild startet mit der Aufstellung des ersten.
 - **Tablet hochkant:** 2 Bilder untereinander statt 2 × 2. Quer gilt das Standard-Blatt.
 
 ### 6.4 Formationen und Positionen
@@ -259,7 +305,9 @@ Wie laut gezählt wird, hängt vom Bild ab:
 - **Ablauf:** Gruppe(n) wählen, Form wählen, die Tänzer werden gleichmäßig verteilt. Danach Form ziehen, drehen (rastet bei 15° ein) und Länge oder Radius ändern. Einzelne Tänzer lassen sich nachträglich verschieben.
 - **Gemischte Formationen:** Eine Formation kann mehrere Gruppen enthalten. Muster: *abwechselnd* (●○●○), *blockweise* (●●●○○○) oder *eigene Reihenfolge*. Jede Position behält ihr Gruppensymbol.
 - **Ausrichtungshilfen:** keine dauerhaften Raster. Beim Ziehen erscheinen kurz Hilfslinien (Bühnenmitte, Kanten anderer Formationen).
-- **Zuordnung beim Formationswechsel:** Wer wohin läuft, ordnet die App automatisch so zu, dass die Wege möglichst kurz sind (innerhalb der Gruppe). Positionen lassen sich manuell tauschen.
+- **Zuordnung beim Formationswechsel:** Wer wohin läuft, ordnet die App automatisch so zu, dass die Wege möglichst kurz sind (innerhalb der Gruppe). Positionen lassen sich manuell tauschen. Ausnahme: Drehungen und Schwenks (siehe unten).
+- **Drehen und Schwenken:** Dreht der Trainer eine Formation am Drehgriff, ist das eine **Drehung** (Drehpunkt in der Mitte) oder ein **Schwenk** (Drehpunkt an einem Ende, umschaltbar am Griff). Die App merkt sich Drehpunkt und Winkel (`PathStyle.turn`). Jeder Tänzer behält seinen Platz in der Form und läuft auf einem Kreisbogen. Auch halbe und ganze Drehungen sind möglich: Die Winkelanzeige zählt über 180° hinaus weiter („Stern halbe Drehung“, „Platzwechsel der Reihen“, „1/4 Drehung Päckchen“).
+- **Blickrichtung:** Jede Formation hat eine Blickrichtung, Standard ist nach vorne. Sie lässt sich in 45°-Schritten einstellen (vorne, außen, innen, hinten, zur Mitte …), einzelne Tänzer können abweichen. Jedes Symbol zeigt sie mit einer kleinen Kerbe. Ändert eine Drehung die Lage der Formation, drehen sich die Blickrichtungen mit.
 
 ### 6.5 Aktionen, Rollen und Kataloge
 
@@ -277,9 +325,14 @@ Gruppe ✕ Reserve    ─▶ Rolle Reserve    ─▶ + BeinSchw
 
 **Schreiben**
 
-- Pro Bild gibt es **eine Spur je Gruppe oder Gruppenverbund** (siehe „Gruppen zusammenfassen“ weiter unten).
+- **Spuren:** Eine Spur gilt für eine Auswahl von Tänzern. Das kann **Alle** sein, ein Gruppenverbund (siehe „Gruppen zusammenfassen“ weiter unten), eine Gruppe oder ein **Teil** („● linke Reihe“, „R 2. Reihe“, „Innerer Kreis“, „Eine“). Einen Teil wählt man auf der Bühne aus (Formation, Reihe, Einzelne) und gibt ihm einen kurzen Namen. Spuren lassen sich mit einem Tipp teilen (Alle → je Gruppe → Teil) und zusammenziehen. Jeder Tänzer ist in genau einer Spur.
+- **Standard-Aufteilung:** Ein neues Bild übernimmt die Spuraufteilung des vorherigen Bildes. Das erste Bild eines Tanzes beginnt mit **einer Spur pro Gruppe**. Das ist der neutrale Ausgangspunkt, aus dem man mit einem Tipp „Alle“ oder einen Verbund zusammenzieht. *Begründung für die Übernahme:* Im Papier-Tanz passt eine Spur pro Gruppe nur in 2 von 28 Bildern. Häufig sind „● | O+R“ (12) und „Alle“ (7), außerdem Teile wie Reihen oder Hälften (7). Aufeinanderfolgende Bilder haben fast immer dieselbe Aufteilung.
 - **Tippen wie auf Papier:** „2 gewschw 6 präs“ wird zu `2 GewSchw` `6 Präs`. Ab dem ersten Buchstaben erscheint eine Vorschlagsliste aus dem Katalog der Rolle. Sie sucht in Kürzel, langem Namen und Tippvarianten und verträgt Tippfehler. `Enter` übernimmt.
 - **Zahlen im Begriff:** Die erste Zahl ist immer die Anzahl Zeiten, Brüche gehören zum Begriff. „2 1/4 dreh“ heißt 2 Zeiten Vierteldrehung. Darum steht die Anzahl Zeiten überall fett und in Mono-Schrift (**2** 1/4 Dreh).
+- **Ohne Zahl** nimmt ein Baustein die restlichen Zeiten des Bildes: „Alle Vorwärtsschwenk zu den Seiten“ in einem 8er-Bild wird zu `8 Vorwärtsschwenk zu den Seiten`.
+- **Begriff + Zusatz:** „14 marsch zur mitte“ wird zu `14 Marsch` mit dem Zusatz *zur Mitte*. Gelernt wird nur der Begriff, damit der Katalog klein bleibt. Für den Zusatz gibt es eigene Vorschläge (nach vorne, nach hinten, rückwärts, zur Mitte, nach außen, nach innen, zu den Seiten, auf der Stelle), auch sie lernen aus der Nutzung. Umgangssprachliche Ziele wie „zum Elferrat“ (= nach hinten) bleiben einfach Text, die Bühne bekommt dafür keine Marke. **„auf der Stelle“** schaltet *bewegt sich* für diesen Baustein aus. Für den häufigsten Fall gibt es zusätzlich den eigenen Baustein `MrschSt`.
+- **Wiederholung:** Bausteine markieren → „Wiederholen ×2“. Angezeigt und gedruckt wird `||: 2 GewSchl · 2 Steh · 4 GewSchl :|| ×2`, gezählt werden 16 Zeiten. Optional mit dem Zusatz *gespiegelt* („mit rechts beginnen“). Im Training läuft die Markierung durch die Wiederholung, darunter steht „1. / 2. Mal“.
+- **Baustein „Lauf“ im Verbund:** In einem Verbund aus Rollen mit verschiedener Fortbewegung steht `Lauf` für die übliche Fortbewegung jeder Rolle. Angezeigt wird zum Beispiel `14 Hüpf/Marsch nach vorne`: eine Spur, ein Weg.
 - **Baustein-Leiste:** die 8 häufigsten Bausteine aus dem Katalog der Rolle und den gemeinsamen Bausteinen, als Tasten. Ein Tipp hängt den Baustein mit seinen üblichen Zeiten an. Fehlen weniger Zeiten, nimmt er genau den Rest (bei `6/8` wird ein Tipp auf `Marsch` zu `2 Marsch`). Kennt die App noch keine üblichen Zeiten, nimmt sie den Rest des Bildes.
 - **Gruppenverbund aus verschiedenen Rollen** (z. B. Mariechen und Grenadiere): Zuerst kommen die gemeinsamen Bausteine, dann die der beteiligten Rollen mit Kennzeichen der Rolle.
 - **Zeiten ändern** per Stepper oder Zahl. Die Summe der Spur steht daneben: `16/16` neutral, `6/8 ⚠` als Hinweis.
@@ -291,7 +344,7 @@ Gruppe ✕ Reserve    ─▶ Rolle Reserve    ─▶ + BeinSchw
 | Neuer Begriff | Was nicht im Katalog steht, ist sofort als **Freitext** nutzbar (gestrichelter Baustein). Keine Rückfrage, kein Dialog. |
 | Zweite Verwendung | Benutzt jemand denselben Begriff ein zweites Mal **in derselben Rolle**, wird er automatisch Baustein dieser Rolle. Ein kurzer Hinweis meldet „Neu bei Grenadiere: Salut“ mit `Rückgängig`. |
 | Übliche Zeiten | Die Zeitenanzahl, die in dieser Rolle am häufigsten für den Baustein benutzt wurde. |
-| Bewegt sich | Beim ersten Mal geschätzt (Wortstämme wie *marsch, lauf, hüpf, geh, schritt*). Stellt ein Trainer es an einem Baustein um, merkt sich die Rolle das. |
+| Bewegt sich | Beim ersten Mal geschätzt (Wortstämme wie *marsch, lauf, hüpf, geh, schritt, schwenk*). Der Zusatz „auf der Stelle“ hebt das für den einzelnen Baustein auf. Stellt ein Trainer es an einem Baustein um, merkt sich die Rolle das. |
 | Reihenfolge | Häufigkeit in dieser Rolle, die letzten Tänze zählen mehr. Angeheftete Bausteine stehen immer vorn. |
 | Übliche Fortbewegung | Der häufigste bewegende Baustein der Rolle (Mariechen: `Marsch` oder `Hüpf`, Grenadiere und Reserve: `Marsch`). Den bietet der Hinweis „läuft ohne Lauf-Aktion“ direkt an: `2 Hüpf ergänzen`. |
 | Doppelte vermeiden | Ähnliche Schreibweisen („Stipp“) bekommen „Meinst du Stip?“. Gleicher Text ist derselbe Begriff, auch wenn zwei Geräte offline arbeiten. |
@@ -358,6 +411,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
   3. **Formiert sich eine Gruppe am Platz um** (ihr Schwerpunkt bewegt sich weniger als 40 % des durchschnittlichen Einzelwegs), sagt ein Pfeil nichts mehr aus. Dann zeigt die App **Einzelwege**.
 - **Manuell:** pro Formation fest auf *Pfeil pro Gruppe* oder *Einzelwege* stellen. Die Referenz-Umsetzung steht in `design-system/stage.js`.
 - **Form des Weges:** gerade oder gebogen (ein Anfasser in der Pfeilmitte).
+- **Drehungen und Schwenks** (`PathStyle.turn`): Hier gilt **nicht** die Zuordnung auf kürzeste Wege. Jeder Tänzer bleibt auf seinem Platz in der Form, die Wege sind Kreisbögen um den Drehpunkt. Dargestellt wird ein gebogener Pfeil um den Drehpunkt mit Winkelangabe (½, ¼, 180°). Bei Teildrehungen wählt die Automatik Einzelbögen. *Abweichung von `stage.js`:* `assignShortest` würde eine 180°-Drehung eines symmetrischen Sterns auf „niemand läuft“ abbilden, und ein einzelner Kontrollpunkt kann keinen Halbkreis zeichnen. Die Referenz muss um `turn` ergänzt werden.
 - **Zeitlicher Verlauf** über die bewegenden Aktionen (siehe 5.1). **Bewegungs-Vorschau:** Abspielen im Editor animiert die Symbole entlang der Wege.
 
 ### 6.7 Musik und Raster
@@ -374,8 +428,10 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
    - **Tempo-Abschnitt:** „Ab hier neues Tempo“ an einem Schlag setzen, BPM per Mittippen oder Zahl.
    - **Feinjustage:** ganzes Raster oder Abschnitt um ±10 ms verschieben.
    - **Kontroll-Klick:** Beim Abspielen ein Klick auf jeder Zeit (nur zum Prüfen des Rasters).
-4. **Zeitleiste:** Bilder liegen als Blöcke über der Wellenform. Die Breite entspricht der Länge in der Musik, jedes Bild zeigt seine Startzeit (mm:ss).
-5. **Neue Musikversion:** Datei ersetzen, die Analyse läuft neu, „Bild 1 beginnt hier“ wird geprüft. Bilder und Aktionen bleiben unverändert.
+4. **Lieder:** Das Medley ist eine fertig geschnittene Datei. Die Analyse schlägt Liedgrenzen vor (Tempowechsel, Pausen, Wechsel im Klang). Der Trainer bestätigt oder verschiebt sie im Raster-Editor und gibt die Namen ein. Ohne Musik gibt es keine Lieder.
+5. **Zusammenfassung eines Lieds (16er):** Die App füllt sie aus der Musik vor, der Trainer passt sie an (siehe 6.12).
+6. **Zeitleiste:** Bilder liegen als Blöcke über der Wellenform. Die Breite entspricht der Länge in der Musik, jedes Bild zeigt seine Startzeit (mm:ss). Darüber liegt ein Band mit den Liedern und Teilen. Die 16er der Zusammenfassung sind feine Striche, an denen Bildgrenzen beim Ziehen einrasten. Ein Klick auf ein Lied öffnet den Lied-Bereich im Inspektor.
+7. **Neue Musikversion:** Datei ersetzen, die Analyse läuft neu, „Bild 1 beginnt hier“ und die Liedgrenzen werden geprüft. Bilder, Aktionen und angepasste Zusammenfassungen bleiben unverändert. Passt eine angepasste Zusammenfassung nicht mehr zur neuen Länge, erscheint ein Hinweis im Lied-Bereich.
 
 ### 6.8 KI-Assistent: Bild beschreiben
 
@@ -440,10 +496,45 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 - **Format:** A4 quer, 2 × 2, identisch mit der Seitenansicht, in Schwarz-Weiß optimiert.
 - **Optionen:** alle Seiten oder Bereich, mit/ohne Laufwege, mit/ohne Notizen.
+- **Liedmarke:** Beginnt in einem Bild ein Lied, steht über dem Bild eine schmale Zeile „Lied 4: Toi, toi, toi · 1:44“. Die Zusammenfassung wird nicht gedruckt.
+- **Wiederholungen** werden als `||: … :||` gedruckt, die Blickrichtung als Kerbe am Symbol.
 - **Fußzeile:** Tanzname · Legende der Gruppen (● Mariechen · ○ Grenadiere · ✕ Reserve) · Stand (Datum, Version) · Seite x / y.
 - **Optional:** eine Schlussseite mit den Kürzeln aller beteiligten Rollen.
 - **Umsetzung:** Druck-Stylesheet (`@page A4 landscape`), dieselben SVG-Komponenten wie am Bildschirm. Ausgabe über den Druckdialog bzw. „Als PDF sichern“.
 - Gleiche Seitenaufteilung in App und Druck, damit „Seite 4, Bild 14“ im Team auf beiden Wegen dasselbe meint.
+
+### 6.12 Lied-Bereich: Zusammenfassung und verplante Zeiten
+
+**Zweck:** Der Trainer sieht beim Schreiben, wie ein Lied aufgebaut ist und ob alle seine Zeiten verplant sind. Die Zusammenfassung ist keine Notiz, sondern ein Teil des Lieds im Datenmodell (`Song.summary`). Die App füllt sie vor, der Trainer passt sie an.
+
+**Wo:**
+- **Inspektor, Bereich „Lied“:** Er zeigt das Lied des aktiven Bildes, also das Lied, in dem das Bild beginnt. Hier wird die Zusammenfassung angezeigt und bearbeitet.
+- **Zeitleiste:** Band mit Liedern und Teilen, 16er-Striche, Bilder darunter (6.7).
+- **Blatt und Druck:** nur die Liedmarke (6.11). **Training:** nichts davon.
+
+```
+┌ Lied ─────────────────────────────────────────┐
+│ Lied 4: Toi, toi, toi          1:44 – 2:49    │
+│ 152 Zeiten · 140 verplant · 12 frei           │
+│ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯       │
+│ Instr.    [16][16][12]                        │
+│ Strophe   [16][16]                            │
+│ Refr.     [16][16][16][16][12]                │
+│ + Teil       Vorschlag der Musik ↺            │
+└───────────────────────────────────────────────┘
+```
+
+**Vorschlag der App:**
+1. Die Länge des Lieds in Zeiten kommt aus dem Raster: Zeiten zwischen dieser und der nächsten Liedgrenze. Wird ein Lied langsamer gezählt, als die Musik schlägt, ist das schon im Raster korrigiert („doppelt / halb so schnell“).
+2. Erkennt die Analyse Wechsel im Lied (z. B. Strophe → Refrain), schlägt sie Teile vor, ohne Namen („Teil 1“, „Teil 2“).
+3. Jedes Lied bzw. jeder Teil wird in 16er zerlegt. Ein Rest unter 8 kommt zum letzten 16er (84 → `16/16/16/16/20`), ab 8 bleibt er eine eigene Zahl (44 → `16/16/12`). Die Reihenfolge ist ein Vorschlag, der Trainer darf den Rest an eine andere Stelle schieben.
+
+**Anpassen:** Tippen auf eine Zahl ändert sie (Stepper). Zahlen lassen sich teilen, zusammenfassen und verschieben, Teile benennen, hinzufügen und löschen. „Vorschlag der Musik“ stellt den Vorschlag wieder her. Eine angepasste Zusammenfassung wird nie automatisch überschrieben.
+
+**Prüfen (pro Lied, als Hinweis, nie als Sperre):**
+- **Verplant** sind die Zeiten des Lieds, die von Bildern belegt sind, gemessen an der Position in der Musik. Ragt ein Bild in das nächste Lied, ist das erlaubt und erzeugt keinen Hinweis.
+- Anzeige im Lied-Bereich: „140 von 152 Zeiten verplant · 12 frei“. Das letzte Lied zeigt am Ende des Tanzes „Musik läuft nach dem letzten Bild noch 12 Zeiten“.
+- Ergibt die Zusammenfassung nicht die Länge des Lieds aus der Musik: „Zusammenfassung: 148, Musik: 152 Zeiten“.
 
 ## 7. Bildschirme (Informationsarchitektur)
 
@@ -464,6 +555,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Thema | Warum später |
 |---|---|
 | Papier-Scan mit KI-Auswertung | Laut Interview erst nach dem MVP. Der Druck ist die Grundlage dafür. |
+| Zeichnen mit Apple Pencil (Bild skizzieren, App übersetzt) | Machbar als PWA, braucht aber eine eigene Erkennung und einen Latenz-Test. Nutzt denselben Übersetzer wie der Papier-Scan. Siehe 13. |
 | Tänzer-Zugang, „Wo stehe ich?“ | Braucht Personenbezug. Bewusst keine Personendaten im MVP. |
 | Langsamer abspielen, Schleife, Metronom | Im Interview nicht priorisiert |
 | Schautanz, Solo, Paartanz | Fokus Gardetanz |
@@ -473,7 +565,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Bildtitel (z. B. „Diagonale“) | Nicht benötigt, Nummer und Zeiten reichen |
 | Rechte pro Garde | Zum Start dürfen alle Trainer alles. Kommt bei Bedarf später |
 | KI räumt Kataloge auf (Synonyme erkennen, z. B. „Gewehr hoch“ = „Präs“) | Erst nötig, wenn Kataloge groß werden. Zusammenführen geht im MVP von Hand am Baustein |
-| Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start |
+| Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start. Häufige Paare wie „14 Marsch \| 2 drehen“ (im Papier-Tanz etwa 8×) sind schon schnell erfasst: tippen „14 marsch 2 1/4 dreh“, oder in der Baustein-Leiste erst die Drehung (2), dann `Marsch` (nimmt den Rest). Fehlt die Drehung, bietet der Blickrichtungs-Hinweis „2 drehen ergänzen“ an. |
 | Mehrere Vereine, Abo | Nur der eigene Verein |
 | Streaming-Dienste als Musikquelle | Synchronisation braucht die Datei |
 
@@ -528,6 +620,45 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | **M4 Training** | Trainingsmodus, Vorlauf, Audio-Verzögerung, Bearbeiten-Modus, Offline-Status | **Einsatz in der Halle** |
 | **M5 KI** | KI-Assistent mit Rückfragen und Vorschau | Schneller neue Bilder |
 
-## 13. Offene Fragen
+## 13. Nach dem MVP: Zeichnen mit Apple Pencil
 
-Alle Fragen aus dem Konzept sind beantwortet (Stand 19.11.2026). Die Antworten stehen im [Interview-Protokoll](01-interview.md) unter „Nachtrag“. Neue Fragen entstehen voraussichtlich bei den Spikes in M0 (Musik, Audio-Latenz, Offline auf dem iPhone, Anmeldung).
+**Ziel:** Am iPad ein Bild zeichnen **wie auf Papier**. Der Trainer zeichnet Symbole (●, ○, R), Pfeile und Text („14 Marsch nach vorne | 2 drehen“) direkt auf die Bühne und darunter. Die App übersetzt das Gezeichnete in Formationen, Laufwege und Spuren.
+
+### 13.1 Ist das als PWA realistisch? Ja, mit Einschränkungen
+
+| Baustein | Stand in Safari/iPadOS | Bewertung |
+|---|---|---|
+| Stift erkennen | Pointer Events mit `pointerType: "pen"`, Druck und Neigung gibt es seit iOS 10.3 | ✓ Gut |
+| Flüssige Linien | `getCoalescedEvents()` (die 240-Hz-Abtastung des Stifts) laut Berichten erst ab iOS 18.2. Vorher sind Kurven eckig | ✓ Ab iOS 18.2, im Spike prüfen |
+| Handballen ignorieren | Während der Stift zeichnet, verwirft die App Berührungen mit `pointerType: "touch"`. Safari liefert Stift und Finger offenbar nicht gleichzeitig | ✓ Machbar. Finger = Verschieben/Zoomen, Stift = Zeichnen |
+| Latenz | Höher als in nativen Apps mit PencilKit (dort sagt das System den Strich voraus). Für Skizzen reicht das, zum Schönschreiben nicht | ⚠ Spike |
+| Doppeltippen, Drücken (Pencil Pro), Drehen am Stift, Schweben | Für Web-Apps nicht oder nur eingeschränkt verfügbar | ✗ Nicht einplanen. Radierer und Rückgängig als Tasten |
+| Handschrift erkennen | Die Handwriting Recognition API gibt es nur in Chromium, nicht in Safari | ✗ Eigene Erkennung nötig (13.2) |
+| Text in Eingabefeldern | iPadOS-„Handschrift“ (Scribble) wandelt Handschrift in normalen Textfeldern selbst um, auf dem Gerät | ✓ Vermutlich, im Spike prüfen |
+
+**Fazit:** Das Zeichnen selbst geht gut in einer PWA. Das Übersetzen muss die App selbst leisten. Reicht die Latenz nicht, wäre ein nativer Rahmen (z. B. Capacitor mit PencilKit) der Ausweg. Der Rest der App bliebe dann gleich.
+
+### 13.2 Übersetzen: zweistufig, wie beim KI-Assistenten
+
+1. **Sofort auf dem Gerät (offline):** Einfache Formen werden direkt erkannt, mit einem kleinen Strich-Erkenner (z. B. aus der „$-Familie“, ohne Lernen):
+   - Punkt, Kreis, Buchstabe → Tänzer der passenden Gruppe (Symbolform wie in 6.2)
+   - Mehrere Tänzer nebeneinander → Formation. Die Form wird angepasst: Linie, Bogen, Kreis, Block, Keil, sonst frei.
+   - Pfeil → Laufweg. Ein gebogener Pfeil um eine Formation → Drehung/Schwenk (`turn`).
+   - ↔ → Hinweis „hin und zurück: Bild teilen?“
+   - Das Erkannte ersetzt die Striche sofort durch saubere Symbole. Ein Tipp auf „Strich zeigen“ holt die Zeichnung zurück.
+2. **Text und Unklares über die KI (online):** Die Striche unter der Bühne gehen als Bild und als Strichdaten an dieselbe Server-Funktion wie der KI-Assistent (6.8). Sie liefert Spuren mit Bausteinen aus den Katalogen der Rollen, mit Zusatz, Wiederholung und „Alle“/Verbund/Teil. Ohne Netz bleibt der Text als Notiz-Zeichnung am Bild und wird später übersetzt.
+3. **Übernehmen wie bei der KI:** Das Ergebnis erscheint als Vorschau mit markierten Annahmen: `Übernehmen` · `Anders versuchen` · `Verwerfen`. Nichts wird ungefragt übernommen.
+
+**Gemeinsamer Übersetzer mit dem Papier-Scan:** Ein gescanntes Blatt ist dasselbe Problem ohne Strichdaten. Beide nutzen dieselbe Übersetzung (Bild → Formationen, Laufwege, Spuren). Den Pencil zuerst zu bauen ist leichter, weil die Strichreihenfolge und die Strichdaten die Erkennung deutlich einfacher machen. Der Scan profitiert danach davon.
+
+### 13.3 Spike vor der Umsetzung
+
+| Risiko | Prüfung | Erfolgskriterium |
+|---|---|---|
+| Latenz und eckige Linien in der installierten PWA | iPad mit Pencil 2 und Pencil Pro, iPadOS ≥ 18.2, Zeichenfläche mit Coalesced Events | Zeichnen fühlt sich wie Stift auf Papier an (Trainerurteil), keine sichtbaren Ecken |
+| Erkennung von ● ○ R und Pfeilen | 10 Bilder aus dem Papier-Tanz nachzeichnen | ≥ 90 % der Tänzer und Pfeile richtig, Rest in < 30 s korrigiert |
+| Erkennung der Aktionen per KI | 20 Aktionsblöcke aus dem Papier-Tanz | ≥ 80 % ohne Korrektur übernehmbar |
+
+## 14. Offene Fragen
+
+Alle Fragen aus dem Konzept sind beantwortet (Stand 22.11.2026). Die Antworten stehen im [Interview-Protokoll](01-interview.md) unter „Nachtrag“ und in den Runden 9 und 10. Neue Fragen entstehen voraussichtlich bei den Spikes in M0 (Musik, Audio-Latenz, Offline auf dem iPhone, Anmeldung).

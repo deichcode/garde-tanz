@@ -83,6 +83,7 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 - **Größe:** Durchmesser ≈ 3 % der Bühnenbreite, nie unter 10 px am Bildschirm.
 - **Strich:** Ring und Kreuz ≈ 24 % des Durchmessers, damit alle drei gleich schwer wirken.
 - **Immer SVG**, nie Schriftzeichen, damit es auf jedem Gerät gleich aussieht.
+- **Blickrichtung:** eine kleine Kerbe am Symbolrand in Blickrichtung (Tinte, Länge ≈ 35 % des Durchmessers). Bei „nach vorne“ zeigt sie nach unten, zum Publikum. Beim Buchstaben-Symbol sitzt sie außerhalb des Buchstabens.
 - **Gruppenverbund:** In gemischten Formationen behält jede Position ihr Symbol (abwechselnd ●○●○ oder blockweise ●●●○○○).
 - Aktionszeilen beginnen mit denselben Symbolen. Gruppen werden nie nur über ihren Namen genannt.
 
@@ -92,7 +93,7 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 - **Kein Raster.** Hilfslinien (Bühnenmitte, Kanten anderer Formationen) erscheinen nur beim Ziehen.
 - **Laufwege** sind eine Stufe leiser als Symbole (`--gm-path`), mit Pfeilspitze am Ziel. Einzelwege sind dünner.
 - **Laufweg-Automatik** in drei Stufen (Konzept 6.6): Pfeil pro Verbund → Pfeil pro Gruppe, wenn sich der Verbund trennt → Einzelwege, wenn sich eine Gruppe am Platz umformiert.
-- **Zuordnung:** Wer wohin läuft, wird auf kürzeste Wege optimiert. Dadurch kreuzen sich die Wege innerhalb einer Gruppe nicht.
+- **Zuordnung:** Wer wohin läuft, wird auf kürzeste Wege optimiert. Dadurch kreuzen sich die Wege innerhalb einer Gruppe nicht. Ausnahme sind **Drehungen und Schwenks**: Dort bleibt jeder Tänzer auf seinem Platz in der Form und läuft auf einem Kreisbogen. Gezeigt wird ein Bogenpfeil um den Drehpunkt (Punkt, `--gm-path`) mit Winkelangabe (¼, ½, 180°).
 - **Auswahl:** gestrichelter Rahmen in Signal-Blau mit Anfassern zum Skalieren und Drehen.
 - **KI-Vorschlag:** das aktuelle Bild gedimmt (30 %), der Vorschlag in Signal-Blau mit gestrichelten Wegen.
 
@@ -106,7 +107,10 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 | Pflege-Menü | `.gm-menu` | Am Baustein: Umbenennen (diese Rolle oder alle), langer Name, übliche Zeiten, bewegt sich, anheften, nicht mehr vorschlagen, zusammenführen. Zeilen 48 px, rechts der aktuelle Wert |
 | Kurzmeldung | `.gm-toast` | Tinte auf Papier invertiert, eine Zeile + `Rückgängig`. Für automatisch Gelerntes („Neu bei Grenadiere: Salut“). Verschwindet nach 6 s, im Training nie |
 | Auswahlliste | `.gm-check` | Für KI-Vorschläge zum Abhaken, z. B. Start-Katalog einer neuen Rolle. Zeile 48 px, Kästchen 22 px in Tinte |
-| Bildkarte | `.gm-frame` | Kopf: Nummer + „16 Zeiten“ + Zählweise, wenn nicht Achter („· 4 + 12“) + Hinweis-Badge. Keine Titel. Bühne. Eine Zeile pro Spur, Anzahl Zeiten fett in Mono (`.gm-track__n`). Summe nur bei Abweichung. `.is-active` = Signal-Rahmen |
+| Bildkarte | `.gm-frame` | Kopf: Nummer + „16 Zeiten“ + Zählweise, wenn nicht Achter („· 4 + 12“) + Hinweis-Badge. Keine Titel. Bühne. Eine Zeile pro Spur, beginnend mit Symbolen und ggf. Teilname („● linke Reihe“, „Alle“), Anzahl Zeiten fett in Mono (`.gm-track__n`). Summe nur bei Abweichung. `.is-active` = Signal-Rahmen. Beginnt ein Lied, steht darüber eine schmale Liedmarke („Lied 4: Toi, toi, toi · 1:44“, `--gm-text-xs`) |
+| Lied-Bereich | im Inspektor | Name, Zeitspanne, „140 von 152 Zeiten verplant · 12 frei“ mit Segmentbalken. Teile als Zeilen, die 16er als Stepper-Bausteine in Mono. „Vorschlag der Musik“ als Ghost-Taste |
+| Zusatz | im `.gm-chip` | Begriff fett, Zusatz in normaler Stärke dahinter: **14 Marsch** zur Mitte |
+| Wiederholung | `.gm-repeat` | Klammert Bausteine mit `‖:` und `:‖` in Tinte, dahinter „×2“ (und „gespiegelt“). Im Training steht darunter „1. / 2. Mal“ |
 | Blatt | `.gm-sheet` | A4 quer, 2 × 2, skaliert über Container-Einheiten, druckt 1:1 (`@page A4 landscape`) |
 | Zählzeit | `.gm-count` | Große Zahl = Zeit im aktuellen Zählabschnitt (Achter, durchgezählt oder aufgeteilt), daneben dessen Länge („/8“, „/16“, „/12“) und der Abschnitt. Segmente pro Zeit, gegliedert nach Zählabschnitten. `--preroll` für den Vorlauf |
 | Stepper | `.gm-stepper` | Für Zeiten. Minus/Plus 48 px (`--l` 64 px). Zahl in Mono |

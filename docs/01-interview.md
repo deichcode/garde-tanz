@@ -99,6 +99,63 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | *Bildtitel? – „Nein.“* | Keine Titel. Der Bild-Kopf zeigt Nummer, Zeiten und gegebenenfalls die Zählweise. |
 | *„Microsoft 365 Gruppe ist erstellt.“* | Einrichtungsschritt „Gruppe anlegen“ erledigt. Offen bis M1: App-Registrierung, Mitglieder und Besitzer, Gäste, Admin-Zustimmung. Konzept 6.1. |
 
+## Runde 9: Abgleich mit einem echten Papier-Tanz (22.11.2026)
+
+**Grundlage:** Garde-Tanz der Session 2026/27, Motto „Vom Dunkel ins Licht“. 8 Seiten (TA_SCHAB.XLS), 29 Bilder (das letzte ist der Platzhalter „Rest 16/16/8“), Medley aus 5 Liedern, 4:00 Min. Drei Gruppen: **●** 6 Tänzer mit Gewehr, **○** 2 Tänzer (hüpfen), **R** 10–12 Tänzer (marschieren, Beine schmeißen). ○ und R treten fast immer zusammen als „O+R“ auf. Gelesen werden die Bilder zeilenweise: oben links, oben rechts, unten links, unten rechts.
+
+**Beobachtungen**
+
+| Beobachtung | Beispiel aus dem Tanz |
+|---|---|
+| Die Lieder und ihre Teile geben die Bilder vor. Die Summe der Zeiten der Bilder eines Lieds stimmt genau. | „Lied 4: Toi, toi, toi · 1:44 (1:05) · Instr. 16/16/12 · Strophe 16/16 · Refr. 16/16/16/16/12“ = Bilder 11–21 = 152 Zeiten |
+| Langsame Zählweise: eine Zeit kann zwei Schlägen der Musik entsprechen | Lied 1 (Trauermarsch): 28 Zeiten in 42 s ≈ 40 pro Minute. Lied 2 „Viva Colonia“: 32 Zeiten in 27 s ≈ 71 pro Minute, die anderen Lieder ≈ 128–148. Eine Schlagerkennung findet dort doppelt so viele Schläge, wie gezählt wird (im Spike M0.1 für Viva Colonia bestätigt) |
+| Bildlängen sind oft keine 8 oder 16 | 12 Zeiten (4×), 20, 24, 32, 40 |
+| Spuren folgen selten genau den Gruppen | Von 28 Bildern: 12 × „● \| O+R“, 7 × „Alle“, 3 × „Alle“ plus eine Teilgruppe, 4 × Teile nach Ort (linke/rechte Reihe, 1./2. Reihe, Hälfte), nur 2 × eine Spur pro Gruppe |
+| Drehungen und Schwenks ganzer Formationen | „Stern halbe Drehung“, „Platzwechsel der Reihen“, „1/4 Drehung (Päckchen)“, „Vorwärtsschwenk zur Mitte“ |
+| Hin und zurück innerhalb eines Bildes | Bilder 18 und 20: „6 Marsch nach außen \| 2 drehen \| 6 Marsch nach innen“ (↔) |
+| Die Blickrichtung kommt ständig vor | „Alle stehen abgewandt“, „2 nach vorne drehen“, „hintere Reihe nach außen drehen“, „Blick zum Publikum“ |
+| Wiederholungszeichen | „\|\|: 1,2 Gewehr schlagen \| 3,4 stehen \| 5–8 Gewehr schlagen :\|\|“, „8 \|\|: :\|\| mit rechts beginnen“ |
+| Eine Aktion ist ein Begriff plus Richtung oder Ziel | „Marsch rückwärts zum Elferrat“, „Marsch zur Mitte (auf Lücke)“, „Marsch auf der Stelle“ |
+| Ein gemeinsamer Weg, zwei Arten sich zu bewegen | „14 O hüpfen / R marschieren → nach vorne“ |
+| Aktion ohne Zahl = das ganze Bild | „Alle Vorwärtsschwenk zu den Seiten“ (8 Zeiten) |
+| Abfolgen wiederholen sich | „14 Marsch \| 2 drehen“ etwa 8× |
+
+**Entscheidungen**
+
+| Frage | Antwort | Konsequenz |
+|---|---|---|
+| Wie bekommen Teile einer Gruppe eigene Aktionen? | **Spur = Auswahl.** Prüfen, ob eine Spur pro Gruppe als Standard taugt. | Eine Spur gilt für eine beliebige Auswahl von Tänzern (Gruppen, Formation, Reihe, Einzelne) und hat optional einen Namen. Eine Spur pro Gruppe ist **kein** guter Standard (2 von 28 Bildern). Stattdessen übernimmt ein neues Bild die Spuraufteilung des vorherigen Bildes, das erste Bild beginnt mit einer Spur pro Gruppe (Vorgabe nach Nachfrage). Konzept 5.2, 6.5. |
+| Wie entstehen Drehungen und Schwenks? | **Formation drehen** | Wer eine Formation am Drehgriff dreht, legt Drehpunkt und Winkel fest. Die Zuordnung folgt der Drehung statt dem kürzesten Weg, die Laufwege sind Kreisbögen, und auch Drehungen über 180° sind möglich. Konzept 6.4, 6.6. |
+| Wie wird „hin und zurück“ innerhalb eines Bildes abgebildet? | **In zwei Bilder teilen** | Keine Zwischenaufstellungen. Ein Bild hat genau eine Startaufstellung, für „hin und zurück“ braucht es zwei Bilder. Die Bildnummern weichen dann vom alten Papier ab. Konzept 5.1. |
+| Wie weit soll die Musikstruktur in die App? | **Lieder + Teile** | Das Raster bekommt benannte Abschnitte (Lied, Teil) mit ihren Zeiten in 16ern. Langsameres Zählen regelt das Raster selbst („doppelt / halb so schnell“, Spike M0.1). Konzept 6.7, präzisiert in Runde 10. |
+| Soll die App die Blickrichtung kennen? | **Pro Formation** | Jede Formation hat eine Blickrichtung (Standard: vorne), einzelne Tänzer können abweichen. Die Symbole zeigen sie mit einer Kerbe. Ändert sie sich, gibt es einen Hinweis mit dem Angebot „2 drehen“. Konzept 6.4, 5.3. |
+| Wie werden Wiederholungen geschrieben? | **Klammer ×n** | Markierte Bausteine werden wiederholt: „\|\|: … :\|\| ×2“, optional gespiegelt. Konzept 6.5. |
+| Wie geht der Katalog mit „Marsch zur Mitte“ um? | **Begriff + Zusatz** | Gelernt wird nur der Begriff („Marsch“). Der Zusatz („zur Mitte“) ist freier Text mit eigenen Vorschlägen. „auf der Stelle“ schaltet „bewegt sich“ aus. Konzept 6.5. |
+| Wie schreibt ein Verbund „O hüpft, R marschiert“? | **Baustein „Lauf“** | Im Verbund steht „Lauf“ für die übliche Fortbewegung jeder Rolle. Angezeigt wird zum Beispiel „14 Hüpf/Marsch nach vorne“. Konzept 6.5. |
+
+**Nachtrag zu Runde 9**
+
+| Frage | Antwort | Konsequenz |
+|---|---|---|
+| Was sind ○ und R? | *„Kreis und R sind unterschiedliche Gruppen, nur dieses Jahr aufgrund von kleiner Gruppengröße zusammengelegt.“* | Zwei Gruppen mit eigener Rolle. „O+R“ ist in diesem Tanz der übliche Gruppenverbund, „Lauf“ wird zu Hüpf bzw. Marsch. |
+| Braucht die Bühne eine Marke für den Elferrat? | *„Nein, nur umgangssprachlich für hinten auf der Bühne.“* | Keine Bühnenmarke. „zum Elferrat“ bleibt ein Zusatz als Text. |
+| Abfolgen wie „14 Marsch \| 2 drehen“ ins MVP? | Nachfrage, wie weit das Konzept das schon abdeckt | Tippen, Baustein-Leiste mit Rest-Logik und Blickrichtungs-Hinweis decken es ab. Bleibt „nicht im MVP“ (Konzept 8). |
+
+## Runde 10: Lied-Zusammenfassung (22.11.2026)
+
+Vorgabe: *„Diese ‚Phrase‘ sind Zusammenfassungen am 1. Bild eines Liedes. In der App würde ich sie als Meta-Informationen zum aktuellen Lied behalten. Die Info ist für den Trainer relevant, um beim Schreiben sicher zu gehen, dass alle Zeiten des Lieds auch verplant sind, und um eine Übersicht über das Lied zu liefern. Grundsätzlich wird immer bis 8 gezählt, diese Zusammenfassung geht aber immer von 16 als Basis aus. Die App soll die Informationen so gut wie möglich automatisch vorbefüllen, aber vom Trainer anpassen lassen. Das Ganze sollte nicht nur eine einfache Notiz sein, sondern sich in die Informationsarchitektur einfügen.“*
+
+| Frage | Antwort | Konsequenz |
+|---|---|---|
+| Woher kommt der Soll-Wert? | **Musik schlägt vor** | Länge und 16er-Aufteilung kommen aus dem Raster, der Trainer passt an. Ohne Musik keine Lieder. Konzept 6.12. |
+| Bedeutet die Reihenfolge („16/16/16/16/20“) etwas? | **Mal so, mal so** | Die App schlägt den Rest am Ende vor, der Trainer darf ihn verschieben. Geprüft wird nur die Summe. |
+| Wo erscheint die Lied-Übersicht? | **Lied-Bereich im Editor, Zeitleiste** | Inspektor-Bereich „Lied“ und Band in der Zeitleiste. Nicht im Training. |
+| Wie genau wird geprüft? | **Pro Lied** | „140 von 152 Zeiten verplant · 12 frei“. |
+| Was steht auf Blatt und Druck? | **Nur kleine Marke** | „Lied 4: Toi, toi, toi · 1:44“ über dem ersten Bild, ohne Zusammenfassung. |
+| Teile (Instr., Strophe, Refr.)? | **Teile mit eigener Zusammenfassung** | Ein Lied kann Teile mit eigenen 16ern haben, geprüft wird trotzdem pro Lied. |
+| Wie kommen die Liedgrenzen in die App? | **Eine Datei, App schlägt vor** | Die Analyse schlägt Grenzen vor, der Trainer bestätigt und benennt sie im Raster-Editor. |
+| Ein Bild ragt über eine Liedgrenze? | **Erlaubt, still** | Kein Hinweis. Das Bild gehört zum Lied, in dem es beginnt. Die frühere Prüfregel „Bilder enden nicht an einer Liedgrenze“ entfällt. |
+
 ---
 
 ## Eigene Annahmen (nicht abgefragt, bitte prüfen)
