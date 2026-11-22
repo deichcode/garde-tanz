@@ -9,7 +9,7 @@ Bild (`Frame`), Zeiten (`counts`, nur ganze), Achter (8 Zeiten), Gruppe (`Group`
 Gruppenverbund (`Track.groupIds` mit mehreren Gruppen), Rolle (`Role`, z. B. Mariechen, Grenadiere)
 mit Katalog (`RoleAction`, Schlüssel = Rolle + normalisierter Begriff), Formation, Aktion/Baustein (`ActionBlock`),
 Laufweg, Raster (`beats[]`), Vorlauf (`preRoll`), Spur (`Track`, Auswahl von Tänzern: „Alle“, Verbund, Gruppe oder Teil),
-Zusatz (`ActionBlock.detail`), Wiederholung (`RepeatBlock`), Blickrichtung (`facing`), Drehung/Schwenk (`PathStyle.turn`),
+Zusatz (`ActionBlock.detail`), Wiederholung (`RepeatBlock`), Drehung/Schwenk (`PathStyle.turn`),
 Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds in 16ern, z. B. 16/16/12; gezählt wird trotzdem bis 8). In der UI nie „Frame“, „Count“, „Pre-Roll“, „Track“.
 
 ## Fachregeln
@@ -17,7 +17,7 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 - Ein Bild zeigt die **Startaufstellung**. Laufwege führen ins nächste Bild und liegen **innerhalb** der Zeiten des Bildes, während der Bausteine mit `moves: true`.
 - Ein Bild hat **genau eine** Startaufstellung, keine Zwischenaufstellungen. „Hin und zurück“ = Bild teilen.
 - Jeder Tänzer ist in genau einer Spur. Ein neues Bild übernimmt die Spuraufteilung des vorherigen, das erste Bild beginnt mit einer Spur pro Gruppe.
-- Wer beim Formationswechsel auf welchen Platz läuft, bestimmt die App so, dass die Wege insgesamt am kürzesten sind (`assignShortest`). **Ausnahme Drehung/Schwenk** (`turn`): Dort behält jeder seinen Platz in der Form und läuft auf einem Kreisbogen, sonst würde z. B. bei „Stern halbe Drehung“ niemand laufen.
+- Wer beim Formationswechsel auf welchen Platz läuft, bestimmt die App so, dass die Wege insgesamt am kürzesten sind (`assignShortest`). **Ausnahme Drehung/Schwenk** (`turn`): Die ganze Formation dreht sich um den Drehpunkt, jeder Tänzer läuft auf einem Kreisbogen um denselben Winkel mit. Nach einer halben Stern-Drehung steht jeder gegenüber, obwohl das Bild gleich aussieht. Kürzeste Wege ergäben hier „niemand läuft“.
 - Prüfregeln (Summe der Zeiten ≠ Bild, fehlende Lauf-Aktion …) sind **Hinweise, nie Sperren**.
 - Tänzer sind **anonym** (`groupId:index`). Keine Personendaten speichern.
 - Bühne fest 3:2, normierte Koordinaten 0..1, **y = 1 ist vorne (Publikum unten)**.
@@ -28,7 +28,7 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 - Gruppenverbünde: beliebige Gruppen-Kombinationen, auch über Bildbereiche. Neue Bilder übernehmen die Verbünde des vorherigen.
 - Begriffe können Zahlen enthalten (`1/4 Dreh`): Die erste Zahl ist immer die Anzahl Zeiten, angezeigt fett in Mono.
 - Zählweise pro Bild (`countSplit`): automatisch Achter, Bausteine > 8 Zeiten werden durchgezählt (Referenz `countSegments`). Steuert die Zählanzeige im Training.
-- Keine Bildtitel, kein Einmarsch/Ausmarsch, keine Rechte pro Garde (alle Trainer dürfen alles).
+- Keine Bildtitel, kein Einmarsch/Ausmarsch, keine Rechte pro Garde (alle Trainer dürfen alles), **keine Blickrichtung** (nach dem MVP).
 - Anmeldung **nur mit Microsoft über den Vereins-Tenant** (Einzelmandant, Gäste mit privatem Konto über Entra B2B). Zugang = Mitglied einer M365-Gruppe, keine eigene Benutzerverwaltung. Die Sitzung muss offline erhalten bleiben.
 
 ## Design-Regeln
@@ -45,4 +45,4 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 `design-system/stage.js` enthält die Referenz für Formen → Einzelpositionen (`layoutFormation`),
 die Zuordnung auf kürzeste Wege (`assignShortest`), die Laufweg-Automatik und die Prüfregeln (`warnings`).
 Bei der App-Umsetzung gleiches Verhalten beibehalten oder die Abweichung im Konzept dokumentieren.
-**Noch nicht enthalten:** Drehung/Schwenk (`turn`) und Blickrichtung (`facing`), siehe Konzept 6.4, 6.6 und 14.
+Dazu Drehung/Schwenk (`rotateFormation`, Bogenpfeile), Zählweise (`countSegments`), Wiederholungen, Zusatz und Teile von Spuren.

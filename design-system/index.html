@@ -110,6 +110,8 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 .sg-ttrack { display: grid; grid-template-columns: 46px minmax(0, 1fr); align-items: center; gap: var(--gm-space-2); }
 .sg-ttrack__who { display: flex; gap: 4px; }
 .sg-ttrack__who svg { width: 18px; height: 18px; }
+.sg-ttrack--label { grid-template-columns: minmax(0, 1fr); }
+.sg-ttrack--label .sg-ttrack__who { align-items: center; font-size: var(--gm-text-sm); }
 .sg-ttrack__chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .sg-rolehead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .sg-rolehead svg { width: 18px; height: 18px; }
@@ -258,7 +260,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
       <nav class="sg-nav" aria-label="Abschnitte">
         <a href="#prinzipien">Prinzipien</a><a href="#farben">Farben</a><a href="#schrift">Schrift</a>
         <a href="#symbole">Symbole</a><a href="#buehne">Bühne</a><a href="#blatt">Bildkarte &amp; Blatt</a>
-        <a href="#zaehlzeit">Zählzeit &amp; Aktionen</a><a href="#rollen">Rollen &amp; Bausteine</a><a href="#bedienung">Bedienelemente</a>
+        <a href="#zaehlzeit">Zählzeit &amp; Aktionen</a><a href="#spuren">Spuren &amp; Lieder</a><a href="#rollen">Rollen &amp; Bausteine</a><a href="#bedienung">Bedienelemente</a>
         <a href="#ki">KI-Assistent</a><a href="#screens">Screens</a><a href="#sprache">Sprache</a><a href="#groessen">Größen</a>
       </nav>
       <div class="gm-seg" role="group" aria-label="Darstellung" id="theme">
@@ -352,6 +354,15 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         <div class="sg-panel sg-stack"><h3>Formation ausgewählt</h3><div id="stage-selected"></div><p class="sg-caption">Gestrichelter Rahmen in Signal-Blau, Anfasser zum Skalieren und Drehen. Hilfslinie zur Bühnenmitte nur beim Ziehen.</p></div>
       </div>
     </div>
+    <div class="sg-stack" id="drehung">
+      <p class="sg-label">Drehung und Schwenk: Die ganze Formation dreht sich um den Drehpunkt, jeder läuft um denselben Winkel mit</p>
+      <div class="sg-grid">
+        <div class="sg-panel sg-stack"><h3>Stern, halbe Drehung</h3><div id="turn-star"></div><p class="sg-caption">Ein Bogenpfeil außen um die Formation, der Winkel als Bruch (½). Der Punkt ist der Drehpunkt. Danach sieht das Bild gleich aus, aber jeder steht gegenüber.</p></div>
+        <div class="sg-panel sg-stack"><h3>Dieselbe Drehung als Einzelbögen</h3><div id="turn-individual"></div><p class="sg-caption">Jeder Tänzer auf seinem Kreisbogen. Pro Formation umschaltbar wie bei geraden Wegen.</p></div>
+        <div class="sg-panel sg-stack"><h3>Ohne Drehung: kürzeste Wege</h3><div id="turn-shortest"></div><p class="sg-caption">Vorher und nachher dieselbe Aufstellung. Die Zuordnung auf kürzeste Wege lässt deshalb jeden stehen, es gibt keinen Pfeil. Darum merkt sich die App die Drehung am Drehgriff.</p></div>
+        <div class="sg-panel sg-stack"><h3>Schwenk um das linke Ende, ¼</h3><div id="turn-swing"></div><p class="sg-caption">Drehpunkt am Ende der Linie, der Bogen läuft am freien Ende entlang. Winkel über 180° zählt die Anzeige weiter (¾, 1).</p></div>
+      </div>
+    </div>
   </section>
 
   <!-- Bildkarte & Blatt -->
@@ -402,6 +413,43 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         </ul>
       </div>
       <div class="sg-panel sg-stack"><h3>Aktionen im Training</h3><div class="sg-ttracks" id="training-tracks"></div></div>
+    </div>
+  </section>
+
+  <!-- Spuren & Lieder -->
+  <section id="spuren" aria-labelledby="h-spuren">
+    <div class="sg-sec-head">
+      <h2 id="h-spuren">Spuren &amp; Lieder</h2>
+      <p>Eine Spur gilt für alle, für einen Gruppenverbund, für eine Gruppe oder für einen Teil davon („● linke Reihe“). Bausteine können einen Zusatz tragen und sich wiederholen. Die Lieder des Medleys stehen als schmale Marke über ihrem ersten Bild, ihre Zusammenfassung im Inspektor.</p>
+    </div>
+    <div class="sg-grid">
+      <div class="sg-stack"><p class="sg-label">Teile einer Gruppe, Zusatz, Wiederholung</p><div id="track-frame"></div></div>
+      <div class="sg-stack"><p class="sg-label">Eine Spur für alle</p><div id="track-all"></div></div>
+      <div class="sg-panel sg-stack">
+        <h3>Spuren</h3>
+        <ul class="sg-rules">
+          <li><strong>Alle</strong> steht als Wort statt drei Symbolen. <strong>Verbund</strong>: Symbole hintereinander (○ ✕).</li>
+          <li><strong>Teil:</strong> Symbol plus Name, den der Trainer vergibt („linke Reihe“). Wer dazugehört, wählt er auf der Bühne aus. Jeder Tänzer ist in genau einer Spur.</li>
+          <li><strong>Zusatz</strong> in normaler Stärke hinter dem Begriff: <strong>8 Marsch</strong> zur Mitte. Gelernt wird nur der Begriff.</li>
+          <li><strong>Wiederholung</strong> mit ‖: … :‖ ×2 in Tinte, gezählt werden alle Runden.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sg-grid sg-grid--wide">
+      <div class="sg-panel sg-stack"><h3>Wiederholung im Training, Zeit 7</h3><div class="sg-ttracks" id="training-repeat"></div><p class="sg-caption">Die Markierung läuft durch jede Runde, darunter steht in Signal-Blau, die wievielte gerade getanzt wird.</p></div>
+      <div class="sg-panel sg-stack">
+        <h3>Lied-Bereich im Inspektor (Bild 11 aktiv)</h3>
+        <section class="gm-song" aria-label="Lied des aktiven Bildes">
+          <div class="gm-song__head"><span class="gm-song__name">Lied 4: Toi, toi, toi</span><span class="gm-song__time">1:44 – 2:49</span></div>
+          <p class="gm-song__meta"><strong>152 Zeiten</strong> · 136 verplant · 16 frei</p>
+          <div class="gm-song__bar" role="img" aria-label="136 von 152 Zeiten verplant"><div class="gm-song__fill" style="width:89.5%"></div></div>
+          <div class="gm-song__part"><span>Instr.</span><span class="gm-song__nums"><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">12</button></span></div>
+          <div class="gm-song__part"><span>Strophe</span><span class="gm-song__nums"><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">16</button></span></div>
+          <div class="gm-song__part"><span>Refr.</span><span class="gm-song__nums"><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">16</button><button class="gm-song__n" type="button">12</button></span></div>
+          <div class="gm-song__tools"><button class="gm-btn gm-btn--ghost" type="button" id="song-add"></button><button class="gm-btn gm-btn--ghost" type="button" id="song-reset"></button></div>
+        </section>
+        <p class="sg-caption">Stand beim Schreiben: Bild 21 fehlt noch. Die 16er schlägt die Musik vor, Tippen auf eine Zahl öffnet den Stepper. Passt die Zusammenfassung nicht zur Musik, steht hier ein Hinweis („Zusammenfassung: 148, Musik: 152 Zeiten“). Blatt und Druck zeigen nur die Liedmarke, das Training nichts davon.</p>
+      </div>
     </div>
   </section>
 
@@ -756,6 +804,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   };
   // Wie in der App: Wer wohin läuft, wird auf kürzeste Wege zugeordnet.
   for (var n = 10; n <= 13; n++) F[n] = GM.assignShortest(F[n - 1], F[n]);
+  F[11].song = 'Lied 4: Toi, toi, toi · 1:44'; // Liedmarke: Lied 4 beginnt mit Bild 11 (Bilder 11–21 = 152 Zeiten)
   var F10individual = Object.assign({}, F[10], { pathMode: { 1: 'individual' } });
 
   /* --- Farben --------------------------------------------------------------- */
@@ -826,6 +875,19 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   $('stage-individual').innerHTML = GM.renderStage(dance, F10individual, F[11], { label: true, title: 'Bild 10 mit Einzelwegen' });
   $('stage-selected').innerHTML = GM.renderStage(dance, F[12], null, { label: true, selected: 1, title: 'Bild 12, Formation ausgewählt',
     guides: [{ x1: 0.84, y1: 0, x2: 0.84, y2: 1 }, { x1: 0, y1: 0.2, x2: 1, y2: 0.2 }] });
+  /* Drehung: Stern mit vier Strahlen, ● oben/unten, ○ links/rechts. Halbe Drehung um die Mitte. */
+  var star = { shape: 'star', cx: 0.5, cy: 0.5, radius: 0.3, rays: 4, members: GM.alternate('b', 'a', 6) };
+  var starTurn = { num: 0, counts: 16, tracks: [], formations: [star], turn: { 0: { pivot: 'center', angle: 180 } } };
+  var starNext = GM.assignShortest(starTurn, { num: 0, counts: 8, tracks: [], formations: [GM.rotateFormation(star, 180, 'center')] });
+  var starPlain = { num: 0, counts: 16, tracks: [], formations: [star] };
+  $('turn-star').innerHTML = GM.renderStage(dance, starTurn, starNext, { label: true, title: 'Stern, halbe Drehung' });
+  $('turn-individual').innerHTML = GM.renderStage(dance, Object.assign({}, starTurn, { pathMode: { 0: 'individual' } }), starNext, { label: true, title: 'Stern, halbe Drehung, Einzelbögen' });
+  $('turn-shortest').innerHTML = GM.renderStage(dance, starPlain, GM.assignShortest(starPlain, starNext), { label: true, title: 'Stern ohne Drehung: niemand läuft' });
+  var swingLine = { shape: 'line', cx: 0.5, cy: 0.28, length: 0.42, members: C };
+  var swing = { num: 0, counts: 8, tracks: [], formations: [swingLine], turn: { 0: { pivot: 'start', angle: 90 } } };
+  $('turn-swing').innerHTML = GM.renderStage(dance, swing, { num: 0, counts: 8, tracks: [], formations: [GM.rotateFormation(swingLine, 90, 'start')] },
+    { label: true, title: 'Schwenk um das linke Ende' });
+
   $('stage-ghost').innerHTML = GM.renderStage(dance, F[12], null, { label: true, ghost: F[13], title: 'Vorschlag für Bild 13' });
 
   /* --- Bildkarten & Blatt ------------------------------------------------------ */
@@ -895,6 +957,29 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
     }).join('');
   }
   $('training-tracks').innerHTML = trainingTracks(F[11], 13);
+
+  /* --- Spuren & Lieder: Bild 14 und 15 aus Lied 4 --------------------------------- */
+  var S14 = { num: 14, counts: 16,
+    formations: [
+      { shape: 'line', cx: 0.14, cy: 0.5, length: 0.4, rotation: 90, members: ['b:0', 'b:1', 'b:2'] },
+      { shape: 'line', cx: 0.86, cy: 0.5, length: 0.4, rotation: 90, members: ['b:3', 'b:4', 'b:5'] },
+      { shape: 'wedge', cx: 0.5, cy: 0.46, spacing: 0.06, members: GM.alternate('a', 'c', 4).concat(['a:4', 'a:5']) }],
+    tracks: [
+      { groups: ['b'], members: ['b:0', 'b:1', 'b:2'], label: 'linke Reihe',
+        blocks: [{ repeat: 2, blocks: [[2, 'GewSchw'], [2, 'Klopf']] }, [8, 'Marsch', 1, 'zur Mitte']] },
+      { groups: ['b'], members: ['b:3', 'b:4', 'b:5'], label: 'rechte Reihe', blocks: [[8, 'Präs'], [8, 'Marsch', 1, 'zur Mitte']] },
+      { groups: ['a', 'c'], blocks: [[8, 'Marsch', 1, 'nach vorne'], [8, 'Stip']] }] };
+  var S15 = GM.assignShortest(S14, { num: 15, counts: 16,
+    formations: [
+      { shape: 'line', cx: 0.5, cy: 0.24, length: 0.5, members: B },
+      { shape: 'wedge', cx: 0.5, cy: 0.84, spacing: 0.06, members: GM.alternate('a', 'c', 4).concat(['a:4', 'a:5']) }],
+    tracks: [{ all: true, groups: ['b', 'a', 'c'], blocks: [[2, '1/4 Dreh'], [14, 'MrschSt']] }] });
+  $('track-frame').innerHTML = GM.renderFrame(dance, S14, S15);
+  $('track-all').innerHTML = GM.renderFrame(dance, S15, null);
+  $('training-repeat').innerHTML = '<div class="sg-ttrack sg-ttrack--label"><span class="sg-ttrack__who">' + GM.trackWho(dance, S14.tracks[0]) + '</span>' +
+    '<span class="sg-ttrack__chips">' + GM.renderChips(S14.tracks[0], { at: 7, size: 'l' }) + '</span></div>';
+  $('song-add').innerHTML = I('plus') + 'Teil';
+  $('song-reset').innerHTML = I('undo') + 'Vorschlag der Musik';
 
   /* --- Abstände ------------------------------------------------------------------ */
   $('spaces').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
@@ -967,10 +1052,11 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 
   /* --- Desktop: Zeitleiste ------------------------------------------------------------ */
   var counts = [], i;
-  for (i = 1; i <= 42; i++) counts.push(F[i] ? F[i].counts : [16, 8, 8, 16, 16, 8][i % 6]);
+  var FILL = { 14: 16, 15: 16, 16: 8, 17: 16, 18: 16, 19: 8, 20: 16, 21: 16 }; // Bilder 11–21 = Lied 4 = 152 Zeiten
+  for (i = 1; i <= 42; i++) counts.push(F[i] ? F[i].counts : FILL[i] || [16, 8, 8, 16, 16, 8][i % 6]);
   var startCount = function (n) { var s = 0; for (var k = 1; k < n; k++) s += counts[k - 1]; return s; };
-  var total = startCount(43), bpm = 126, intro = 8;
-  var secAt = function (c) { return ((c + intro) * 60) / bpm; };
+  var total = startCount(43), bpm = 140;
+  var secAt = function (c) { return 104 + ((c - startCount(11)) * 60) / bpm; }; // Bild 11 = Lied 4 bei 1:44
   var mmss = function (s) { var m = Math.floor(s / 60), r = Math.round(s % 60); return m + ':' + (r < 10 ? '0' : '') + r; };
   var TW = 1000, from = 6, to = 15, c0 = startCount(from), c1 = startCount(to + 1), sx = TW / (c1 - c0);
   var svg = '<svg viewBox="0 0 ' + TW + ' 108" role="img" aria-label="Zeitleiste mit Bild 6 bis 15 und Musik">';
@@ -996,7 +1082,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   var px = (startCount(10) + 3 - c0) * sx;
   svg += '<line class="sg-tl-head" x1="' + px.toFixed(1) + '" y1="12" x2="' + px.toFixed(1) + '" y2="104"/><circle class="sg-tl-headknob" cx="' + px.toFixed(1) + '" cy="12" r="5"/>';
   $('timeline').innerHTML = '<div class="sg-row" style="justify-content:space-between"><span class="sg-label">Zeitleiste · Bild 6–15 von 42</span>' +
-    '<span class="gm-status">' + I('music') + 'Gardemarsch-Mix_v3.mp3 · 126 BPM, 2 Tempowechsel</span></div>' + svg + '</svg>';
+    '<span class="gm-status">' + I('music') + 'Gardemarsch-Mix_v3.mp3 · 140 BPM, 2 Tempowechsel</span></div>' + svg + '</svg>';
 
   $('pager-dots').innerHTML = Array.apply(null, Array(11)).map(function (_, k) {
     return '<span class="sg-pager__dot' + (k === 2 ? ' is-on' : '') + '"></span>';

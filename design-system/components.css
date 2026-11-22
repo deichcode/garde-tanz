@@ -7,7 +7,7 @@
 /* --- Basis ---------------------------------------------------------------- */
 [class*="gm-"], [class*="gm-"]::before, [class*="gm-"]::after { box-sizing: border-box; }
 
-:where(.gm-btn, .gm-chip, .gm-seg button, .gm-stepper button, .gm-field, a):focus-visible {
+:where(.gm-btn, .gm-chip, .gm-seg button, .gm-stepper button, .gm-song__n, .gm-field, a):focus-visible {
   outline: 3px solid var(--gm-signal);
   outline-offset: 3px;
 }
@@ -222,6 +222,7 @@
 
 /* --- Bildkarte ------------------------------------------------------------ */
 .gm-frame {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--gm-space-2);
@@ -240,6 +241,8 @@
   padding: 0 0.2em;
 }
 .gm-frame__head { display: flex; align-items: baseline; gap: var(--gm-space-2); }
+/* Liedmarke über dem ersten Bild eines Lieds */
+.gm-frame__song { margin: 0; color: var(--gm-ink-2); font-size: var(--gm-text-xs); font-weight: var(--gm-weight-bold); letter-spacing: 0.02em; }
 .gm-frame__num {
   font-weight: var(--gm-weight-heavy);
   font-size: var(--gm-text-xl);
@@ -265,6 +268,17 @@
 .gm-track__who svg { width: 0.95em; height: 0.95em; display: block; }
 .gm-track__text { min-width: 0; overflow-wrap: anywhere; }
 .gm-track__n { font-family: var(--gm-font-mono); font-weight: var(--gm-weight-heavy); }
+.gm-track__label { font-weight: var(--gm-weight-bold); white-space: nowrap; }  /* „Alle“, „linke Reihe“ */
+.gm-track__detail, .gm-chip__detail { font-weight: var(--gm-weight-regular); }  /* Zusatz: „nach vorne“ */
+
+/* --- Wiederholung ‖: … :‖ ×2 ---------------------------------------------- */
+.gm-repeat { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.gm-repeat__end { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.gm-repeat__mark { font: var(--gm-weight-heavy) 1.15em / 1 var(--gm-font-mono); color: var(--gm-ink); }
+.gm-repeat__times { font: var(--gm-weight-bold) var(--gm-text-xs) / 1.2 var(--gm-font-mono); color: var(--gm-ink-2); white-space: nowrap; }
+.gm-track .gm-repeat__times { font-size: 0.85em; }
+/* Im Training: die laufende Runde unter der Wiederholung („2. Mal“) */
+.gm-repeat__round { flex-basis: 100%; padding-left: 1.4em; color: var(--gm-signal); font-size: var(--gm-text-sm); font-weight: var(--gm-weight-heavy); }
 .gm-track__sum { font-family: var(--gm-font-mono); font-size: 0.85em; color: var(--gm-ink-3); }
 .gm-track.has-warning { background: var(--gm-warn-tint); border-left-color: var(--gm-warn-line); }
 .gm-track.has-warning .gm-track__sum { color: var(--gm-warn); font-weight: var(--gm-weight-bold); }
@@ -294,6 +308,7 @@
 }
 .gm-sheet .gm-frame > * { width: 33cqw; }
 .gm-sheet .gm-frame__num { font-size: 2.3cqw; }
+.gm-sheet .gm-frame__song { position: absolute; top: -1.45cqw; left: 0; right: 0; font-size: 1.15cqw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .gm-sheet .gm-frame__counts { font-size: 1.45cqw; }
 .gm-sheet .gm-frame__tracks { gap: 0.15cqw; }
 .gm-sheet .gm-track { font-size: 1.45cqw; padding: 0 0.4cqw; border-left-width: 0.3cqw; column-gap: 0.7cqw; }
@@ -465,6 +480,28 @@
 .gm-check__label { font-weight: var(--gm-weight-bold); }
 .gm-check__meta { margin-left: auto; color: var(--gm-ink-2); font: var(--gm-weight-regular) var(--gm-text-xs) var(--gm-font-mono); white-space: nowrap; }
 
+/* --- Lied-Bereich (Inspektor) -------------------------------------------- */
+.gm-song { display: grid; gap: var(--gm-space-2); color: var(--gm-ink); font-family: var(--gm-font-ui); }
+.gm-song__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--gm-space-1) var(--gm-space-3); }
+.gm-song__name { font-size: var(--gm-text-md); font-weight: var(--gm-weight-heavy); }
+.gm-song__time { color: var(--gm-ink-2); font: var(--gm-weight-bold) var(--gm-text-xs) var(--gm-font-mono); }
+.gm-song__meta { color: var(--gm-ink-2); font-size: var(--gm-text-sm); }
+.gm-song__meta strong { color: var(--gm-ink); }
+.gm-song__bar { height: 12px; border: 1.5px solid var(--gm-line-strong); border-radius: 3px; overflow: hidden; }
+.gm-song__fill { height: 100%; background: var(--gm-ink-3); }
+.gm-song__part { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); align-items: center; gap: var(--gm-space-2); }
+.gm-song__part > span:first-child { font-weight: var(--gm-weight-bold); }
+.gm-song__nums { display: flex; flex-wrap: wrap; gap: 4px; }
+/* Eine Zahl der Zusammenfassung: Tippen öffnet den Stepper */
+.gm-song__n {
+  min-width: var(--gm-hit-min); min-height: var(--gm-hit-min); padding: 0 var(--gm-space-2);
+  border: var(--gm-stroke) solid var(--gm-line-strong); border-radius: var(--gm-radius-s);
+  background: var(--gm-paper); color: var(--gm-ink); cursor: pointer;
+  font: var(--gm-weight-heavy) var(--gm-text-md) / 1 var(--gm-font-mono);
+}
+.gm-song__n:hover { border-color: var(--gm-ink); }
+.gm-song__tools { display: flex; flex-wrap: wrap; gap: var(--gm-space-2); }
+
 /* --- Bühne (SVG) ---------------------------------------------------------- */
 .gm-stage { display: block; width: 100%; max-width: 100%; height: auto; overflow: visible; }
 .gm-stage__floor { fill: var(--gm-stage-bg); stroke: var(--gm-stage-edge); stroke-width: 1.5; }
@@ -481,6 +518,9 @@
 .gm-path--individual { stroke-width: 1.25; }
 .gm-path__head { fill: var(--gm-path); }
 .gm-path__head--ghost { fill: var(--gm-ghost); }
+/* Drehung/Schwenk: Bogenpfeil um den Drehpunkt mit Winkelangabe (¼, ½, 90°) */
+.gm-path__pivot { fill: var(--gm-path); }
+.gm-path__label { fill: var(--gm-path); font: var(--gm-weight-heavy) 16px var(--gm-font-ui); }
 .gm-track__who .gm-dancer--ring { fill: none; }
 
 .gm-stage .is-ghost .gm-dancer--dot,

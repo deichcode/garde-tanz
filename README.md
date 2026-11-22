@@ -2,7 +2,7 @@
 
 Eine PWA zum Choreografieren von Gardetänzen. Das Trainerteam schreibt den Tanz am Desktop oder Tablet **wie auf Papier** (4 Bilder pro A4-Seite) und verbindet ihn mit der Musik. Im Training läuft er am Handy synchron mit.
 
-**Stand:** Konzeptphase. Interview, Produktkonzept und Design-System sind fertig. Als Nächstes kommen die Spikes (M0).
+**Stand:** Konzeptphase abgeschlossen. Interview, Produktkonzept und Design-System sind fertig, der Spike zur Schlagerkennung (M0) ebenfalls. Als Nächstes kommt das Grundgerüst (M1).
 
 ## Dokumente
 

@@ -128,7 +128,7 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | Wie entstehen Drehungen und Schwenks? | **Formation drehen** | Wer eine Formation am Drehgriff dreht, legt Drehpunkt und Winkel fest. Die Zuordnung folgt der Drehung statt dem kürzesten Weg, die Laufwege sind Kreisbögen, und auch Drehungen über 180° sind möglich. Konzept 6.4, 6.6. |
 | Wie wird „hin und zurück“ innerhalb eines Bildes abgebildet? | **In zwei Bilder teilen** | Keine Zwischenaufstellungen. Ein Bild hat genau eine Startaufstellung, für „hin und zurück“ braucht es zwei Bilder. Die Bildnummern weichen dann vom alten Papier ab. Konzept 5.1. |
 | Wie weit soll die Musikstruktur in die App? | **Lieder + Teile** | Das Raster bekommt benannte Abschnitte (Lied, Teil) mit ihren Zeiten in 16ern. Langsameres Zählen regelt das Raster selbst („doppelt / halb so schnell“, Spike M0.1). Konzept 6.7, präzisiert in Runde 10. |
-| Soll die App die Blickrichtung kennen? | **Pro Formation** | Jede Formation hat eine Blickrichtung (Standard: vorne), einzelne Tänzer können abweichen. Die Symbole zeigen sie mit einer Kerbe. Ändert sie sich, gibt es einen Hinweis mit dem Angebot „2 drehen“. Konzept 6.4, 5.3. |
+| Soll die App die Blickrichtung kennen? | **Pro Formation** | Jede Formation hat eine Blickrichtung (Standard: vorne), einzelne Tänzer können abweichen. Die Symbole zeigen sie mit einer Kerbe. Ändert sie sich, gibt es einen Hinweis mit dem Angebot „2 drehen“. Konzept 6.4, 5.3. **→ 22.11.2026: aus dem MVP genommen** (Nachtrag 22.11.). |
 | Wie werden Wiederholungen geschrieben? | **Klammer ×n** | Markierte Bausteine werden wiederholt: „\|\|: … :\|\| ×2“, optional gespiegelt. Konzept 6.5. |
 | Wie geht der Katalog mit „Marsch zur Mitte“ um? | **Begriff + Zusatz** | Gelernt wird nur der Begriff („Marsch“). Der Zusatz („zur Mitte“) ist freier Text mit eigenen Vorschlägen. „auf der Stelle“ schaltet „bewegt sich“ aus. Konzept 6.5. |
 | Wie schreibt ein Verbund „O hüpft, R marschiert“? | **Baustein „Lauf“** | Im Verbund steht „Lauf“ für die übliche Fortbewegung jeder Rolle. Angezeigt wird zum Beispiel „14 Hüpf/Marsch nach vorne“. Konzept 6.5. |
@@ -139,7 +139,7 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 |---|---|---|
 | Was sind ○ und R? | *„Kreis und R sind unterschiedliche Gruppen, nur dieses Jahr aufgrund von kleiner Gruppengröße zusammengelegt.“* | Zwei Gruppen mit eigener Rolle. „O+R“ ist in diesem Tanz der übliche Gruppenverbund, „Lauf“ wird zu Hüpf bzw. Marsch. |
 | Braucht die Bühne eine Marke für den Elferrat? | *„Nein, nur umgangssprachlich für hinten auf der Bühne.“* | Keine Bühnenmarke. „zum Elferrat“ bleibt ein Zusatz als Text. |
-| Abfolgen wie „14 Marsch \| 2 drehen“ ins MVP? | Nachfrage, wie weit das Konzept das schon abdeckt | Tippen, Baustein-Leiste mit Rest-Logik und Blickrichtungs-Hinweis decken es ab. Bleibt „nicht im MVP“ (Konzept 8). |
+| Abfolgen wie „14 Marsch \| 2 drehen“ ins MVP? | Nachfrage, wie weit das Konzept das schon abdeckt | Tippen und Baustein-Leiste mit Rest-Logik decken es ab (der Blickrichtungs-Hinweis ist mit der Blickrichtung aus dem MVP genommen). Bleibt „nicht im MVP“ (Konzept 8). |
 
 ## Runde 10: Lied-Zusammenfassung (22.11.2026)
 
@@ -161,6 +161,8 @@ Vorgabe: *„Diese ‚Phrase‘ sind Zusammenfassungen am 1. Bild eines Liedes. 
 | Vorgabe | Konsequenz |
 |---|---|
 | *„Jeder Tanz kann seine Rollen zuordnen, grundsätzlich ist aber ● Grenadiere.“* | Die Rolle einer Gruppe legt jeder Tanz selbst fest. Vorgabe für den ersten Tanz: **● Grenadiere, ○ Mariechen, ✕ Reserve**, wie im Papier-Tanz (● 6 mit Gewehr, ○ 2 hüpfen, R 10–12). Ein neuer Tanz übernimmt die Zuordnung vom letzten Tanz der Garde. Konzept 6.2, `seed/start-katalog.json`. |
+| *„Blickrichtung holen wir aus dem MVP heraus, um Komplexität zu reduzieren. Setze es auf die Liste für spätere Themen.“* | Keine Blickrichtung im MVP: keine Kerbe am Symbol, kein Hinweis „2 drehen ergänzen“, nichts im Datenmodell. Steht in Konzept 8 („Nicht im MVP“). Drehungen der Tänzer stehen weiter als Bausteine (`2 1/4 Dreh` mit Zusatz *nach außen*). |
+| *„Nur weil das Bild nachher genauso aussieht, ist trotzdem bei einer halben Stern-Drehung gerade nicht jeder auf seinem Platz.“* | Die Formulierung „jeder behält seinen Platz“ war widersprüchlich und ist überall ersetzt: **Die ganze Formation dreht sich, jeder Tänzer läuft auf einem Kreisbogen um denselben Winkel mit.** Nach einer halben Drehung steht jeder gegenüber. Konzept 6.4, 6.6, Design-System 5, CLAUDE.md. |
 
 ---
 

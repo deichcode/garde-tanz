@@ -60,7 +60,6 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 | **Achter** | 8 Zeiten. Ein Bild mit 16 Zeiten hat 2 Achter | – |
 | **Zählweise** | Wie laut gezählt wird: in Achtern, durch (1–16) oder aufgeteilt (1–4, 1–12) | `Frame.countSplit` |
 | **Formation** | Form, in der Tänzer stehen: Linie, Block, Kreis, Bogen, Keil, frei | `Formation` |
-| **Blickrichtung** | Wohin die Tänzer einer Formation schauen. Standard: nach vorne zum Publikum | `Formation.facing` |
 | **Aktion** | Baustein mit Anzahl Zeiten und optionalem Zusatz, z. B. `2 1/4 Dreh`, `14 Marsch nach vorne`. Bausteine kommen aus dem **Katalog der Rolle**, der sich beim Schreiben selbst füllt | `ActionBlock` |
 | **Zusatz** | Richtung oder Ziel einer Aktion: „nach vorne“, „zur Mitte“, „auf der Stelle“. Freier Text, wird nicht als Baustein gelernt | `ActionBlock.detail` |
 | **Wiederholung** | Bausteine, die mehrmals hintereinander getanzt werden: `||: 2 GewSchl · 2 Steh · 4 GewSchl :|| ×2` | `RepeatBlock` |
@@ -88,7 +87,7 @@ Bild 7 · 16 Zeiten                          Bild 8 · 8 Zeiten
 - Ein Bild beschreibt die **Startaufstellung** und was jede Spur (Alle, Verbund, Gruppe oder Teil) in den Zeiten des Bildes tut.
 - Die **Laufwege** führen zur Aufstellung des nächsten Bildes. Sie liegen **innerhalb** der Zeiten des Bildes, und zwar in den Aktionen, die als *bewegend* markiert sind (z. B. `8 Marsch`).
 - **Bewegung läuft nur während bewegender Aktionen.** Beispiel `4 Marsch · 2 1/2 Dreh · 2 Marsch`: Die Gruppe läuft 4 Zeiten, dreht 2 Zeiten am Platz und läuft 2 Zeiten weiter. Die Vorschau-Animation bildet das genau so ab.
-- Beim Anlegen ist ein neues Bild eine **Kopie des vorherigen**: Aufstellung, Blickrichtungen und **Spuraufteilung** (Verbünde und Teile) werden übernommen, die Spuren sind leer. Verschiebt oder dreht der Trainer im neuen Bild Formationen, entstehen die Laufwege im vorherigen Bild automatisch.
+- Beim Anlegen ist ein neues Bild eine **Kopie des vorherigen**: Aufstellung und **Spuraufteilung** (Verbünde und Teile) werden übernommen, die Spuren sind leer. Verschiebt oder dreht der Trainer im neuen Bild Formationen, entstehen die Laufwege im vorherigen Bild automatisch.
 - **Ein Bild hat genau eine Startaufstellung.** Laufen Tänzer innerhalb eines Bildes hin und zurück („6 Marsch nach außen | 2 drehen | 6 Marsch nach innen“), wird das Bild in **zwei Bilder** geteilt (8 + 8). Dafür gibt es „Bild teilen nach Zeit …“. Zwischenaufstellungen innerhalb eines Bildes gibt es bewusst nicht.
 
 ### 5.2 Datenmodell (vereinfacht)
@@ -132,16 +131,15 @@ interface Frame {
 
 interface Formation {
   id: Id;
-  shape: 'line' | 'block' | 'circle' | 'arc' | 'wedge' | 'free';
+  shape: 'line' | 'block' | 'circle' | 'arc' | 'wedge' | 'star' | 'free';
   params: {                   // normierte Bühnenkoordinaten 0..1 (y=1 = vorne/Publikum)
     cx: number; cy: number; rotation: number;
     length?: number; rows?: number; radius?: number; spread?: number;
+    rays?: number;            // Stern: Anzahl Strahlen, Tänzer reihum verteilt
   };
   members: DancerRef[];       // Reihenfolge entlang der Form; gemischte Gruppen erlaubt
   pattern?: 'alternate' | 'blocks' | 'custom';
   overrides: Record<string, { x: number; y: number }>; // einzeln verschobene Positionen
-  facing: number;             // Blickrichtung in Grad, 0 = nach vorne (Publikum), 180 = abgewandt
-  facingOverrides: Record<string, number>; // einzelne Tänzer mit eigener Blickrichtung
 }
 
 interface Track {
@@ -227,7 +225,6 @@ interface SongPart {
 | Positionen ändern sich zum nächsten Bild, aber keine bewegende Aktion | „● – läuft ins nächste Bild, aber keine Lauf-Aktion“ |
 | Laufwege verschiedener Gruppen kreuzen sich zur selben Zeit | „● und ✕ kreuzen sich in Zeit 5–8. Abstand prüfen.“ (Hinweis, kein Fehler: Durchmärsche sind gewollt) |
 | Tänzer ohne Spur oder in zwei Spuren | „2 Tänzer von R haben keine Aktion“ |
-| Blickrichtung ändert sich zum nächsten Bild, aber die Spur hat keine Drehen-Aktion | „○ – schaut im nächsten Bild nach außen. `2 drehen` ergänzen?“ |
 | Bewegende Aktion, aber keine Position ändert sich (z. B. hin und zurück) | „● – 12 Marsch, aber kein Laufweg. Bild teilen?“ |
 
 Hinweise erscheinen an der Spur, als Symbol am Bildkopf und gesammelt in einer Liste „Offene Hinweise (3)“. Auch ein Bild mit Hinweisen kann gespeichert, gedruckt und trainiert werden.
@@ -301,13 +298,12 @@ Wie laut gezählt wird, hängt vom Bild ab:
 
 ### 6.4 Formationen und Positionen
 
-- **Formen:** Linie, Block (Reihen × Spalten), Kreis, Bogen, Keil (V), frei.
+- **Formen:** Linie, Block (Reihen × Spalten), Kreis, Bogen, Keil (V), Stern (Strahlen aus der Mitte), frei.
 - **Ablauf:** Gruppe(n) wählen, Form wählen, die Tänzer werden gleichmäßig verteilt. Danach Form ziehen, drehen (rastet bei 15° ein) und Länge oder Radius ändern. Einzelne Tänzer lassen sich nachträglich verschieben.
 - **Gemischte Formationen:** Eine Formation kann mehrere Gruppen enthalten. Muster: *abwechselnd* (●○●○), *blockweise* (●●●○○○) oder *eigene Reihenfolge*. Jede Position behält ihr Gruppensymbol.
 - **Ausrichtungshilfen:** keine dauerhaften Raster. Beim Ziehen erscheinen kurz Hilfslinien (Bühnenmitte, Kanten anderer Formationen).
 - **Zuordnung beim Formationswechsel:** Wer wohin läuft, ordnet die App automatisch so zu, dass die Wege möglichst kurz sind (innerhalb der Gruppe). Positionen lassen sich manuell tauschen. Ausnahme: Drehungen und Schwenks (siehe unten).
-- **Drehen und Schwenken:** Dreht der Trainer eine Formation am Drehgriff, ist das eine **Drehung** (Drehpunkt in der Mitte) oder ein **Schwenk** (Drehpunkt an einem Ende, umschaltbar am Griff). Die App merkt sich Drehpunkt und Winkel (`PathStyle.turn`). Jeder Tänzer behält seinen Platz in der Form und läuft auf einem Kreisbogen. Auch halbe und ganze Drehungen sind möglich: Die Winkelanzeige zählt über 180° hinaus weiter („Stern halbe Drehung“, „Platzwechsel der Reihen“, „1/4 Drehung Päckchen“).
-- **Blickrichtung:** Jede Formation hat eine Blickrichtung, Standard ist nach vorne. Sie lässt sich in 45°-Schritten einstellen (vorne, außen, innen, hinten, zur Mitte …), einzelne Tänzer können abweichen. Jedes Symbol zeigt sie mit einer kleinen Kerbe. Ändert eine Drehung die Lage der Formation, drehen sich die Blickrichtungen mit.
+- **Drehen und Schwenken:** Dreht der Trainer eine Formation am Drehgriff, ist das eine **Drehung** (Drehpunkt in der Mitte) oder ein **Schwenk** (Drehpunkt an einem Ende, umschaltbar am Griff). Die App merkt sich Drehpunkt und Winkel (`PathStyle.turn`). Die ganze Formation dreht sich um den Drehpunkt: Jeder Tänzer läuft auf einem Kreisbogen um denselben Winkel mit. Nach einer halben Stern-Drehung steht deshalb jeder gegenüber, auch wenn das Bild danach gleich aussieht. Auch halbe und ganze Drehungen sind möglich: Die Winkelanzeige zählt über 180° hinaus weiter („Stern halbe Drehung“, „Platzwechsel der Reihen“, „1/4 Drehung Päckchen“).
 
 ### 6.5 Aktionen, Rollen und Kataloge
 
@@ -411,7 +407,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
   3. **Formiert sich eine Gruppe am Platz um** (ihr Schwerpunkt bewegt sich weniger als 40 % des durchschnittlichen Einzelwegs), sagt ein Pfeil nichts mehr aus. Dann zeigt die App **Einzelwege**.
 - **Manuell:** pro Formation fest auf *Pfeil pro Gruppe* oder *Einzelwege* stellen. Die Referenz-Umsetzung steht in `design-system/stage.js`.
 - **Form des Weges:** gerade oder gebogen (ein Anfasser in der Pfeilmitte).
-- **Drehungen und Schwenks** (`PathStyle.turn`): Hier gilt **nicht** die Zuordnung auf kürzeste Wege. Jeder Tänzer bleibt auf seinem Platz in der Form, die Wege sind Kreisbögen um den Drehpunkt. Dargestellt wird ein gebogener Pfeil um den Drehpunkt mit Winkelangabe (½, ¼, 180°). Bei Teildrehungen wählt die Automatik Einzelbögen. *Abweichung von `stage.js`:* `assignShortest` würde eine 180°-Drehung eines symmetrischen Sterns auf „niemand läuft“ abbilden, und ein einzelner Kontrollpunkt kann keinen Halbkreis zeichnen. Die Referenz muss um `turn` ergänzt werden.
+- **Drehungen und Schwenks** (`PathStyle.turn`): Hier gilt **nicht** die Zuordnung auf kürzeste Wege. Die ganze Formation dreht sich um den Drehpunkt: Jeder Tänzer läuft auf einem Kreisbogen um denselben Winkel mit. Nach einer halben Stern-Drehung steht deshalb jeder gegenüber, auch wenn das Bild danach gleich aussieht. Dargestellt wird ein gebogener Pfeil um den Drehpunkt mit Winkelangabe (¼, ½, ¾, 1 oder in Grad, z. B. 45°). Bei Teildrehungen wählt die Automatik Einzelbögen. Ohne Drehung würde die Zuordnung auf kürzeste Wege eine halbe Stern-Drehung als „niemand läuft“ abbilden, weil jeder Platz danach wieder besetzt ist. Referenz: `rotateFormation` und die Bogenpfeile in `design-system/stage.js`. `assignShortest` lässt gedrehte Formationen aus.
 - **Zeitlicher Verlauf** über die bewegenden Aktionen (siehe 5.1). **Bewegungs-Vorschau:** Abspielen im Editor animiert die Symbole entlang der Wege.
 
 ### 6.7 Musik und Raster
@@ -497,7 +493,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 - **Format:** A4 quer, 2 × 2, identisch mit der Seitenansicht, in Schwarz-Weiß optimiert.
 - **Optionen:** alle Seiten oder Bereich, mit/ohne Laufwege, mit/ohne Notizen.
 - **Liedmarke:** Beginnt in einem Bild ein Lied, steht über dem Bild eine schmale Zeile „Lied 4: Toi, toi, toi · 1:44“. Die Zusammenfassung wird nicht gedruckt.
-- **Wiederholungen** werden als `||: … :||` gedruckt, die Blickrichtung als Kerbe am Symbol.
+- **Wiederholungen** werden als `||: … :||` gedruckt.
 - **Fußzeile:** Tanzname · Legende der Gruppen (● Grenadiere · ○ Mariechen · ✕ Reserve) · Stand (Datum, Version) · Seite x / y.
 - **Optional:** eine Schlussseite mit den Kürzeln aller beteiligten Rollen.
 - **Umsetzung:** Druck-Stylesheet (`@page A4 landscape`), dieselben SVG-Komponenten wie am Bildschirm. Ausgabe über den Druckdialog bzw. „Als PDF sichern“.
@@ -557,6 +553,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Papier-Scan mit KI-Auswertung | Laut Interview erst nach dem MVP. Der Druck ist die Grundlage dafür. |
 | Zeichnen mit Apple Pencil (Bild skizzieren, App übersetzt) | Machbar als PWA, braucht aber eine eigene Erkennung und einen Latenz-Test. Nutzt denselben Übersetzer wie der Papier-Scan. Siehe 13. |
 | Tänzer-Zugang, „Wo stehe ich?“ | Braucht Personenbezug. Bewusst keine Personendaten im MVP. |
+| Blickrichtung (pro Formation, Kerbe am Symbol, Hinweis „2 drehen ergänzen“) | Aus dem MVP genommen, um die Komplexität zu senken (22.11.2026). Bis dahin steht sie in den Bausteinen, z. B. `2 1/4 Dreh` mit Zusatz *nach außen* |
 | Langsamer abspielen, Schleife, Metronom | Im Interview nicht priorisiert |
 | Schautanz, Solo, Paartanz | Fokus Gardetanz |
 | Bühnenmaße, Raster, umschaltbare Perspektive | „Freie Fläche reicht“, Publikum immer unten |
@@ -565,7 +562,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Bildtitel (z. B. „Diagonale“) | Nicht benötigt, Nummer und Zeiten reichen |
 | Rechte pro Garde | Zum Start dürfen alle Trainer alles. Kommt bei Bedarf später |
 | KI räumt Kataloge auf (Synonyme erkennen, z. B. „Gewehr hoch“ = „Präs“) | Erst nötig, wenn Kataloge groß werden. Zusammenführen geht im MVP von Hand am Baustein |
-| Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start. Häufige Paare wie „14 Marsch \| 2 drehen“ (im Papier-Tanz etwa 8×) sind schon schnell erfasst: tippen „14 marsch 2 1/4 dreh“, oder in der Baustein-Leiste erst die Drehung (2), dann `Marsch` (nimmt den Rest). Fehlt die Drehung, bietet der Blickrichtungs-Hinweis „2 drehen ergänzen“ an. |
+| Reihenfolgen lernen („nach Stip folgt meist Marsch“) | Häufigkeit reicht für gute Vorschläge zum Start. Häufige Paare wie „14 Marsch \| 2 drehen“ (im Papier-Tanz etwa 8×) sind schon schnell erfasst: tippen „14 marsch 2 1/4 dreh“, oder in der Baustein-Leiste erst die Drehung (2), dann `Marsch` (nimmt den Rest). |
 | Mehrere Vereine, Abo | Nur der eigene Verein |
 | Streaming-Dienste als Musikquelle | Synchronisation braucht die Datei |
 
@@ -683,10 +680,8 @@ Alle Fragen aus den Interviews sind beantwortet (Stand 22.11.2026, [Interview-Pr
 
 **Technische Aufgaben aus dem Konzept**
 
-5. Referenz-Code `design-system/stage.js` um Drehung/Schwenk (`turn`, Kreisbögen statt kürzester Wege) und Blickrichtung (`facing`, Kerbe am Symbol) ergänzen (6.4, 6.6).
-6. Styleguide um die Elemente aus Runde 9 und 10 ergänzen: Spur mit Teilname, Blickrichtungs-Kerbe, Wiederholung `.gm-repeat`, Zusatz im Baustein, Liedmarke, Lied-Bereich (Design-System 4–6). Das geschieht mit den Komponenten in M1.
-7. Lizenzen der Musik-Analyse prüfen: Essentia (AGPL-3.0), Modellgewichte von beat_this (9).
+5. Lizenzen der Musik-Analyse prüfen: Essentia (AGPL-3.0), Modellgewichte von beat_this (9).
 
 **Nach dem MVP**
 
-8. Spike Zeichnen mit Apple Pencil (13.3) und Papier-Scan (8).
+6. Spike Zeichnen mit Apple Pencil (13.3) und Papier-Scan (8).
