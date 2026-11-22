@@ -11,3 +11,12 @@ dist/
 *.m4a
 __pycache__/
 *.pyc
+!.env.example
+
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+functions/lib/

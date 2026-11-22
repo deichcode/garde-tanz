@@ -46,3 +46,11 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 die Zuordnung auf kürzeste Wege (`assignShortest`), die Laufweg-Automatik und die Prüfregeln (`warnings`).
 Bei der App-Umsetzung gleiches Verhalten beibehalten oder die Abweichung im Konzept dokumentieren.
 Dazu Drehung/Schwenk (`rotateFormation`, Bogenpfeile), Zählweise (`countSegments`), Wiederholungen, Zusatz und Teile von Spuren.
+
+## App (ab M1)
+
+- `app/`: PWA mit React, TypeScript und Vite. Fachlogik in `src/domain` (rein, getestet), Komponenten in `src/ui`, Datenhaltung in `src/data` (Schnittstelle `Repo`: `firebaseRepo` für den Verein, `previewRepo` ohne Anmeldung).
+- Die App importiert `design-system/tokens.css` und `components.css` direkt. Neue Komponenten-Styles gehören dorthin, App-Layout nach `app/src/styles/app.css` (nur Tokens).
+- `src/domain/parity.test.ts` vergleicht die Fachlogik mit `design-system/stage.js`. Ändert sich das Verhalten, beide anpassen oder die Abweichung im Konzept dokumentieren.
+- `functions/`: Gruppenprüfung bei der Anmeldung (`zugangPruefen`) und täglicher Abgleich. `firestore.rules` mit Tests in `app/rules-test` (`npm run test:rules`, braucht Java).
+- Prüfen vor dem Commit: `npm test`, `npm run typecheck` und `npm run build` in `app/`, `npm test` in `functions/`.

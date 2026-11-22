@@ -241,6 +241,11 @@
   padding: 0 0.2em;
 }
 .gm-frame__head { display: flex; align-items: baseline; gap: var(--gm-space-2); }
+/* Ganze Karte anklickbar: Taste über der Nummer, Fläche per ::after (Tastatur und Vorleser bleiben korrekt) */
+:where(.gm-frame__select) { all: unset; }
+.gm-frame__select { cursor: pointer; }
+.gm-frame__select::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.gm-frame__select:focus-visible::after { box-shadow: var(--gm-focus-ring); }
 /* Liedmarke über dem ersten Bild eines Lieds */
 .gm-frame__song { margin: 0; color: var(--gm-ink-2); font-size: var(--gm-text-xs); font-weight: var(--gm-weight-bold); letter-spacing: 0.02em; }
 .gm-frame__num {
@@ -269,6 +274,7 @@
 .gm-track__text { min-width: 0; overflow-wrap: anywhere; }
 .gm-track__n { font-family: var(--gm-font-mono); font-weight: var(--gm-weight-heavy); }
 .gm-track__label { font-weight: var(--gm-weight-bold); white-space: nowrap; }  /* „Alle“, „linke Reihe“ */
+.gm-track__empty { color: var(--gm-ink-3); }  /* Spur ohne Aktion */
 .gm-track__detail, .gm-chip__detail { font-weight: var(--gm-weight-regular); }  /* Zusatz: „nach vorne“ */
 
 /* --- Wiederholung ‖: … :‖ ×2 ---------------------------------------------- */
@@ -332,6 +338,8 @@
   .gm-sheet { width: 297mm; height: 210mm; aspect-ratio: auto; break-after: page; box-shadow: none; }
   .gm-frame.is-active { border-color: transparent; box-shadow: none; }
   .gm-track.has-warning { background: none; border-left-color: transparent; }
+  /* Hinweise werden nicht gedruckt (Design-System 7) */
+  .gm-frame__flags .gm-badge--warn, .gm-track__sum { visibility: hidden; }
 }
 
 /* --- Zählzeit ------------------------------------------------------------- */

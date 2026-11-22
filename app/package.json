@@ -1,0 +1,34 @@
+{
+  "name": "garde-tanz-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "PWA zum Choreografieren von Gardetänzen",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "test:rules": "cd .. && npx --yes firebase-tools@15 emulators:exec --only firestore --project garde-tanz-test \"cd app && npx vitest run --config vitest.rules.config.ts\""
+  },
+  "dependencies": {
+    "firebase": "^13.4.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^31.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.1.1"
+  }
+}

@@ -214,6 +214,13 @@ interface SongPart {
 }
 ```
 
+**Umsetzung in der App (M1, `app/src/domain/types.ts`):** Vier kleine Abweichungen vom Modell oben.
+
+- `DancerRef` ist ein String `"groupId:index"` statt eines Objekts. Er ist kompakt in Firestore und lässt sich direkt als Schlüssel verwenden (`overrides`).
+- Die freie Form speichert ihre Positionen in `params.points` (`{x, y}` pro Mitglied). Firestore erlaubt keine Listen in Listen.
+- `PathStyle.mode` fehlt = Automatik (6.6). `bend` ist der Versatz des Kontrollpunkts von der Mitte, normiert.
+- „Alle“ wird nicht gespeichert: Eine Spur mit allen Gruppen und ohne `members` ist „Alle“.
+
 **Zeitberechnung:** Jeder Schlag im Raster ist eine Zeit (wird anders gezählt, als die Musik schlägt, korrigiert man das Raster mit „doppelt / halb so schnell“, siehe 6.7). Bild *i* beginnt bei der globalen Zeit `C_i = Σ counts(Bild 1 … i−1)`. Seine Startzeit in der Musik ist `beats[firstCountBeat + C_i]`. Ändert sich die Zeitenanzahl eines Bildes, verschieben sich alle folgenden Bilder automatisch.
 
 ### 5.3 Prüfregeln (Hinweise, nie Sperren)
@@ -400,7 +407,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 ### 6.6 Laufwege
 
 - **Automatisch** aus der Aufstellung von Bild *n* zu Bild *n+1*.
-- **Wer läuft wohin:** Die App ordnet die Tänzer jeder Gruppe den neuen Plätzen so zu, dass die Summe der Wege minimal ist (Ungarische Methode). Dadurch kreuzen sich Wege innerhalb einer Gruppe nicht. Plätze lassen sich manuell tauschen.
+- **Wer läuft wohin:** Die App ordnet die Tänzer jeder Gruppe den neuen Plätzen so zu, dass die Summe der Wege minimal ist. Bis 8 Tänzer pro Gruppe probiert die App alle Möglichkeiten durch (wie der Referenz-Code), darüber rechnet sie mit der Ungarischen Methode. Dadurch kreuzen sich Wege innerhalb einer Gruppe nicht. Plätze lassen sich manuell tauschen.
 - **Darstellung, Automatik in drei Stufen:**
   1. **Ein Pfeil pro Formation bzw. Gruppenverbund**, vom Schwerpunkt der Startaufstellung zum Schwerpunkt der Zielaufstellung.
   2. **Trennt sich ein Verbund** (z. B. ●○-Kreis wird zur Diagonale mit ● links, ○ rechts), bekommt jede Gruppe ihren eigenen Pfeil.
@@ -580,7 +587,8 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Audio | **Web Audio API**, Zeit aus `AudioContext.currentTime` minus `outputLatency` minus Geräte-Verzögerung | Genaue Synchronität |
 | Schlagerkennung | Server-Analyse beim Hochladen mit **zwei Verfahren**: **Essentia** für das Raster, **beat_this** (KI, PyTorch auf CPU) für die „1“ und als Zweitmeinung gegen den Gegenschlag. Tempo-Ebene per Regel 75–150 Schritte/min. Als Container-Dienst (z. B. Cloud Run), wenige Sekunden pro Musik. Lizenzen prüfen: Essentia AGPL-3.0, beat_this-Code MIT, Modellgewichte separat | Ergebnis Spike M0.1: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md) |
 | KI | Server-Funktion mit Anthropic SDK, `claude-opus-5-5`, strukturierte Ausgabe | Schlüssel sicher, Antwort schema-valide |
-| Tests | Vitest (Logik: Zeiten, Prüfregeln, Formen), Playwright (Abläufe, Druck) | – |
+| Tests | Vitest (Logik: Zeiten, Prüfregeln, Formen; Vergleich mit dem Referenz-Code `design-system/stage.js`), Sicherheitsregeln im Firestore-Emulator, Playwright (Abläufe, Druck) | – |
+| Vorschau | Ohne Firebase-Konfiguration startet die App ohne Anmeldung, Daten nur auf dem Gerät, deutlich markiert. Nur bis zur Einrichtung im Verein, Firebase wird dann gar nicht geladen | Ausprobieren und Entwickeln ohne Vereinskonto |
 
 ## 10. Risiken und frühe Prüfungen (Spikes)
 
@@ -597,7 +605,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 - **Risiko 1** ist geprüft, mit 4 Vereinsmusiken und Hörtest durch den Trainer: **Erfolgskriterium erreicht.** Ohne Korrektur liegen rund 90 % der Klicks auf den gezählten Schritten, mit 0–2 Korrekturen pro Tanz stimmt alles. Fehlerarten: Tempo-Ebene und Gegenschlag. Die „1“ ist unzuverlässig. Ein KI-Verfahren erkennt die „1“ zu 82–97 % und ergänzt sich mit Essentia. Empfehlung: beide kombinieren (6.7, 9). Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
 - **Risiko 2** (Bluetooth-Box) wird später vor Ort in der Halle getestet, mit dem Trainingsmodus aus M4.
-- **Risiken 3 und 6** (iPhone offline, Anmeldung) brauchen echte Geräte und den Vereins-Tenant. Sie werden am Prototyp aus M1 geprüft.
+- **Risiken 3 und 6** (iPhone offline, Anmeldung) brauchen echte Geräte und den Vereins-Tenant. Sie werden am Prototyp aus M1 geprüft. Das Prüfprotokoll steht in [`04-einrichtung.md`](04-einrichtung.md#7-geräte-prüfung-risiko-3-und-6), die Messwerte zeigt die App unter *Einstellungen → Geräte-Prüfung*.
 - **Risiken 4 und 5** (KI-Aufstellungen, Verschieben am Handy) werden mit M5 bzw. M4 geprüft.
 
 ## 11. Erfolgskriterien für das MVP
@@ -613,7 +621,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Meilenstein | Inhalt | Nutzen danach |
 |---|---|---|
 | **M0 Spikes** | Risiko 1 (Schlagerkennung) ✓ abgeschlossen. Die übrigen Risiken brauchen echte Geräte und werden in M1 bzw. M4 geprüft (Abschnitt 10) | Musik-Analyse ist abgesichert |
-| **M1 Fundament** | PWA-Gerüst, Design-System als Komponenten, Datenmodell, Konten und Sync. Dabei auf echten Geräten prüfen: Risiko 3 (iPhone offline) und 6 (Anmeldung) | Daten sind auf allen Geräten |
+| **M1 Fundament** | PWA-Gerüst, Design-System als Komponenten, Datenmodell, Konten und Sync. Dabei auf echten Geräten prüfen: Risiko 3 (iPhone offline) und 6 (Anmeldung). **Stand 22.11.2026:** Code fertig (`app/`, `functions/`, Sicherheitsregeln, Tests). Offen sind die Einrichtung im Verein und die Geräte-Prüfung ([`04-einrichtung.md`](04-einrichtung.md)). Bis dahin läuft die App als Vorschau ohne Anmeldung | Daten sind auf allen Geräten |
 | **M2 Schreiben + Drucken** | Seitenansicht 2 × 2, Formationen, Aktionen, Laufwege, Prüfregeln, Druck | **Ersetzt das Schreiben auf Papier**, der Ausdruck bleibt |
 | **M3 Musik** | Hochladen, Analyse, Raster-Editor, Zeitleiste, Bewegungs-Vorschau | Tanz und Musik sind verbunden |
 | **M4 Training** | Trainingsmodus, Vorlauf, Audio-Verzögerung, Bearbeiten-Modus, Offline-Status. Dabei in der Halle prüfen: Risiko 2 (Bluetooth-Box) und 5 | **Einsatz in der Halle** |
@@ -668,7 +676,7 @@ Alle Fragen aus den Interviews sind beantwortet (Stand 22.11.2026, [Interview-Pr
 
 **Für M1 benötigt (keine Geheimnisse)**
 
-2. **Tenant-ID** des Vereins-Microsoft-365 und **Objekt-ID** der Gruppe „Garde-Tanz“, dazu die App-Registrierung in Entra ID (6.1).
+2. **Einrichtung im Verein:** Firebase-Projekt, App-Registrierung in Entra ID, Tenant-ID und Objekt-ID der Gruppe „Garde-Tanz“. Schritt für Schritt in [`04-einrichtung.md`](04-einrichtung.md). Danach die Geräte-Prüfung (Risiko 3 und 6).
 
 **Annahmen, die als Standard gelten, bis jemand widerspricht** ([Interview, „Eigene Annahmen“](01-interview.md#eigene-annahmen-nicht-abgefragt-bitte-prüfen))
 

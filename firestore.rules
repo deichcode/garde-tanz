@@ -1,0 +1,48 @@
+rules_version = '2';
+// Zugang = Mitglied der M365-Gruppe „Garde-Tanz“. Den Claim setzt die Funktion zugangPruefen
+// bei jeder Anmeldung, der tägliche Abgleich entzieht ihn. Alle Trainer dürfen alles (Konzept 6.1),
+// nur Garden anlegen und Rollen löschen dürfen die Besitzer der Gruppe (Claim admin).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function member() { return request.auth != null && request.auth.token.member == true; }
+    function admin() { return member() && request.auth.token.admin == true; }
+    // „zuletzt geändert von …“ muss stimmen
+    function stamped() { return request.resource.data.updatedBy == request.auth.uid; }
+
+    match /teams/{teamId} {
+      allow read: if member();
+      allow write: if admin();
+    }
+
+    match /dances/{danceId} {
+      allow read, delete: if member();
+      allow create, update: if member() && stamped();
+
+      match /frames/{frameId} {
+        allow read, delete: if member();
+        allow create, update: if member() && stamped();
+      }
+    }
+
+    // Alle Bilder auf einmal: hält jeden Tanz offline bereit (Übersicht, Offline-Status)
+    match /{path=**}/frames/{frameId} {
+      allow read: if member();
+    }
+
+    match /roles/{roleId} {
+      allow read, create, update: if member();
+      allow delete: if admin();
+    }
+
+    match /roleActions/{actionId} {
+      allow read, create, update: if member();
+      allow delete: if admin();
+    }
+
+    // Name, E-Mail, Microsoft-Konto-ID: schreibt nur der Server
+    match /users/{uid} {
+      allow read: if member();
+      allow write: if false;
+    }
+  }
+}
