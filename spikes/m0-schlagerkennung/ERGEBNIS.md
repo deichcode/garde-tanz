@@ -1,6 +1,6 @@
 # Spike M0.1: Schlagerkennung auf echter Vereinsmusik
 
-**Stand:** 21.11.2026 · **Status:** abgeschlossen. Hörtest mit allen vier Musiken, dazu ein KI-Verfahren getestet. Offen ist nur noch eine Nachfrage zu Piccolotanz 1:40–2:10.
+**Stand:** 22.11.2026 · **Status:** abgeschlossen. Hörtest mit allen vier Musiken, dazu ein KI-Verfahren getestet und seine „1“ im Piccolotanz direkt per Hörtest bestätigt.
 **Risiko:** Konzept, Abschnitt 10, Nr. 1 („Schlagerkennung versagt bei Garde-Medleys mit Tempowechseln“). Erfolgskriterium: ≥ 90 % der Schläge korrekt, Korrektur < 5 Min. pro Musik.
 **Musik:** 4 Tänze des Vereins. Die Musik liegt **nicht** im Repository.
 
@@ -136,11 +136,15 @@ Die Wahrheit kommt aus dem Hörtest (Skript [`ki_verfahren.py`](ki_verfahren.py)
 | Musik | Schläge richtig: KI | Schläge richtig: Essentia | „1“ richtig: KI | „1“ richtig: Essentia |
 |---|---|---|---|---|
 | Gardetanz 2027 | 84 % | 100 %* | **82 %** | 0 % (auf 3/7, 4/8) |
-| Piccolotanz 2027 | 87 % | 100 %* | **84 %** | nur im 1. Teil |
+| Piccolotanz 2027 | 87 % | 100 %* | **95 %**† | nur im 1. Teil |
 | Piccolos 2026 | 97 % | 100 %* | **97 %** | 0 % (auf 3/7) |
 | Piccolos 2025 | **93 %** | 70 % | **96 %** | in 3 von 6 Teilen |
 
 \* Essentia hat hier 100 %, weil der Trainer diese Klicks als passend gehört hat. Die Wahrheit ist also an Essentia ausgerichtet. Abweichungen der KI können deshalb auch mehrdeutige Stellen sein.
+
+† **Direkt per Hörtest bestätigt (22.11.2026):** Der Trainer hat die KI-Klick-Spur angehört. Die erkannten „1“ liegen in allen drei Liedern dort, wo er sie zählt: 30/30, 27/29 und 34/37, zusammen 95 %. Aus dem Essentia-Hörtest abgeleitet waren es nur 84 %, weil dessen grobe Angabe („ab dem 2. Teil“) das dritte Lied nicht unterschied.
+
+**Fehler in der ersten KI-Klick-Spur (behoben):** Die hohen Klicks lagen im festen 4er-Abstand ab der ersten erkannten „1“. Die KI erkennt die „1“ aber nach jedem Tempowechsel neu. Deshalb klang die Spur ab dem zweiten Lied falsch („auf 2 und 6“, „auf 4 und 8“), obwohl die KI richtig lag. Jetzt sitzt der hohe Klick genau auf jeder erkannten „1“. Das zeigt auch, worauf es im Produkt ankommt: Die „1“ wird **pro Musikteil** neu bestimmt, nicht einmal für den ganzen Tanz.
 
 **An den Gegenschlag-Stellen in Piccolos 2025** liegt die KI zu **93 %** richtig, Essentia zu 0 %.
 
@@ -150,7 +154,7 @@ Die Wahrheit kommt aus dem Hörtest (Skript [`ki_verfahren.py`](ki_verfahren.py)
 |---|---|---|
 | Gardetanz 2027 | 0:00–0:20 | freies Intro, KI zählt anders |
 | Gardetanz 2027 | 0:30–0:40 | KI doppelt so schnell |
-| Piccolotanz 2027 | 1:40–2:10 | KI auf dem Gegenschlag. Auch die verworfene Bass-Regel vermutete hier einen Gegenschlag. **Nachhören** |
+| Piccolotanz 2027 | 1:40–2:10 | KI einen halben Schlag neben Essentia. Der Trainer hat **beide** Klick-Spuren hier als zählbar gehört, sonst hätte er die KI-„1“ nicht Zählzeiten zuordnen können. Die Stelle ist also **mehrdeutig**, ein typischer Fall für „A · B anhören“ |
 | Piccolos 2026 | 2:20–2:30, 3:30–3:40 | teilweise daneben (Übergang, Schluss) |
 | Piccolos 2025 | 3:10–Ende | Schluss, keine Schläge |
 

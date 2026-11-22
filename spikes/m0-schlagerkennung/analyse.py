@@ -186,11 +186,14 @@ def click(sr, freq, dur=0.035, gain=0.6):
     return gain * np.sin(2 * np.pi * freq * t) * np.exp(-t * 90)
 
 
-def click_track(audio, sr, beats, phase, out_mp3, bar=4):
+def click_track(audio, sr, beats, phase, out_mp3, bar=4, accents=None):
+    """Hoher Klick auf jedem bar-ten Schlag ab phase – oder, wenn accents (Schlag-Indizes)
+    gegeben ist, genau auf diesen Schlägen (z. B. die von der KI erkannten Taktanfänge)."""
     mix = 0.5 * audio.astype(np.float32)
     hi, lo = click(sr, 1760, gain=0.8), click(sr, 880, gain=0.55)
     for i, b in enumerate(beats):
-        c = hi if (i - phase) % bar == 0 else lo
+        is_one = (i in accents) if accents is not None else (i - phase) % bar == 0
+        c = hi if is_one else lo
         s = int(b * sr)
         e = min(len(mix), s + len(c))
         mix[s:e] += c[:e - s]

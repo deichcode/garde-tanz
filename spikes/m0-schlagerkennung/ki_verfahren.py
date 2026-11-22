@@ -94,12 +94,11 @@ def evaluate(name, path, a2b, out):
         res["eins"] = {"echte_einsen": int(len(t_ones)), "ki_getroffen": round(float(hit.mean()), 3),
                        "ki_schlaege_pro_takt": int(np.median(per_bar)) if per_bar else None}
     res["ki_abschnitte"] = [{k: v for k, v in s.items() if k in ("start", "ende", "bpm")} for s in sections(kb)]
-    # Klick-Spur der KI: hoher Klick auf den erkannten Taktanfängen
-    phase = 0
-    if len(kd):
-        phase = int(np.argmin(np.abs(kb - kd[0])))
-    click_track(audio, 44100, kb, phase, out / f"{name}_ki_klicks.mp3",
-                bar=int(res.get("eins", {}).get("ki_schlaege_pro_takt") or 4))
+    # Klick-Spur der KI: hoher Klick genau auf jedem von der KI erkannten Taktanfang.
+    # (Nicht im festen 4er-Abstand ab der ersten „1“ – die KI erkennt die „1“ nach
+    # Tempowechseln neu; ein fester Abstand hatte das im ersten Hörtest verfälscht.)
+    accents = {int(np.argmin(np.abs(kb - d))) for d in kd if np.min(np.abs(kb - d)) < 0.07}
+    click_track(audio, 44100, kb, 0, out / f"{name}_ki_klicks.mp3", accents=accents)
     return res
 
 
