@@ -23,6 +23,7 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 - Bühne fest 3:2, normierte Koordinaten 0..1, **y = 1 ist vorne (Publikum unten)**.
 - Musik-Raster = Liste von Schlagzeitpunkten (Tempowechsel möglich), nicht ein globales BPM.
 - Kataloge pflegen sich selbst: Freitext wird beim **zweiten Gebrauch in derselben Rolle** automatisch Baustein. Übliche Zeiten und „bewegt sich“ werden aus der Nutzung gelernt. Pflege nur in place am Baustein, nie als Pflicht-Schritt vorab.
+- Rollen ordnet **jeder Tanz** seinen Gruppen selbst zu. Vorgabe (Seed): **● Grenadiere, ○ Mariechen, ✕ Reserve**.
 - Gemeinsame Bausteine (`roleId: '*'`) gelten für alle Rollen. Start-Kataloge: `seed/start-katalog.json`.
 - Gruppenverbünde: beliebige Gruppen-Kombinationen, auch über Bildbereiche. Neue Bilder übernehmen die Verbünde des vorherigen.
 - Begriffe können Zahlen enthalten (`1/4 Dreh`): Die erste Zahl ist immer die Anzahl Zeiten, angezeigt fett in Mono.
@@ -44,3 +45,4 @@ Lied/Teil (`Song`, `SongPart`), Zusammenfassung (`summary`, Zeiten eines Lieds i
 `design-system/stage.js` enthält die Referenz für Formen → Einzelpositionen (`layoutFormation`),
 die Zuordnung auf kürzeste Wege (`assignShortest`), die Laufweg-Automatik und die Prüfregeln (`warnings`).
 Bei der App-Umsetzung gleiches Verhalten beibehalten oder die Abweichung im Konzept dokumentieren.
+**Noch nicht enthalten:** Drehung/Schwenk (`turn`) und Blickrichtung (`facing`), siehe Konzept 6.4, 6.6 und 14.

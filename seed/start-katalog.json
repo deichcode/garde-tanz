@@ -1,14 +1,14 @@
 {
   "stand": "2026-11-19",
-  "hinweis": "Start-Kataloge des Vereins. roleId '*' = gemeinsamer Baustein für alle Rollen. 'moves' ist geschätzt, 'defaultCounts' noch unbekannt (null). Beides lernt die App aus der Nutzung (Konzept 6.5).",
+  "hinweis": "Start-Kataloge des Vereins. groupsDefault ist die Vorgabe für den ersten Tanz (● Grenadiere, ○ Mariechen, ✕ Reserve), jeder Tanz kann die Rollen seiner Gruppen ändern. roleId '*' = gemeinsamer Baustein für alle Rollen. 'moves' ist geschätzt, 'defaultCounts' noch unbekannt (null). Beides lernt die App aus der Nutzung (Konzept 6.5).",
   "roles": [
     { "id": "mariechen", "name": "Mariechen" },
     { "id": "grenadiere", "name": "Grenadiere" },
     { "id": "reserve", "name": "Reserve" }
   ],
   "groupsDefault": [
-    { "symbol": "dot", "name": "Mariechen", "roleId": "mariechen" },
-    { "symbol": "ring", "name": "Grenadiere", "roleId": "grenadiere" },
+    { "symbol": "dot", "name": "Grenadiere", "roleId": "grenadiere" },
+    { "symbol": "ring", "name": "Mariechen", "roleId": "mariechen" },
     { "symbol": "cross", "name": "Reserve", "roleId": "reserve" }
   ],
   "roleActions": [

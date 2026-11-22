@@ -51,9 +51,9 @@ Die Oberfläche spricht die Sprache der Trainer. Diese Begriffe sind verbindlich
 | Begriff | Bedeutung | Code |
 |---|---|---|
 | **Tanz** | Eine Choreografie einer Garde für eine Saison | `Dance` |
-| **Gruppe** | Feste Teilmenge der Tänzer mit eigenem Symbol (● ○ ✕). Meist 2–3 Gruppen mit je 4–10 Tänzern | `Group` |
+| **Gruppe** | Feste Teilmenge der Tänzer mit eigenem Symbol (● ○ ✕). Meist 2–3 Gruppen mit je 2–12 Tänzern. Welche Rolle eine Gruppe hat, legt jeder Tanz fest (Vorgabe: ● Grenadiere, ○ Mariechen, ✕ Reserve) | `Group` |
 | **Rolle** | Was eine Gruppe ist, z. B. *Mariechen* oder *Grenadiere*. Bestimmt, welche Aktionen es gibt (Grenadiere schwenken, klopfen, präsentieren das Gewehr). Gilt vereinsweit, mehrere Gruppen können dieselbe Rolle haben | `Role` |
-| **Gruppenverbund** | Beliebig viele Gruppen, die sich in einem Bild oder einem Abschnitt des Tanzes wie eine Gruppe verhalten (z. B. ●✕ von Bild 11 bis 18) | `Track.groupIds` |
+| **Gruppenverbund** | Beliebig viele Gruppen, die sich in einem Bild oder einem Abschnitt des Tanzes wie eine Gruppe verhalten (z. B. „O+R“, also ○✕, von Bild 11 bis 18) | `Track.groupIds` |
 | **Spur** | Eine Zeile Aktionen unter der Bühne. Sie gilt für eine Auswahl von Tänzern: **Alle**, einen Gruppenverbund, eine Gruppe oder einen Teil („● linke Reihe“, „Innerer Kreis“, „Eine“) | `Track` |
 | **Bild** | Eine Aufstellung mit einer festen Anzahl Zeiten. Zeigt die Startaufstellung und die Laufwege ins nächste Bild | `Frame` |
 | **Zeit** | Ein Schlag. Kleinste Einheit, nur ganze Zeiten | `count` |
@@ -111,7 +111,7 @@ interface Group {
   id: Id;
   name: string;               // frei, z. B. "Mariechen", "Reserve"
   symbol: 'dot' | 'ring' | 'cross' | 'triangle' | 'square' | 'diamond' | { letter: string };
-  size: number;               // Anzahl Tänzer, 4–10 typisch
+  size: number;               // Anzahl Tänzer, 2–12 typisch
   roleId: Id;                 // Rolle, z. B. "Grenadiere" → bestimmt den Baustein-Katalog
 }
 
@@ -268,7 +268,7 @@ Wie laut gezählt wird, hängt vom Bild ab:
 ### 6.2 Tanz anlegen
 
 - Titel, Garde, Saison.
-- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** (bei euch: ● Mariechen, ○ Grenadiere und ✕ Reserve, jede mit eigener Rolle) und Anzahl Tänzer (4–10). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
+- **Gruppen:** Standard 3 Gruppen (● ○ ✕), jeweils mit **Rolle** und Anzahl Tänzer (typisch 2–12). **Jeder Tanz ordnet seinen Gruppen die Rollen selbst zu.** Die Vorgabe für den ersten Tanz ist **● Grenadiere, ○ Mariechen, ✕ Reserve** (`seed/start-katalog.json`). Der Name ist optional, Standard ist der Name der Rolle. Gruppen lassen sich hinzufügen oder entfernen. Die UX ist auf 2–3 ausgelegt, 4–5 funktionieren.
 - Ein neuer Tanz übernimmt Gruppen und Rollen vom letzten Tanz derselben Garde. Optional: aus einem anderen Tanz kopieren.
 
 ### 6.3 Seitenansicht und Bild-Editor (Desktop, Tablet)
@@ -283,8 +283,8 @@ Wie laut gezählt wird, hängt vom Bild ab:
 │ │ │ ● ○ ● ○ ● ○ │      │  ●  ●  ●  ● │   │ │  ▸ Linie ●○ (8)           │ │
 │ │ │    ✕ ✕ ✕    │      │ ✕ ✕   ○ ○ ○ │   │ │  ▸ Block ✕ (4)            │ │
 │ │ └─────────────┘      └─────────────┘   │ │ Aktionen                  │ │
-│ │ ●○ 8 Stip · 8 Marsch ●  8 Hüpf         │ │  ●○ [8 Stip][8 Marsch] ✓  │ │
-│ │ ✕  16 BeinSchw       ○  6 Präs ⚠ 6/8   │ │  ✕  [16 BeinSchw] ✓       │ │
+│ │ ●○ 8 Stip · 8 Marsch ○  8 Hüpf         │ │  ●○ [8 Stip][8 Marsch] ✓  │ │
+│ │ ✕  16 BeinSchw       ●  6 Präs ⚠ 6/8   │ │  ✕  [16 BeinSchw] ✓       │ │
 │ │ 11 · …               12 · …            │ │ Bausteine ✕: BeinSchw …   │ │
 │ └────────────────────────────────────────┘ │ Notiz                     │ │
 │ ‹ Seite 2   ■■■□□□□□□□□   Seite 4 ›        │ ✦ Mit KI beschreiben      │ │
@@ -317,8 +317,8 @@ Wie laut gezählt wird, hängt vom Bild ab:
 
 ```
 Alle Rollen ────────────────────────────▶   Marsch→  MrschSt  1/4 Dreh  1/2 Dreh  Stip
-Gruppe ● Mariechen  ─▶ Rolle Mariechen  ─▶ + Hüpf→  Schmeiß
-Gruppe ○ Grenadiere ─▶ Rolle Grenadiere ─▶ + GewSchw  Präs  Fuß  Klopf
+Gruppe ● Grenadiere ─▶ Rolle Grenadiere ─▶ + GewSchw  Präs  Fuß  Klopf
+Gruppe ○ Mariechen  ─▶ Rolle Mariechen  ─▶ + Hüpf→  Schmeiß
 Gruppe ✕ Reserve    ─▶ Rolle Reserve    ─▶ + BeinSchw
                           (→ = bewegt sich · + = zusätzlich zu den gemeinsamen Bausteinen)
 ```
@@ -396,8 +396,8 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 - **Für einen Abschnitt:** Gruppen markieren, `Zusammenfassen` wählen und den Bereich festlegen: *nur dieses Bild*, *bis Bild …* oder *bis auf Weiteres*. Neue Bilder übernehmen den Verbund des vorherigen Bildes, bis er getrennt wird.
 - **Trennen** geht genauso, ab einem bestimmten Bild. Die Aktionen der gemeinsamen Spur werden dabei in jede Gruppe kopiert, damit nichts verloren geht.
 - **Einzelne Abweichung:** Macht eine Gruppe in einem Bild etwas anderes, löst man sie nur für dieses Bild heraus. Die anderen Bilder des Abschnitts bleiben zusammengefasst.
-- **Überblick:** Über den Bildern zeigt die Zeitleiste, welche Gruppen wann zusammen sind (z. B. ein Balken „●✕ Bild 11–18“).
-- **Formationen sind davon unabhängig:** Eine Linie kann ●○ mischen, während die Aktionen in ●✕ und ○ aufgeteilt sind.
+- **Überblick:** Über den Bildern zeigt die Zeitleiste, welche Gruppen wann zusammen sind (z. B. ein Balken „○✕ Bild 11–18“).
+- **Formationen sind davon unabhängig:** Eine Linie kann ●○ mischen, während die Aktionen in ● und ○✕ aufgeteilt sind.
 
 **Was ein Trainer nie tun muss:** einen Katalog vorab anlegen, übliche Zeiten pflegen oder Listen aufräumen, damit die App funktioniert.
 
@@ -469,8 +469,8 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 │ └──────── Publikum ────────┘ │
 │   5  /8     2. Achter        │  ← Zählzeit, riesig
 │  ▮▮▮▮▮▯▯▯ ▮▮▮▮▮▮▮▮           │  ← Achter-Segmente
-│ ●✕ ┃ 8 Stip ┃ ▌8 Marsch▐     │  ← laufende Aktion invertiert
-│ ○  ┃ 8 Klopf ┃ ▌8 Marsch▐    │
+│ ○✕ ┃ 8 Stip ┃ ▌8 Marsch▐     │  ← laufende Aktion invertiert
+│ ●  ┃ 8 Klopf ┃ ▌8 Marsch▐    │
 │ Weiter: Bild 13 · 8 Zeiten   │
 │ [Vorlauf 8 ▾]   [✎ Bearbeiten]│
 │  ◀ Bild 11   ( ▶ )  Bild 13 ▶ │  ← Daumenbereich, große Tasten
@@ -498,7 +498,7 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 - **Optionen:** alle Seiten oder Bereich, mit/ohne Laufwege, mit/ohne Notizen.
 - **Liedmarke:** Beginnt in einem Bild ein Lied, steht über dem Bild eine schmale Zeile „Lied 4: Toi, toi, toi · 1:44“. Die Zusammenfassung wird nicht gedruckt.
 - **Wiederholungen** werden als `||: … :||` gedruckt, die Blickrichtung als Kerbe am Symbol.
-- **Fußzeile:** Tanzname · Legende der Gruppen (● Mariechen · ○ Grenadiere · ✕ Reserve) · Stand (Datum, Version) · Seite x / y.
+- **Fußzeile:** Tanzname · Legende der Gruppen (● Grenadiere · ○ Mariechen · ✕ Reserve) · Stand (Datum, Version) · Seite x / y.
 - **Optional:** eine Schlussseite mit den Kürzeln aller beteiligten Rollen.
 - **Umsetzung:** Druck-Stylesheet (`@page A4 landscape`), dieselben SVG-Komponenten wie am Bildschirm. Ausgabe über den Druckdialog bzw. „Als PDF sichern“.
 - Gleiche Seitenaufteilung in App und Druck, damit „Seite 4, Bild 14“ im Team auf beiden Wegen dasselbe meint.
@@ -596,10 +596,12 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | 5 | 30 Tänzer auf dem Handy präzise verschieben | Prototyp Bearbeiten-Modus | Formation in < 10 s korrekt verschoben |
 | 6 | Microsoft-Anmeldung scheitert in der installierten iOS-PWA (Weiterleitung, Safari trennt den Speicher von Drittanbietern), oder Gastkonten mit privatem Microsoft-Konto verhalten sich anders | Anmeldung mit Vereinskonto und Gastkonto auf iPhone (installiert), Android und Desktop. Entfernen aus der Gruppe testen | Beide Kontoarten melden sich an. Die Sitzung hält ≥ 30 Tage, auch über Offline-Phasen. Wer aus der Gruppe entfernt wurde, ist beim nächsten Online-Start gesperrt |
 
-**Stand 19.11.2026:**
+**Stand 22.11.2026:**
 
 - **Risiko 1** ist geprüft, mit 4 Vereinsmusiken und Hörtest durch den Trainer: **Erfolgskriterium erreicht.** Ohne Korrektur liegen rund 90 % der Klicks auf den gezählten Schritten, mit 0–2 Korrekturen pro Tanz stimmt alles. Fehlerarten: Tempo-Ebene und Gegenschlag. Die „1“ ist unzuverlässig. Ein KI-Verfahren erkennt die „1“ zu 82–97 % und ergänzt sich mit Essentia. Empfehlung: beide kombinieren (6.7, 9). Details: [`spikes/m0-schlagerkennung/ERGEBNIS.md`](../spikes/m0-schlagerkennung/ERGEBNIS.md).
-- **Risiko 2** (Bluetooth-Box) wird später vor Ort getestet.
+- **Risiko 2** (Bluetooth-Box) wird später vor Ort in der Halle getestet, mit dem Trainingsmodus aus M4.
+- **Risiken 3 und 6** (iPhone offline, Anmeldung) brauchen echte Geräte und den Vereins-Tenant. Sie werden am Prototyp aus M1 geprüft.
+- **Risiken 4 und 5** (KI-Aufstellungen, Verschieben am Handy) werden mit M5 bzw. M4 geprüft.
 
 ## 11. Erfolgskriterien für das MVP
 
@@ -613,11 +615,11 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 
 | Meilenstein | Inhalt | Nutzen danach |
 |---|---|---|
-| **M0 Spikes** | Risiken 1–3 und 6 aus Abschnitt 10 | Technik ist abgesichert |
-| **M1 Fundament** | PWA-Gerüst, Design-System als Komponenten, Datenmodell, Konten und Sync | Daten sind auf allen Geräten |
+| **M0 Spikes** | Risiko 1 (Schlagerkennung) ✓ abgeschlossen. Die übrigen Risiken brauchen echte Geräte und werden in M1 bzw. M4 geprüft (Abschnitt 10) | Musik-Analyse ist abgesichert |
+| **M1 Fundament** | PWA-Gerüst, Design-System als Komponenten, Datenmodell, Konten und Sync. Dabei auf echten Geräten prüfen: Risiko 3 (iPhone offline) und 6 (Anmeldung) | Daten sind auf allen Geräten |
 | **M2 Schreiben + Drucken** | Seitenansicht 2 × 2, Formationen, Aktionen, Laufwege, Prüfregeln, Druck | **Ersetzt das Schreiben auf Papier**, der Ausdruck bleibt |
 | **M3 Musik** | Hochladen, Analyse, Raster-Editor, Zeitleiste, Bewegungs-Vorschau | Tanz und Musik sind verbunden |
-| **M4 Training** | Trainingsmodus, Vorlauf, Audio-Verzögerung, Bearbeiten-Modus, Offline-Status | **Einsatz in der Halle** |
+| **M4 Training** | Trainingsmodus, Vorlauf, Audio-Verzögerung, Bearbeiten-Modus, Offline-Status. Dabei in der Halle prüfen: Risiko 2 (Bluetooth-Box) und 5 | **Einsatz in der Halle** |
 | **M5 KI** | KI-Assistent mit Rückfragen und Vorschau | Schneller neue Bilder |
 
 ## 13. Nach dem MVP: Zeichnen mit Apple Pencil
@@ -659,6 +661,32 @@ Zum gelegentlichen Aufräumen gibt es in den Vereinseinstellungen eine Übersich
 | Erkennung von ● ○ R und Pfeilen | 10 Bilder aus dem Papier-Tanz nachzeichnen | ≥ 90 % der Tänzer und Pfeile richtig, Rest in < 30 s korrigiert |
 | Erkennung der Aktionen per KI | 20 Aktionsblöcke aus dem Papier-Tanz | ≥ 80 % ohne Korrektur übernehmbar |
 
-## 14. Offene Fragen
+## 14. Offene Punkte
 
-Alle Fragen aus dem Konzept sind beantwortet (Stand 22.11.2026). Die Antworten stehen im [Interview-Protokoll](01-interview.md) unter „Nachtrag“ und in den Runden 9 und 10. Neue Fragen entstehen voraussichtlich bei den Spikes in M0 (Musik, Audio-Latenz, Offline auf dem iPhone, Anmeldung).
+Alle Fragen aus den Interviews sind beantwortet (Stand 22.11.2026, [Interview-Protokoll](01-interview.md)). Offen ist nur noch Folgendes.
+
+**Fragen an den Verein**
+
+1. **Schmeiß auch für die Reserve?** Im Papier-Tanz schmeißen die R die Beine, im Start-Katalog steht `Schmeiß` aber nur bei den Mariechen. Ohne Antwort lernt die App es beim zweiten Gebrauch in der Rolle Reserve von selbst.
+
+**Für M1 benötigt (keine Geheimnisse)**
+
+2. **Tenant-ID** des Vereins-Microsoft-365 und **Objekt-ID** der Gruppe „Garde-Tanz“, dazu die App-Registrierung in Entra ID (6.1).
+
+**Annahmen, die als Standard gelten, bis jemand widerspricht** ([Interview, „Eigene Annahmen“](01-interview.md#eigene-annahmen-nicht-abgefragt-bitte-prüfen))
+
+3. Deutsch, duzen · Vorlauf 8 Zeiten · heller Modus als Standard · ✕ statt „R“ als Symbol der Reserve · KI-Kosten zentral über einen Vereins-Schlüssel mit Monatslimit · Firebase (EU) als Backend · Bewegungs-Vorschau im Editor, im Training aus.
+
+**Prüfungen auf echten Geräten** (Abschnitt 10)
+
+4. Risiko 3 (iPhone offline) und 6 (Anmeldung) in M1, Risiko 2 (Bluetooth-Box) und 5 (Verschieben am Handy) in M4, Risiko 4 (KI-Aufstellungen) in M5.
+
+**Technische Aufgaben aus dem Konzept**
+
+5. Referenz-Code `design-system/stage.js` um Drehung/Schwenk (`turn`, Kreisbögen statt kürzester Wege) und Blickrichtung (`facing`, Kerbe am Symbol) ergänzen (6.4, 6.6).
+6. Styleguide um die Elemente aus Runde 9 und 10 ergänzen: Spur mit Teilname, Blickrichtungs-Kerbe, Wiederholung `.gm-repeat`, Zusatz im Baustein, Liedmarke, Lied-Bereich (Design-System 4–6). Das geschieht mit den Komponenten in M1.
+7. Lizenzen der Musik-Analyse prüfen: Essentia (AGPL-3.0), Modellgewichte von beat_this (9).
+
+**Nach dem MVP**
+
+8. Spike Zeichnen mit Apple Pencil (13.3) und Papier-Scan (8).

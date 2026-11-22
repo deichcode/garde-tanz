@@ -74,9 +74,11 @@ Im **Blatt** skaliert die Schrift mit der Blattbreite (Container-Einheiten). Akt
 
 | Gruppe | Symbol | Papier heute |
 |---|---|---|
-| 1 | ● gefüllter Kreis | gefüllter Kreis |
-| 2 | ○ leerer Kreis | leerer Kreis |
+| 1 (Grenadiere) | ● gefüllter Kreis | gefüllter Kreis |
+| 2 (Mariechen) | ○ leerer Kreis | leerer Kreis |
 | 3 (Reserve) | ✕ Kreuz | „R“ für Reserve |
+
+Die Rollen in Klammern sind die **Vorgabe** (● Grenadiere, ○ Mariechen, ✕ Reserve). Jeder Tanz kann seinen Gruppen andere Rollen zuordnen, das Symbol bleibt an der Gruppe.
 | 4, 5 oder als Ersatz | ▲ Dreieck, ■ Quadrat, ◆ Raute, Buchstabe | – |
 
 - Das **Kreuz** unterscheidet sich von beiden Kreisen in **Form und Füllung** (offene Striche statt Fläche oder Ring). Darum ist es die beste dritte Wahl. „R“ bleibt als Buchstaben-Option.

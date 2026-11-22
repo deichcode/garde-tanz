@@ -182,7 +182,7 @@ In den vier Tänzen hätte die Zweitmeinung **beide echten Fehler** gefunden (Pi
 5. **Die „1“ kommt von der KI** (82–97 % richtig). Die App schlägt „Bild 1 beginnt hier“ auf einer erkannten 1 vor, der Trainer bestätigt oder verschiebt.
 6. **Freie Abschnitte** (Intro ohne festen Takt) bekommen kein Raster.
 7. **Server-Analyse mit zwei Verfahren:** Essentia für das Raster, beat_this für „1“ und Zweitmeinung (siehe Empfehlung). Lizenzen prüfen.
-8. **Idee:** Musikteile (Lieder im Medley) in der Zeitleiste benennen, z. B. „Viva Colonia“. Noch nicht entschieden.
+8. **Entschieden (Interview Runde 10):** Lieder und Teile des Medleys werden benannt und mit ihrer 16er-Zusammenfassung geführt (Konzept 6.7, 6.12).
 
 ## Hörtest: Vorgehen (für neue Musik)
 

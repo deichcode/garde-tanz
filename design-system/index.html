@@ -322,7 +322,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
     </div>
     <div class="sg-grid">
       <div class="sg-panel sg-stack"><h3>Gruppenverbund: abwechselnd</h3><div id="mix-alt"></div><p class="sg-caption">Zwei Gruppen verhalten sich wie eine Linie, jede Position behält ihr Symbol.</p></div>
-      <div class="sg-panel sg-stack"><h3>Gruppenverbund: blockweise</h3><div id="mix-block"></div><p class="sg-caption">Muster blockweise: erst alle Mariechen, dann alle Grenadiere.</p></div>
+      <div class="sg-panel sg-stack"><h3>Gruppenverbund: blockweise</h3><div id="mix-block"></div><p class="sg-caption">Muster blockweise: erst alle Grenadiere, dann alle Mariechen.</p></div>
     </div>
     <ul class="sg-rules">
       <li><strong>Größe:</strong> Durchmesser ≈ 3 % der Bühnenbreite, nie unter 10 px am Bildschirm. Bei 30 Tänzern bleibt so genug Luft.</li>
@@ -708,18 +708,18 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
 
   /* --- Beispieltanz: Junioren-Garde, Bilder 9–13 -------------------------- */
   var dance = { groups: [
-    { id: 'a', name: 'Mariechen', role: 'Mariechen', symbol: 'dot' },
-    { id: 'b', name: 'Grenadiere', role: 'Grenadiere', symbol: 'ring' },
+    { id: 'b', name: 'Grenadiere', role: 'Grenadiere', symbol: 'dot' },
+    { id: 'a', name: 'Mariechen', role: 'Mariechen', symbol: 'ring' },
     { id: 'c', name: 'Reserve', role: 'Reserve', symbol: 'cross' }
   ] };
   var A = GM.members('a', 6), B = GM.members('b', 6), C = GM.members('c', 4);
   var F = {
     9: { num: 9, counts: 16,
       formations: [
-        { shape: 'line', cx: 0.5, cy: 0.76, length: 0.84, members: GM.alternate('a', 'b', 6) },
+        { shape: 'line', cx: 0.5, cy: 0.76, length: 0.84, members: GM.alternate('b', 'a', 6) },
         { shape: 'line', cx: 0.5, cy: 0.32, length: 0.36, members: C }],
       tracks: [
-        { groups: ['a', 'b'], blocks: [[4, 'Stip'], [12, 'Marsch', 1]] },
+        { groups: ['b', 'a'], blocks: [[4, 'Stip'], [12, 'Marsch', 1]] },
         { groups: ['c'], blocks: [[4, '1/4 Dreh'], [12, 'Marsch', 1]] }] },
     10: { num: 10, counts: 8, note: 'Hintere Reihe kommt zu spät',
       formations: [
@@ -732,7 +732,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         { groups: ['c'], blocks: [[4, 'BeinSchw'], [4, 'Marsch', 1]] }] },
     11: { num: 11, counts: 16,
       formations: [
-        { shape: 'circle', cx: 0.5, cy: 0.47, radius: 0.31, members: GM.alternate('a', 'b', 6) },
+        { shape: 'circle', cx: 0.5, cy: 0.47, radius: 0.31, members: GM.alternate('b', 'a', 6) },
         { shape: 'line', cx: 0.5, cy: 0.47, length: 0.17, members: C }],
       tracks: [
         { groups: ['a', 'c'], blocks: [[4, '1/2 Dreh'], [4, 'Stip'], [8, 'Marsch', 1]] },
@@ -742,7 +742,7 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
         { shape: 'line', cx: 0.47, cy: 0.52, length: 0.86, rotation: 24, members: A.concat(B) },
         { shape: 'line', cx: 0.84, cy: 0.2, length: 0.18, members: C }],
       tracks: [
-        { groups: ['a', 'b'], blocks: [[2, '1/4 Dreh'], [6, 'Marsch', 1]] },
+        { groups: ['b', 'a'], blocks: [[2, '1/4 Dreh'], [6, 'Marsch', 1]] },
         { groups: ['c'], blocks: [[8, 'Marsch', 1]] }] },
     13: { num: 13, counts: 16,
       formations: [
@@ -809,15 +809,15 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   }).join('');
 
   /* --- Symbole -------------------------------------------------------------- */
-  var SYM = [['dot', 'Mariechen', 'gefüllter Kreis'], ['ring', 'Grenadiere', 'leerer Kreis'], ['cross', 'Reserve', 'Kreuz, ersetzt „R“']];
+  var SYM = [['dot', 'Grenadiere', 'gefüllter Kreis'], ['ring', 'Mariechen', 'leerer Kreis'], ['cross', 'Reserve', 'Kreuz, ersetzt „R“']];
   $('symbols').innerHTML = SYM.map(function (s) {
     return '<div class="sg-symbol">' + GM.symbolIcon(s[0], s[1]) + '<strong>' + s[1] + '</strong><span class="sg-caption">' + s[2] + '</span></div>';
   }).join('');
   var ALTS = [['triangle', 'Dreieck'], ['square', 'Quadrat'], ['diamond', 'Raute'], [{ letter: 'R' }, 'Buchstabe']];
   $('symbol-alts').innerHTML = ALTS.map(function (s) { return '<span class="sg-alt">' + GM.symbolIcon(s[0], s[1]) + s[1] + '</span>'; }).join('');
 
-  var mixAlt = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.alternate('a', 'b', 5) }] };
-  var mixBlock = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.members('a', 5).concat(GM.members('b', 5)) }] };
+  var mixAlt = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.alternate('b', 'a', 5) }] };
+  var mixBlock = { num: 0, counts: 8, tracks: [], formations: [{ shape: 'line', cx: 0.5, cy: 0.55, length: 0.8, members: GM.members('b', 5).concat(GM.members('a', 5)) }] };
   $('mix-alt').innerHTML = GM.renderStage(dance, mixAlt, null, { label: true, title: 'Linie abwechselnd' });
   $('mix-block').innerHTML = GM.renderStage(dance, mixBlock, null, { label: true, title: 'Linie blockweise' });
 
@@ -904,8 +904,8 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   /* --- Kataloge der Rollen (Reihenfolge = Häufigkeit) ------------------------------ */
   var CAT = {
     Alle: [['Marsch', 1], ['1/2 Dreh'], ['1/4 Dreh'], ['Stip'], ['MrschSt']],
-    Mariechen: [['Hüpf', 1], ['Schmeiß']],
     Grenadiere: [['Präs'], ['GewSchw'], ['Klopf'], ['Fuß']],
+    Mariechen: [['Hüpf', 1], ['Schmeiß']],
     Reserve: [['BeinSchw']]
   };
   // Leiste einer Rolle: eigene Bausteine und gemeinsame, nach Häufigkeit (Beispiel)
@@ -927,8 +927,8 @@ section { display: grid; gap: var(--gm-space-5); scroll-margin-top: var(--gm-spa
   }).join('');
   var cells = '';
   for (var k = 9; k <= 20; k++) cells += '<span class="sg-band__cell">' + k + '</span>';
-  $('merge-band').innerHTML = '<span class="sg-band__bar">' + GM.symbolIcon('dot', '') + GM.symbolIcon('cross', '') + 'zusammen</span>' + cells;
-  var gren = dance.groups[1];
+  $('merge-band').innerHTML = '<span class="sg-band__bar">' + GM.symbolIcon('ring', '') + GM.symbolIcon('cross', '') + 'zusammen</span>' + cells;
+  var gren = dance.groups.filter(function (g) { return g.role === 'Grenadiere'; })[0];
   $('sugg-who').innerHTML = GM.symbolIcon(gren.symbol, gren.name);
   $('learn-1').innerHTML = GM.symbolIcon(gren.symbol, gren.name);
   $('learn-2').innerHTML = GM.symbolIcon(gren.symbol, gren.name);

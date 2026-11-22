@@ -90,7 +90,7 @@ Jede Antwort hat eine Spalte **Konsequenz**. Sie zeigt, was die Antwort für das
 | *Gibt es schon eine M365-Gruppe mit allen Trainern? – „Nein.“* | Für die App wird eine neue Gruppe „Garde-Tanz“ angelegt. Mitglieder sind die Trainer, Besitzer sind die Admins. Eine zweite Admin-Gruppe ist nicht nötig. Konzept 6.1. |
 | *Weitere Rollen? – „Dritte Gruppe heißt ‚Reserve‘ (tanzt aber mit).“* | Das „R“ auf dem Papier steht für **Reserve**. Die Reserve ist eine vollwertige Gruppe in jedem Bild, keine Ersatzbank. Ob sie eigene Aktionen hat oder den Katalog einer anderen Rolle teilt, entscheidet die Rolle der Gruppe. Das Symbol bleibt ✕, „R“ ist wählbar. |
 | *Start-Kataloge:* Alle: Marsch, Marsch auf der Stelle (Kürzel *MrschSt*), 1/4 Dreh, 1/2 Dreh, Stip (Stippeföttche). Mariechen: Hüpf, Schmeiß (Beine schmeißen). Grenadiere: GewSchw, Präs, Fuß (Gewehr zum Fuß), Klopf. Reserve: BeinSchw (Beine schwenken). | Neue Ebene **gemeinsame Bausteine** für alle Rollen. Die Listen sind die Start-Kataloge (Konzept 6.5, `seed/start-katalog.json`). Weil Begriffe Zahlen enthalten können (1/4 Dreh), steht die **Anzahl Zeiten immer fett in Mono-Schrift**. Die erste Zahl beim Tippen ist immer die Anzahl Zeiten. |
-| *„Reserve ist eigenständige Gruppe.“* | Die Reserve bekommt eine **eigene Rolle** mit eigenem Katalog, sie nutzt nicht die Liste der Mariechen mit. Zuordnung: ● Mariechen, ○ Grenadiere, ✕ Reserve. |
+| *„Reserve ist eigenständige Gruppe.“* | Die Reserve bekommt eine **eigene Rolle** mit eigenem Katalog, sie nutzt nicht die Liste der Mariechen mit. Zuordnung ~~● Mariechen, ○ Grenadiere~~, korrigiert am 22.11.2026: **● Grenadiere, ○ Mariechen, ✕ Reserve** (siehe Nachtrag 22.11.). |
 | *„Mehrere Gruppen sollten beliebig zu einer Gruppe zusammengenommen werden können, auch für Teile des Tanzes.“* | **Gruppenverbund** aus beliebigen Gruppen, festgelegt für *nur dieses Bild*, *bis Bild …* oder *bis auf Weiteres*. Neue Bilder übernehmen den Verbund. Trennen ist ab einem Bild möglich, die Zeitleiste zeigt die Abschnitte. Konzept 6.5. |
 | *Kürzel für „Marsch auf der Stelle“? – „MrschSt“* | Im gemeinsamen Katalog als `MrschSt` (bewegt sich nicht). |
 | *Wie wird gezählt? – „Hängt immer davon ab. Bei 16 Zeiten Marsch wird 1, 2, 3, 4, …, 16 gezählt. Häufig bis 8. Selten aufgeteilt, z. B. 1, 2, 3, 4, 1, 2, 3, 4, …, 12 für 16 Zeiten. Das sind dann markante Stellen, wo auf eine bestimmte Aktion hin gezählt wird.“* | Jedes Bild hat eine **Zählweise**: Achter, durchgezählt oder eigene Aufteilung. Automatisch gilt Achter. Lange Bausteine (> 8 Zeiten) werden ab ihrem Beginn durchgezählt. Die Zählweise lässt sich in place ändern, steht im Bild-Kopf und im Druck und steuert die Zählanzeige im Training. Konzept 5.4. |
@@ -156,11 +156,17 @@ Vorgabe: *„Diese ‚Phrase‘ sind Zusammenfassungen am 1. Bild eines Liedes. 
 | Wie kommen die Liedgrenzen in die App? | **Eine Datei, App schlägt vor** | Die Analyse schlägt Grenzen vor, der Trainer bestätigt und benennt sie im Raster-Editor. |
 | Ein Bild ragt über eine Liedgrenze? | **Erlaubt, still** | Kein Hinweis. Das Bild gehört zum Lied, in dem es beginnt. Die frühere Prüfregel „Bilder enden nicht an einer Liedgrenze“ entfällt. |
 
+## Nachtrag (22.11.2026)
+
+| Vorgabe | Konsequenz |
+|---|---|
+| *„Jeder Tanz kann seine Rollen zuordnen, grundsätzlich ist aber ● Grenadiere.“* | Die Rolle einer Gruppe legt jeder Tanz selbst fest. Vorgabe für den ersten Tanz: **● Grenadiere, ○ Mariechen, ✕ Reserve**, wie im Papier-Tanz (● 6 mit Gewehr, ○ 2 hüpfen, R 10–12). Ein neuer Tanz übernimmt die Zuordnung vom letzten Tanz der Garde. Konzept 6.2, `seed/start-katalog.json`. |
+
 ---
 
 ## Eigene Annahmen (nicht abgefragt, bitte prüfen)
 
-Diese Punkte habe ich festgelegt, damit das Konzept vollständig ist. Jeder lässt sich leicht ändern.
+Diese Punkte habe ich festgelegt, damit das Konzept vollständig ist. Jeder lässt sich leicht ändern. **Stand 22.11.2026:** Nr. 2 ist ersetzt. Die übrigen gelten als Standard, bis jemand widerspricht. Sie stehen gesammelt in Konzept 14.
 
 1. **Sprache und Ansprache:** Die Oberfläche ist auf Deutsch und duzt. Sie nutzt das Vokabular der Trainer: *Bild, Zeiten, Achter, Gruppe, Laufweg, Aktion*. Begriffe wie *Frame* oder *Count* tauchen nicht auf.
 2. ~~**Zählanzeige in Achtern**~~ → ersetzt durch die **Zählweise pro Bild** (siehe Nachtrag, Konzept 5.4).
